@@ -5,6 +5,9 @@ _ZN2al16isPadTriggerLeftEi
 _ZN2al17isPadTriggerRightEi
 _ZN2al16isPadTriggerDownEi
 _ZN2al14isPadTriggerUpEi
+_ZN2al26isPadTriggerPressLeftStickEi
+_ZN2al14isPadHoldRightEi
+_ZN2al13isPadHoldLeftEi
 
 @smo:130
 _ZN2al10isPadHoldAEi = 0x005d0bb0

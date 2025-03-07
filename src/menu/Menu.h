@@ -4,6 +4,7 @@
 
 #include "hk/gfx/DebugRenderer.h"
 #include "sead/gfx/seadDrawContext.h"
+#include "settings/SettingsMgr.h"
 
 #define printf(FORMAT, ...) renderer->printf(FORMAT, ##__VA_ARGS__)
 #define TEXT(LINE, FMT, ...) renderer->setCursor({20, 370 + (LINE+1) * 20}); printf(FMT, ##__VA_ARGS__)
@@ -40,7 +41,16 @@
         printf("%s" NAME "\n", mCharCursor, FMT);\
         if (mIsEnabledInput && mCurrentLine == LINE  && al::isPadTriggerRight(-1)) {ACTION;}
 
-#define MAX_MENU_PAGES 3
+
+#define INDEXRL( VAR, MIN, MAX, LINE) CURSOR(LINE);                                                                     \
+        if (mIsEnabledInput && mCurrentLine == LINE) {                             \
+            if ((al::isPadHoldRight(-1) && heldDirFrames > 20) || al::isPadTriggerRight(-1)) VAR++; \
+            if ((al::isPadHoldLeft(-1)) && heldDirFrames > 20|| al::isPadTriggerLeft(-1)) VAR--; \
+        }                                                                                 \
+        if (VAR < MIN) VAR = MAX;                                                         \
+        if (VAR > MAX) VAR = MIN
+
+#define MAX_MENU_PAGES 4
 
 namespace btt {
 
@@ -53,7 +63,8 @@ private:
     enum Page {
         Main = 0,
         Options = 1,
-        Info = 2
+        Info = 2,
+        Misc = 3
     };
     
     int mCurrentPage = Main;
@@ -61,13 +72,21 @@ private:
     const char* mCharCursor = " ";
     sead::Heap* mHeap = nullptr;
 
+    int currentStage = 0;
+    int currentScenario = 0;
+    int heldDirFrames = 0;
+
+    SettingsMgr::Settings mSettings;
+
     void drawMain(hk::gfx::DebugRenderer* renderer);
     void drawOptions(hk::gfx::DebugRenderer* renderer);
     void drawInfo(hk::gfx::DebugRenderer* renderer);
+    void drawMisc(hk::gfx::DebugRenderer* renderer);
 
 public:
     Menu() = default;
     bool mIsEnabledInput = true;
+    bool mIsEnabledMenu = true;
 
     void init(sead::Heap* heap);
     void draw(sead::DrawContext* drawContext);

@@ -1,12 +1,12 @@
 #include "Menu.h"
 
-#include "hk/gfx/DebugRenderer.h"
 #include "helpers/getHelper.h"
 
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "al/Library/LiveActor/ActorPoseKeeper.h"
 #include "game/System/GameSystem.h"
 #include "al/Library/Controller/InputFunction.h"
+#include <cstddef>
 #include <heap/seadHeapMgr.h>
 #include "game/Sequence/ChangeStageInfo.h"
 #include "game/Scene/StageScene.h"
@@ -25,50 +25,33 @@ void Menu::init(sead::Heap* heap) {
 }
 
 void Menu::draw(sead::DrawContext* drawContext) {
-    auto* renderer = hk::gfx::DebugRenderer::instance();
-    
 
-    renderer->clear();
-    renderer->begin(drawContext->getCommandBuffer()->ToData()->pNvnCommandBuffer);
-
-    renderer->setGlyphSize(0.55);
 
 
 
     if (mIsEnabledMenu) {
 
-        renderer->drawQuad(
-            { { 0, 360 }, { 0, 0 }, 0xaf000000 },
-            { { 500, 360 }, { 1.0, 0 }, 0xaf000000 },
-            { { 500, 720 }, { 1.0, 1.0 }, 0xaf000000 },
-            { { 0, 720 }, { 0, 1.0 }, 0xaf000000 });
-    
-        renderer->setCursor({ 10, 370});
-
         switch (mCurrentPage) {
             case Main:
-                drawMain(renderer);
+                drawMain(nullptr);
                 break;
 
             case Options:
-                drawOptions(renderer);
+                drawOptions(nullptr);
                 break;
 
             case Info:
-                drawInfo(renderer);
+                drawInfo(nullptr);
                 break;
             
                 case Misc:
-                drawMisc(renderer);
+                drawMisc(nullptr);
                 break;
 
             default:
-                printf("Invalid page\n");
                 break;
         }
     }
-
-    renderer->end();
 
     if (al::isPadTriggerDown(-1) && mIsEnabledMenu && mIsEnabledInput) {
         mCurrentLine++;
@@ -87,59 +70,59 @@ void Menu::draw(sead::DrawContext* drawContext) {
 
 }
 
-void Menu::drawMain(hk::gfx::DebugRenderer* renderer) {
-    TITLE("BTT Studio");
-    MAX_LINE(3);
-    CHANGE_PAGE("Misc", Misc, 0)
-    CHANGE_PAGE("Options", Options, 1);
-    CHANGE_PAGE("Info", Info, 2);
+void Menu::drawMain(void* renderer) {
+    // TITLE("BTT Studio");
+    // MAX_LINE(3);
+    // CHANGE_PAGE("Misc", Misc, 0)
+    // CHANGE_PAGE("Options", Options, 1);
+    // CHANGE_PAGE("Info", Info, 2);
 
 
 }
 
-void Menu::drawOptions(hk::gfx::DebugRenderer* renderer) {
-    TITLE("Options");
-    MAX_LINE(2);
-    BACK_PAGE(Main, 0);
+void Menu::drawOptions(void* renderer) {
+    // TITLE("Options");
+    // MAX_LINE(2);
+    // BACK_PAGE(Main, 0);
 
-    TOGGLE("Moon Jump", SettingsMgr::instance()->mSettings.mIsEnableMoonJump, 1);
+    // TOGGLE("Moon Jump", SettingsMgr::instance()->mSettings.mIsEnableMoonJump, 1);
 }
 
-void Menu::drawInfo(hk::gfx::DebugRenderer* renderer) {
-    TITLE("Info");
-    MAX_LINE(1);
-    BACK_PAGE(Main, 0);
+void Menu::drawInfo(void* renderer) {
+    // TITLE("Info");
+    // MAX_LINE(1);
+    // BACK_PAGE(Main, 0);
 
 
-    al::LiveActor* player = helpers::tryGetPlayer();
-    if (player) {
-        const sead::Vector3f& trans = al::getTrans(player);
-        const sead::Vector3f& vel = player->getPoseKeeper()->getVelocity();
+    // al::LiveActor* player = helpers::tryGetPlayer();
+    // if (player) {
+    //     const sead::Vector3f& trans = al::getTrans(player);
+    //     const sead::Vector3f& vel = player->getPoseKeeper()->getVelocity();
         
-        TEXT(1,"Pos: %.2f %.2f %.2f\n", trans.x, trans.y, trans.z);
-        TEXT(2,"Vel: %.2f %.2f %.2f\n", vel.x, vel.y, vel.z);
-    } else {
-        TEXT(1,"No player\n");
-    }
+    //     TEXT(1,"Pos: %.2f %.2f %.2f\n", trans.x, trans.y, trans.z);
+    //     TEXT(2,"Vel: %.2f %.2f %.2f\n", vel.x, vel.y, vel.z);
+    // } else {
+    //     TEXT(1,"No player\n");
+    // }
 }
 
-void Menu::drawMisc(hk::gfx::DebugRenderer* renderer) {
-    TITLE("Misc");
-    MAX_LINE(4);
-    BACK_PAGE(Main, 0);
+void Menu::drawMisc(void* renderer) {
+    // TITLE("Misc");
+    // MAX_LINE(4);
+    // BACK_PAGE(Main, 0);
 
-    INDEXRL(currentStage, 0, NUM_STAGES - 1, 1);
-    TEXT(1,"%sStage: %s\n", mCharCursor, stageNames[currentStage]);
-    INDEXRL(currentScenario, 0, 15, 2);
+    // INDEXRL(currentStage, 0, NUM_STAGES - 1, 1);
+    // TEXT(1,"%sStage: %s\n", mCharCursor, stageNames[currentStage]);
+    // INDEXRL(currentScenario, 0, 15, 2);
 
-    if (currentScenario != 0) {TEXT(2,"%sScenario: %d\n", mCharCursor, currentScenario);}
-    else TEXT(2,"%sScenario: Don't change\n", mCharCursor);
+    // if (currentScenario != 0) {TEXT(2,"%sScenario: %d\n", mCharCursor, currentScenario);}
+    // else TEXT(2,"%sScenario: Don't change\n", mCharCursor);
 
-    TRIGGER("Go", 3, {
-        ChangeStageInfo info = ChangeStageInfo(helpers::tryGetStageScene()->mHolder->mData, "start", stageNames[currentStage], false, currentScenario ?: -1, ChangeStageInfo::NO_SUB_SCENARIO);
-        helpers::tryGetStageScene()->mHolder->mData->changeNextStage(&info, 0);
-        mCurrentLine = 0;
-    });
+    // TRIGGER("Go", 3, {
+    //     ChangeStageInfo info = ChangeStageInfo(helpers::tryGetStageScene()->mHolder->mData, "start", stageNames[currentStage], false, currentScenario ?: -1, ChangeStageInfo::NO_SUB_SCENARIO);
+    //     helpers::tryGetStageScene()->mHolder->mData->changeNextStage(&info, 0);
+    //     mCurrentLine = 0;
+    // });
 
 
 }

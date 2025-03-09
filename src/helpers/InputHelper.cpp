@@ -32,6 +32,7 @@ nn::hid::TouchScreenState<1> InputHelper::prevTouchState{};
 ulong InputHelper::selectedPort = -1;
 bool InputHelper::isReadInput = true;
 bool InputHelper::toggleInput = false;
+bool InputHelper::disableMouse = false;
 
 const char *getStyleName(nn::hid::NpadStyleSet style) {
 
@@ -77,7 +78,7 @@ void InputHelper::updatePadState() {
     prevTouchState = curTouchState;
     nn::hid::GetTouchScreenState(&curTouchState);
 
-    if (isHoldZL() && isPressZR()) {
+    if (isHoldL() && isPressPadLeft()) {
         toggleInput = !toggleInput;
     }
 }
@@ -149,7 +150,9 @@ bool InputHelper::isMouseRelease(nn::hid::MouseButton button) {
 }
 
 bool InputHelper::isMouseConnected() {
-    return curMouseState.attributes.Test((int) nn::hid::MouseAttribute::IsConnected);
+    if (!disableMouse)
+        return curMouseState.attributes.Test((int) nn::hid::MouseAttribute::IsConnected);
+    else return false;
 }
 
 void InputHelper::getMouseCoords(float *x, float *y) {

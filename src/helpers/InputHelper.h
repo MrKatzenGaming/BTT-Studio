@@ -209,6 +209,9 @@ public:
         return y < 0 ? -y : 0;
     }
 
+    static void setDisableMouse(bool disable) { disableMouse = disable; }
+    static bool isDisableMouse() { return disableMouse; }
+
 private:
 
     static bool tryGetContState(nn::hid::NpadBaseState *state, ulong port);
@@ -228,6 +231,8 @@ private:
     static nn::hid::TouchScreenState<1> prevTouchState;
 
     static ulong selectedPort;
+    
+    static bool disableMouse;
 
     static bool isReadInput;
     static bool toggleInput;

@@ -1,16 +1,17 @@
 #include "Menu.h"
 
+#include "InputHelper.h"
 #include "helpers/getHelper.h"
 
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "al/Library/LiveActor/ActorPoseKeeper.h"
 #include "game/System/GameSystem.h"
-#include "al/Library/Controller/InputFunction.h"
-#include <cstddef>
 #include <heap/seadHeapMgr.h>
-#include "game/Sequence/ChangeStageInfo.h"
 #include "game/Scene/StageScene.h"
-#include "game/System/GameDataHolder.h"
+#include "game/System/GameDataFunction.h"
+#include <cstdio>
+
+#include "imgui.h"
 
 namespace btt {
 
@@ -19,113 +20,49 @@ const char* stageNames[] = {"CapWorldHomeStage", "WaterfallWorldHomeStage", "San
 
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
-void Menu::init(sead::Heap* heap) {
-    mHeap = heap;
-    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
-}
+void Menu::draw() {
+    HakoniwaSequence* gameSeq = (HakoniwaSequence *) GameSystemFunction::getGameSystem()->mSequence;
+    PlayerActorBase* player = helpers::tryGetPlayerActor();
 
-void Menu::draw(sead::DrawContext* drawContext) {
+    StageScene* stageScene = helpers::tryGetStageScene();
 
+    if (InputHelper::isHoldPadUp() && player && !InputHelper::isReadInputs()) {
+        player->getPoseKeeper()->getVelocityPtr()->y = 0;
+        al::getTransPtr(player)->y += 20;
+    }
 
+    char title[256];
+    snprintf(title, sizeof(title), "BTT Studio%s", InputHelper::isInputToggled() ? "" : " [Menu disabled]");
 
+    ImGui::Begin(title, nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    ImGui::SetWindowSize(mWindowSize, ImGuiCond_FirstUseEver);
+    ImGui::SetWindowPos(ImVec2(0, 900-mWindowSize.y), ImGuiCond_FirstUseEver);
 
-    if (mIsEnabledMenu) {
+    ImGui::Text("Current Sequence Name: %s", gameSeq->mName.cstr());
 
-        switch (mCurrentPage) {
-            case Main:
-                drawMain(nullptr);
-                break;
+    static bool showWindow = false;
 
-            case Options:
-                drawOptions(nullptr);
-                break;
+    if (ImGui::Button("Toggle Demo Window")) {
+        showWindow = !showWindow;
+    }
 
-            case Info:
-                drawInfo(nullptr);
-                break;
-            
-                case Misc:
-                drawMisc(nullptr);
-                break;
+    if (showWindow) {
+        ImGui::ShowDemoWindow();
+    }
 
-            default:
-                break;
+    if (stageScene) {
+        if (ImGui::Button("Kill Scene"))
+        stageScene->kill();
+    }
+
+    if (player) {
+
+        if (ImGui::Button("Kill Mario")) {
+            GameDataFunction::killPlayer(GameDataHolderWriter(player));
         }
     }
 
-    if (al::isPadTriggerDown(-1) && mIsEnabledMenu && mIsEnabledInput) {
-        mCurrentLine++;
-    } else if (al::isPadTriggerUp(-1) && mIsEnabledMenu && mIsEnabledInput) {
-        mCurrentLine--;
-    }
-    if (al::isPadTriggerPressLeftStick(-1)) {
-        mIsEnabledMenu = !mIsEnabledMenu;
-    }
-
-    if (al::isPadHoldRight(-1) || al::isPadHoldLeft(-1)) {
-        heldDirFrames++;
-    } else {
-        heldDirFrames = 0;
-    }
-
+    ImGui::End();
 }
-
-void Menu::drawMain(void* renderer) {
-    // TITLE("BTT Studio");
-    // MAX_LINE(3);
-    // CHANGE_PAGE("Misc", Misc, 0)
-    // CHANGE_PAGE("Options", Options, 1);
-    // CHANGE_PAGE("Info", Info, 2);
-
-
-}
-
-void Menu::drawOptions(void* renderer) {
-    // TITLE("Options");
-    // MAX_LINE(2);
-    // BACK_PAGE(Main, 0);
-
-    // TOGGLE("Moon Jump", SettingsMgr::instance()->mSettings.mIsEnableMoonJump, 1);
-}
-
-void Menu::drawInfo(void* renderer) {
-    // TITLE("Info");
-    // MAX_LINE(1);
-    // BACK_PAGE(Main, 0);
-
-
-    // al::LiveActor* player = helpers::tryGetPlayer();
-    // if (player) {
-    //     const sead::Vector3f& trans = al::getTrans(player);
-    //     const sead::Vector3f& vel = player->getPoseKeeper()->getVelocity();
-        
-    //     TEXT(1,"Pos: %.2f %.2f %.2f\n", trans.x, trans.y, trans.z);
-    //     TEXT(2,"Vel: %.2f %.2f %.2f\n", vel.x, vel.y, vel.z);
-    // } else {
-    //     TEXT(1,"No player\n");
-    // }
-}
-
-void Menu::drawMisc(void* renderer) {
-    // TITLE("Misc");
-    // MAX_LINE(4);
-    // BACK_PAGE(Main, 0);
-
-    // INDEXRL(currentStage, 0, NUM_STAGES - 1, 1);
-    // TEXT(1,"%sStage: %s\n", mCharCursor, stageNames[currentStage]);
-    // INDEXRL(currentScenario, 0, 15, 2);
-
-    // if (currentScenario != 0) {TEXT(2,"%sScenario: %d\n", mCharCursor, currentScenario);}
-    // else TEXT(2,"%sScenario: Don't change\n", mCharCursor);
-
-    // TRIGGER("Go", 3, {
-    //     ChangeStageInfo info = ChangeStageInfo(helpers::tryGetStageScene()->mHolder->mData, "start", stageNames[currentStage], false, currentScenario ?: -1, ChangeStageInfo::NO_SUB_SCENARIO);
-    //     helpers::tryGetStageScene()->mHolder->mData->changeNextStage(&info, 0);
-    //     mCurrentLine = 0;
-    // });
-
-
-}
-    
 
 } // namespace btt

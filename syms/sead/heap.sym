@@ -7,5 +7,6 @@ _ZN4sead7ExpHeap6createEmRKNS_14SafeStringBaseIcEEPNS_4HeapEiNS5_13HeapDirection
 _ZN4sead9IDisposerC2EPNS_4HeapENS0_14HeapNullOptionE
 _ZnamPN4sead4HeapEi
 _ZN4sead9IDisposerD2Ev
+_ZTIN4sead9IDisposerE
 
 @smo:130

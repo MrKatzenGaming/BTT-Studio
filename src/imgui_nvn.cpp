@@ -124,88 +124,36 @@ void disableButtons(nn::hid::NpadBaseState *state) {
     }
 }
 
-// HOOK_DEFINE_TRAMPOLINE(DisableFullKeyState) {
-//     static int Callback(int *unkInt, nn::hid::NpadFullKeyState *state, int count, uint const &port) {
-//         int result = Orig(unkInt, state, count, port);
-//         disableButtons(state);
-//         return result;
-//     }
-// };
 HkTrampoline<int, int*, nn::hid::NpadFullKeyState*, int, unsigned int const&> DisableFullKeyState = hk::hook::trampoline([](int *unkInt, nn::hid::NpadFullKeyState *state, int count, unsigned int const &port) -> int {
     int result = DisableFullKeyState.orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 });
 
-// HOOK_DEFINE_TRAMPOLINE(DisableHandheldState) {
-//     static int Callback(int *unkInt, nn::hid::NpadHandheldState *state, int count, uint const &port) {
-//         int result = Orig(unkInt, state, count, port);
-//         disableButtons(state);
-//         return result;
-//     }
-// };
 HkTrampoline<int, int*, nn::hid::NpadHandheldState*, int, unsigned int const&> DisableHandheldState = hk::hook::trampoline([](int *unkInt, nn::hid::NpadHandheldState *state, int count, unsigned int const &port) -> int {
     int result = DisableHandheldState.orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 });
 
-// HOOK_DEFINE_TRAMPOLINE(DisableJoyDualState) {
-//     static int Callback(int *unkInt, nn::hid::NpadJoyDualState *state, int count, uint const &port) {
-//         int result = Orig(unkInt, state, count, port);
-//         disableButtons(state);
-//         return result;
-//     }
-// };
 HkTrampoline<int, int*, nn::hid::NpadJoyDualState*, int, unsigned int const&> DisableJoyDualState = hk::hook::trampoline([](int *unkInt, nn::hid::NpadJoyDualState *state, int count, unsigned int const &port) -> int {
     int result = DisableJoyDualState.orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 });
 
-// HOOK_DEFINE_TRAMPOLINE(DisableJoyLeftState) {
-//     static int Callback(int *unkInt, nn::hid::NpadJoyLeftState *state, int count, uint const &port) {
-//         int result = Orig(unkInt, state, count, port);
-//         disableButtons(state);
-//         return result;
-//     }
-// };
 HkTrampoline<int, int*, nn::hid::NpadJoyLeftState*, int, unsigned int const&> DisableJoyLeftState = hk::hook::trampoline([](int *unkInt, nn::hid::NpadJoyLeftState *state, int count, unsigned int const &port) -> int {
     int result = DisableJoyLeftState.orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 });
 
-// HOOK_DEFINE_TRAMPOLINE(DisableJoyRightState) {
-//     static int Callback(int *unkInt, nn::hid::NpadJoyRightState *state, int count, uint const &port) {
-//         int result = Orig(unkInt, state, count, port);
-//         disableButtons(state);
-//         return result;
-//     }
-// };
 HkTrampoline<int, int*, nn::hid::NpadJoyRightState*, int, unsigned int const&> DisableJoyRightState = hk::hook::trampoline([](int *unkInt, nn::hid::NpadJoyRightState *state, int count, unsigned int const &port) -> int {
     int result = DisableJoyRightState.orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 });
 
-// HOOK_DEFINE_TRAMPOLINE(NvnBootstrapHook) {
-//     static void *Callback(const char *funcName) {
-
-//         void *result = Orig(funcName);
-
-//         if (strcmp(funcName, "nvnDeviceInitialize") == 0) {
-//             tempDeviceInitFuncPtr = (nvn::DeviceInitializeFunc) result;
-//             return (void *) &deviceInit;
-//         }
-//         if (strcmp(funcName, "nvnDeviceGetProcAddress") == 0) {
-//             tempGetProcAddressFuncPtr = (nvn::DeviceGetProcAddressFunc) result;
-//             return (void *) &getProc;
-//         }
-
-//         return result;
-//     }
-// };
 HkTrampoline<void*, const char*> NvnBootstrapHook = hk::hook::trampoline([](const char *funcName) -> void* {
     void *result = NvnBootstrapHook.orig(funcName);
 
@@ -260,11 +208,11 @@ void nvnImGui::procDraw() {
 
 void nvnImGui::InstallHooks() {
     NvnBootstrapHook.installAtSym<"nvnBootstrapLoader">();
-    // DisableFullKeyState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_16NpadFullKeyStateEiRKj">();
-    // DisableHandheldState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_17NpadHandheldStateEiRKj">();
-    // DisableJoyDualState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_16NpadJoyDualStateEiRKj">();
-    // DisableJoyLeftState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_16NpadJoyLeftStateEiRKj">();
-    // DisableJoyRightState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_17NpadJoyRightStateEiRKj">();
+    DisableFullKeyState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_16NpadFullKeyStateEiRKj">();
+    DisableHandheldState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_17NpadHandheldStateEiRKj">();
+    DisableJoyDualState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_16NpadJoyDualStateEiRKj">();
+    DisableJoyLeftState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_16NpadJoyLeftStateEiRKj">();
+    DisableJoyRightState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_17NpadJoyRightStateEiRKj">();
 }
 
 bool nvnImGui::InitImGui() {

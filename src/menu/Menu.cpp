@@ -21,7 +21,7 @@ void Menu::draw() {
     HakoniwaSequence* gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
     PlayerActorBase* player = helpers::tryGetPlayerActor();
     StageScene* stageScene = helpers::tryGetStageScene();
-    SettingsMgr* settings = SettingsMgr::instance();
+    SettingsMgr* set = SettingsMgr::instance();
 
     if (InputHelper::isInputToggled()) {
         drawInputDisabled();
@@ -48,8 +48,13 @@ void Menu::draw() {
     drawStageWarpWindow();
 
     if (ImGui::CollapsingHeader("Options")) {
-        ImGui::Checkbox("Moon Jump", &settings->mSettings.mIsEnableMoonJump);
-        ImGui::Checkbox("Moon Refresh", &settings->mSettings.mIsEnableMoonRefresh);
+        ImGui::Checkbox("Moon Refresh", &set->mSettings.mIsEnableMoonRefresh);
+        ImGui::Checkbox("Always Manually Skip Cutscene", &set->mSettings.mIsEnableAlwaysManualCutscene);
+        ImGui::Checkbox("Always Allow Checkpoints", &set->mSettings.mIsEnableAlwaysCheckpoints);
+        ImGui::Checkbox("Disable Auto Save", &set->mSettings.mIsEnableDisableAutoSave);
+        ImGui::Checkbox("Disable Moon Lock", &set->mSettings.mIsEnableDisableMoonLock);
+        ImGui::Checkbox("No Damage", &set->mSettings.mIsEnableNoDamage);
+        ImGui::Checkbox("Disable Music", &set->mSettings.mIsEnableDisableMusic);
     }
 
     ImGui::End();

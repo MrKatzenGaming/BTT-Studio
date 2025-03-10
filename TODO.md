@@ -4,7 +4,7 @@
 - [ ] Disable Telport Puppet only in Moon Anim  
 - [ ] Input Display  
 - [x] Stage Warper
-- [ ] Most Settings from Lunakit  
+- [x] Most Settings from Lunakit  
 - [ ] Save config to sd
 - [x] Name  
     - [x] Btt Studio  
@@ -21,3 +21,4 @@
 - [ ] having the multimoon spawn at the start of every kingdom, or a way to reload stage like you got the multimoon  
 - [ ] Could you shorten story moon cutscenes and make the story moons not as messy too  
 - [ ] this doesnt seem very feasible but some way to manip cycles  
+- [ ] choose moon text from prewritten list

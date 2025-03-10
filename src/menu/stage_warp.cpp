@@ -212,15 +212,25 @@ const char* getEnglishName(const char* internalName) {
     return internalName;
 }
 
+inline const char* getScenarioType(WorldListEntry& entry, int scenario)
+{   
+    if(scenario == -1)
+        return " (No Change)";
+    if(scenario == 0)
+        return " (First Visit)";
+    if(scenario == entry.clearMainScenario)
+        return " (Peace)";
+    if(scenario == entry.endingScenario)
+        return " (Post-game)";
+    if(scenario == entry.moonRockScenario)
+        return " (Moon Rock)";
+
+    return "";
+}
+
 void drawStageWarpWindow() {
     HakoniwaSequence* gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
 
-    // ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
-    // ImGui::SetNextWindowSize(ImVec2(400, 600), ImGuiCond_FirstUseEver);
-
-    // ImGui::Begin("Stage Teleporter", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
-    //                                           ImGuiWindowFlags_NoSavedSettings |
-    //                                           ImGuiWindowFlags_NoFocusOnAppearing);
     if (ImGui::CollapsingHeader("Stage Warp")) {
         auto curScene = gameSeq->mCurrentScene;
 
@@ -241,12 +251,12 @@ void drawStageWarpWindow() {
             sprintf(subAreaButtonId, "Sub-Areas##%s", entry.mainStageName);
 
             ImGui::AlignTextToFramePadding();
-            ImGui::BulletText("%s", getEnglishName(entry.mainStageName));
+            ImGui::BulletText("%s%s", getEnglishName(entry.mainStageName), getScenarioType(entry, curScenario));
             ImGui::SameLine();
             if (ImGui::Button(warpButtonId)) {
                 // PlayerHelper::warpPlayer(entry.mainStageName, gameSeq->mGameDataHolderAccessor, curScenario);
                 ChangeStageInfo stageInfo(
-                    gameSeq->mGameDataHolderAccessor, "", entry.mainStageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                    gameSeq->mGameDataHolderAccessor, "start", entry.mainStageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                 );
                 GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
             }
@@ -264,7 +274,7 @@ void drawStageWarpWindow() {
                         if (ImGui::MenuItem(getEnglishName(stageName))) {
                             // PlayerHelper::warpPlayer(stageName, gameSeq->mGameDataHolderAccessor, curScenario);
                             ChangeStageInfo stageInfo(
-                                gameSeq->mGameDataHolderAccessor, "", stageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                                gameSeq->mGameDataHolderAccessor, "start", stageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                             );
                             GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
                         }

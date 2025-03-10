@@ -1,9 +1,80 @@
-BasedOnStyle: WebKit
+---
+Language: Cpp
+AccessModifierOffset: -4
+AlignAfterOpenBracket: BlockIndent
+AlignEscapedNewlines: Right
+AlignOperands: Align
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: true
+BinPackParameters: true
+BitFieldColonSpacing: Both
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Attach
+BreakBeforeTernaryOperators: false
+BreakConstructorInitializers: AfterColon
+BreakInheritanceList: AfterComma
+ColumnLimit: 160
+CompactNamespaces: false
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: false
+EmptyLineBeforeAccessModifier: LogicalBlock
+FixNamespaceComments: true
+IncludeCategories:
+  - Regex:    '^<'
+    Priority: 1
+  - Regex:    '^"'
+    Priority: 2
+IndentAccessModifiers: false
+IndentCaseBlocks: false
+IndentCaseLabels: false
+IndentPPDirectives: AfterHash
+IndentWidth: 4
+IndentWrappedFunctionNames: true
+InsertBraces: false
+InsertNewlineAtEOF: true
+KeepEmptyLinesAtEOF: false
+KeepEmptyLinesAtTheStartOfBlocks: false
+LineEnding: LF
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+PPIndentWidth: 1
+PackConstructorInitializers: NextLine
+PenaltyReturnTypeOnItsOwnLine: 1000000
+PointerAlignment: Left
 QualifierAlignment: Left
-NamespaceIndentation: All
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterEnum: true
-  AfterFunction: false
-  AfterClass: false
-  SplitEmptyFunction: false
+ReflowComments: true
+RemoveParentheses: ReturnStatement
+RemoveSemicolon: true
+SeparateDefinitionBlocks: Always
+SortIncludes: CaseSensitive
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpacesInAngles: Never
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: -1
+SpacesInParens: Never
+SpacesInSquareBrackets: false
+Standard: c++20
+TypeNames: [ u8, s8, u16, s16, u32, s32, f32, u64, s64, f64 ]
+TabWidth: 4
+UseTab: Never

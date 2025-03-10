@@ -9,14 +9,13 @@
 
 namespace btt {
 
-
 class Menu {
     SEAD_SINGLETON_DISPOSER(Menu)
 
 private:
     SettingsMgr::Settings mSettings;
 
-    void drawStageWarp();
+    void drawInputDisabled();
 
     ImVec2 mWindowSize = ImVec2(500, 400);
 
@@ -25,7 +24,7 @@ public:
     bool mIsEnabledMenu = true;
 
     void draw();
-
+    void setupStyle();
 };
 
 } // namespace btt

@@ -10,3 +10,5 @@ _ZN4sead9IDisposerD2Ev
 _ZTIN4sead9IDisposerE
 
 @smo:130
+
+_ZN4sead7ExpHeap6createEmRKNS_14SafeStringBaseIcEEPNS_4HeapEiNS5_13HeapDirectionEb = 0x00951150

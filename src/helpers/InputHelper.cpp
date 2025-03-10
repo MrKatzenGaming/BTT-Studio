@@ -1,4 +1,6 @@
 #include "InputHelper.h"
+#include "imgui.h"
+#include "imgui_internal.h"
 
 static const char *styleNames[] = {
         "Pro Controller",

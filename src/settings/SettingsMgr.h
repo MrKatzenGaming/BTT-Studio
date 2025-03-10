@@ -14,6 +14,7 @@ public:
 
     struct Settings {
         bool mIsEnableMoonJump = false;
+        bool mIsEnableMoonRefresh = false;
     } mSettings;
 
     void init(sead::Heap* heap);

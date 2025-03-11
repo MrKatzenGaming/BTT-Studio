@@ -57,13 +57,6 @@ HkTrampoline<int, GameDataHolder*, bool*, int> disableMoonLockHook = hk::hook::t
     return SettingsMgr::instance()->mSettings.mIsEnableDisableMoonLock ? 0 : lockSize;
 });
 
-// HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
-//     static void Callback(PlayerHitPointData* hitPointData) {
-//         if (!DevGuiManager::instance()->getSettings()->getStateByName("No Damage"))
-//             return Orig(hitPointData);
-//     }
-// };
-
 HkTrampoline<void, PlayerHitPointData*> NoDamageHook = hk::hook::trampoline([](PlayerHitPointData* hitPointData) -> void {
     if (!SettingsMgr::instance()->mSettings.mIsEnableNoDamage) 
         NoDamageHook.orig(hitPointData);

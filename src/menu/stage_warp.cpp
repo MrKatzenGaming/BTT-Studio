@@ -217,13 +217,13 @@ inline const char* getScenarioType(WorldListEntry& entry, int scenario)
     if(scenario == -1)
         return " (No Change)";
     if(scenario == 0)
-        return " (First Visit)";
+        return " ()";
     if(scenario == entry.clearMainScenario)
         return " (Peace)";
     if(scenario == entry.endingScenario)
-        return " (Post-game)";
+        return " (PG)";
     if(scenario == entry.moonRockScenario)
-        return " (Moon Rock)";
+        return " (MR)";
 
     return "";
 }

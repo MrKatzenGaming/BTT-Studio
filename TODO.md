@@ -21,4 +21,11 @@
 - [ ] having the multimoon spawn at the start of every kingdom, or a way to reload stage like you got the multimoon  
 - [ ] Could you shorten story moon cutscenes and make the story moons not as messy too  
 - [ ] this doesnt seem very feasible but some way to manip cycles  
-- [ ] choose moon text from prewritten list
+- [ ] choose moon text from prewritten list  
+- [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
+- [ ] tp cam with player  
+- [ ] all persisting states should have the ability to be reset  
+- [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
+- [ ] also shop text thingys  
+- [ ] warp text  
+- [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  

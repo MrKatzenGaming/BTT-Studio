@@ -1,72 +1,74 @@
-#include "getHelper.h"
-#include "hk/gfx/DebugRenderer.h"
+#include <cstddef>
+#include "InputHelper.h"
+#include "Menu.h"
+#include "game/System/GameFrameworkNx.h"
 #include "hk/hook/Trampoline.h"
-
-#include "agl/common/aglDrawContext.h"
 
 #include "game/System/Application.h"
 #include "game/System/GameSystem.h"
 
-#include "al/Library/LiveActor/LiveActor.h"
-#include "al/Library/Controller/InputFunction.h"
-#include "al/Library/LiveActor/ActorPoseKeeper.h"
-#include "al/Library/LiveActor/ActorPoseUtil.h"
-#include "al/Library/System/GameSystemInfo.h"
+
 #include "al/Library/Memory/HeapUtil.h"
 
-#include "menu/Menu.h"
+#include "settings/SettingsHooks.h"
 #include "settings/SettingsMgr.h"
 
-using namespace hk::hook;
+#include "imgui.h"
+#include "nvnImGui/imgui_nvn.h"
+
+using namespace hk;
 using namespace btt;
 
-HkTrampoline<void, al::LiveActor*> marioControl = hk::hook::trampoline([](al::LiveActor* player) -> void {
-    if (al::isPadHoldA(-1) && SettingsMgr::instance()->mSettings.mIsEnableMoonJump) {
-        player->getPoseKeeper()->getVelocityPtr()->y = 0;
-        al::getTransPtr(player)->y += 20;
+void drawFpsWindow() {
+    if (!Menu::instance()->mIsEnabledMenu) return;
+    ImGui::SetNextWindowPos(ImVec2(120.f, -8.f));
+
+    ImGui::Begin(
+        "FPSCounter", nullptr,
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+            ImGuiWindowFlags_NoBackground
+    );
+
+    ImGui::Text("FPS: %2.f\n", Application::instance()->mGameFramework->calcFps());
+
+    ImGui::End();
+}
+
+void drawMenu() {
+    Menu* menu = Menu::instance();
+
+    if (InputHelper::isPressStickL()) {
+        menu->mIsEnabledMenu = !menu->mIsEnabledMenu;
     }
 
-    marioControl.orig(player);
-});
+    if (menu && menu->mIsEnabledMenu) menu->draw();
+}
 
 HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
     sead::Heap* heap = al::getStationedHeap();
 
     SettingsMgr* settingsMgr = SettingsMgr::createInstance(heap);
-    settingsMgr->init(heap);
-
     Menu* menu = Menu::createInstance(heap);
-    menu->init(heap);
+
+    menu->setupStyle();
+
+    nvnImGui::addDrawFunc(drawMenu);
+    // nvnImGui::addDrawFunc(drawFpsWindow);
+
+    InputHelper::setDisableMouse(true);
 
     gameSystemInit.orig(gameSystem);
 });
 
 
-HkTrampoline<void, GameSystem*> drawMainHook = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
-    drawMainHook.orig(gameSystem);
 
-    auto* drawContext = Application::instance()->mDrawSystemInfo->drawContext;
-
-    Menu* menu = Menu::instance();
-    menu->draw(drawContext);
-    
-});
-
-HkTrampoline<bool, al::IUseSceneObjHolder*> isTriggerSnapShotModeHook = hk::hook::trampoline([](al::IUseSceneObjHolder* holder) -> bool {
-    return (Menu::instance()->mIsEnabledInput && Menu::instance()->mIsEnabledMenu) ? 0 : isTriggerSnapShotModeHook.orig(holder);
-});
-
-HkTrampoline<bool, al::IUseSceneObjHolder*> isTriggerAmiiboModeHook = hk::hook::trampoline([](al::IUseSceneObjHolder* holder) -> bool {
-    return (Menu::instance()->mIsEnabledInput && Menu::instance()->mIsEnabledMenu) ? 0 : isTriggerAmiiboModeHook.orig(holder);
-});
+HkTrampoline<void, GameSystem*> drawMainHook = hk::hook::trampoline([](GameSystem* gameSystem) -> void { drawMainHook.orig(gameSystem); });
 
 extern "C" void hkMain() {
-    marioControl.installAtSym<"_ZN19PlayerActorHakoniwa7controlEv">();
     gameSystemInit.installAtSym<"_ZN10GameSystem4initEv">();
     drawMainHook.installAtSym<"_ZN10GameSystem8drawMainEv">();
 
-    isTriggerSnapShotModeHook.installAtSym<"_ZN2rs21isTriggerSnapShotModeEPKN2al18IUseSceneObjHolderE">();
-    isTriggerAmiiboModeHook.installAtSym<"_ZN2rs19isTriggerAmiiboModeEPKN2al18IUseSceneObjHolderE">();
+    SettingsHooks::installSettingsHooks();
 
-    hk::gfx::DebugRenderer::instance()->installHooks();
+    nvnImGui::InstallHooks();
 }

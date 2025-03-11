@@ -6,4 +6,5 @@ _ZN18GameSystemFunction13getGameSystemEv
 
 @smo:130
 
+_ZN10GameSystem4initEv = 0x004e1720
 _ZN10GameSystem8drawMainEv = 0x004e29a0

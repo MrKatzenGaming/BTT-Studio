@@ -1,148 +1,100 @@
 #include "Menu.h"
 
-#include "hk/gfx/DebugRenderer.h"
+#include "InputHelper.h"
 #include "helpers/getHelper.h"
 
-#include "al/Library/LiveActor/ActorPoseUtil.h"
-#include "al/Library/LiveActor/ActorPoseKeeper.h"
-#include "game/System/GameSystem.h"
-#include "al/Library/Controller/InputFunction.h"
 #include <heap/seadHeapMgr.h>
-#include "game/Sequence/ChangeStageInfo.h"
+#include <nn/oe.h>
 #include "game/Scene/StageScene.h"
-#include "game/System/GameDataHolder.h"
+#include "game/System/GameDataFunction.h"
+#include "game/System/GameSystem.h"
+#include "settings/SettingsMgr.h"
+#include "stage_warp.h"
+
+#include "imgui.h"
 
 namespace btt {
 
-const char* stageNames[] = {"CapWorldHomeStage", "WaterfallWorldHomeStage", "SandWorldHomeStage", "LakeWorldHomeStage", "ForestWorldHomeStage", "CloudWorldHomeStage", "ClashWorldHomeStage", "CityWorldHomeStage","SnowWorldHomeStage", "SeaWorldHomeStage", "LavaWorldHomeStage", "BossRaidWorldHomeStage", "SkyWorldHomeStage", "MoonWorldHomeStage", "PeachWorldHomeStage", "Special1WorldHomeStage", "Special2WorldHomeStage", "MoonWorldBasementStage", "MoonWorldKoopa1Stage", "MoonWorldKoopa2Stage", "AnimalChaseExStage", "BikeSteelExStage", "BikeSteelNoCapExStage", "BullRunExStage", "ByugoPuzzleExStage", "CapAppearExStage", "CapAppearLavaLiftExStage", "CapRotatePackunExStage", "CapWorldTowerStage", "CityPeopleRoadStage", "CityWorldFactoryStage", "CityWorldMainTowerStage", "CityWorldSandSlotStage", "CityWorldShop01Stage", "ClashWorldShopStage", "CloudExStage", "Cube2DExStage", "DemoBossRaidAttackStage", "DemoChangeWorldBossRaidAttackStage", "DemoChangeWorldFindKoopaShipStage", "DemoChangeWorldStage", "DemoCrashHomeFallStage", "DemoCrashHomeStage", "DemoEndingStage", "DemoHackFirstStage", "DemoHackKoopaStage", "DemoLavaWorldScenario1EndStage", "DemoMeetCapNpcSubStage", "DemoOpeningStage", "DemoStartWorldWaterfallStage", "DemoTakeOffKoopaForMoonStage", "DemoWorldMoveBackwardArriveStage", "DemoWorldMoveBackwardStage", "DemoWorldMoveForwardArriveStage", "DemoWorldMoveForwardFirstStage", "DemoWorldMoveForwardStage", "DemoWorldMoveMoonBackwardStage", "DemoWorldMoveMoonForwardFirstStage", "DemoWorldMoveMoonForwardStage", "DemoWorldWarpHoleStage", "DonsukeExStage", "DotHardExStage", "DotTowerExStage", "ElectricWireExStage", "FastenerExStage", "FogMountainExStage", "ForestWorldBonusStage", "ForestWorldBossStage", "ForestWorldCloudBonusExStage", "ForestWorldTowerStage", "ForestWorldWaterExStage", "ForestWorldWoodsCostumeStage", "ForestWorldWoodsStage", "ForestWorldWoodsTreasureStage", "ForkExStage", "FrogPoisonExStage", "FrogSearchExStage", "FukuwaraiKuriboStage", "FukuwaraiMarioStage", "GabuzouClockExStage", "Galaxy2DExStage", "GotogotonExStage", "HomeShipInsideStage", "IceWalkerExStage", "IceWaterBlockExStage", "IceWaterDashExStage", "ImomuPoisonExStage", "JangoExStage", "JizoSwitchExStage", "KaronWingTowerStage", "KillerRailCollisionExStage", "KillerRoadExStage", "KillerRoadNoCapExStage", "LakeWorldShopStage", "LavaWorldBubbleLaneExStage", "LavaWorldClockExStage", "LavaWorldCostumeStage", "LavaWorldExcavationExStage", "LavaWorldFenceLiftExStage", "LavaWorldShopStage", "LavaWorldTreasureStage", "LavaWorldUpDownExStage", "LavaWorldUpDownYoshiExStage", "Lift2DExStage", "MeganeLiftExStage", "MoonAthleticExStage", "MoonWorldCaptureParadeStage", "MoonWorldShopRoom", "MoonWorldSphinxRoom", "MoonWorldWeddingRoom2Stage", "MoonWorldWeddingRoomStage", "Note2D3DRoomExStage", "PackunPoisonExStage", "PackunPoisonNoCapExStage", "PeachWorldCastleStage", "PeachWorldCostumeStage", "PeachWorldPictureBossForestStage", "PeachWorldPictureBossKnuckleStage", "PeachWorldPictureBossMagmaStage", "PeachWorldPictureBossRaidStage", "PeachWorldPictureGiantWanderBossStage", "PeachWorldPictureMofumofuStage", "PeachWorldShopStage", "PoisonWaveExStage", "PoleGrabCeilExStage", "PoleKillerExStage", "PushBlockExStage", "RadioControlExStage", "RailCollisionExStage", "ReflectBombExStage", "RevengeBossKnuckleStage", "RevengeBossMagmaStage", "RevengeBossRaidStage", "RevengeForestBossStage", "RevengeGiantWanderBossStage", "RevengeMofumofuStage", "RocketFlowerExStage", "RollingExStage", "SandWorldCostumeStage", "SandWorldKillerExStage", "SandWorldMeganeExStage", "SandWorldPressExStage", "SandWorldPyramid000Stage", "SandWorldPyramid001Stage", "SandWorldRotateExStage", "SandWorldSecretStage", "SandWorldShopStage", "SandWorldSlotStage", "SandWorldSphinxExStage", "SandWorldUnderground000Stage", "SandWorldUnderground001Stage", "SandWorldVibrationStage", "SeaWorldCostumeStage", "SeaWorldSecretStage", "SeaWorldSneakingManStage", "SeaWorldUtsuboCaveStage", "SeaWorldVibrationStage", "SenobiTowerExStage", "SenobiTowerYoshiExStage", "ShootingCityExStage", "ShootingCityYoshiExStage", "ShootingElevatorExStage", "SkyWorldCloudBonusExStage", "SkyWorldCostumeStage", "SkyWorldShopStage", "SkyWorldTreasureStage", "SnowWorldCloudBonusExStage", "SnowWorldCostumeStage", "SnowWorldLobby000Stage", "SnowWorldLobby001Stage", "SnowWorldLobbyExStage", "SnowWorldRace000Stage", "SnowWorldRace001Stage", "SnowWorldRaceExStage", "SnowWorldRaceHardExStage", "SnowWorldRaceTutorialStage", "SnowWorldShopStage", "SnowWorldTownStage", "Special1WorldTowerBombTailStage", "Special1WorldTowerCapThrowerStage", "Special1WorldTowerFireBlowerStage", "Special1WorldTowerStackerStage", "Special2WorldCloudStage", "Special2WorldKoopaStage", "Special2WorldLavaStage", "StaffRollMoonRockDemo", "SwingSteelExStage", "Theater2DExStage", "TogezoRotateExStage", "TrampolineWallCatchExStage", "TrexBikeExStage", "TrexPoppunExStage", "TsukkunClimbExStage", "TsukkunRotateExStage", "WanwanClashExStage", "WaterTubeExStage", "WaterValleyExStage", "WindBlowExStage", "WorldStage", "YoshiCloudExStage"};
-#define NUM_STAGES 200
-
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
-void Menu::init(sead::Heap* heap) {
-    mHeap = heap;
-    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
-}
+void Menu::draw() {
+    HakoniwaSequence* gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
+    PlayerActorBase* player = helpers::tryGetPlayerActor();
+    StageScene* stageScene = helpers::tryGetStageScene();
+    SettingsMgr* set = SettingsMgr::instance();
 
-void Menu::draw(sead::DrawContext* drawContext) {
-    auto* renderer = hk::gfx::DebugRenderer::instance();
-    
+    if (InputHelper::isInputToggled()) {
+        drawInputDisabled();
+    }
 
-    renderer->clear();
-    renderer->begin(drawContext->getCommandBuffer()->ToData()->pNvnCommandBuffer);
+    ImGui::Begin("BTT Studio", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    ImGui::SetWindowSize(mWindowSize, ImGuiCond_FirstUseEver);
+    ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
 
-    renderer->setGlyphSize(0.55);
+    ImGui::Text("Toggle Menu: L Stick");
+    ImGui::Text("Toggle Input: L + DPad-Left");
+    ImGui::Separator();
 
+    if (stageScene) {
+        if (ImGui::Button("Kill Scene")) stageScene->kill();
+    }
 
-
-    if (mIsEnabledMenu) {
-
-        renderer->drawQuad(
-            { { 0, 360 }, { 0, 0 }, 0xaf000000 },
-            { { 500, 360 }, { 1.0, 0 }, 0xaf000000 },
-            { { 500, 720 }, { 1.0, 1.0 }, 0xaf000000 },
-            { { 0, 720 }, { 0, 1.0 }, 0xaf000000 });
-    
-        renderer->setCursor({ 10, 370});
-
-        switch (mCurrentPage) {
-            case Main:
-                drawMain(renderer);
-                break;
-
-            case Options:
-                drawOptions(renderer);
-                break;
-
-            case Info:
-                drawInfo(renderer);
-                break;
-            
-                case Misc:
-                drawMisc(renderer);
-                break;
-
-            default:
-                printf("Invalid page\n");
-                break;
+    if (player) {
+        if (ImGui::Button("Kill Mario")) {
+            GameDataFunction::killPlayer(GameDataHolderWriter(player));
         }
     }
 
-    renderer->end();
+    drawStageWarpWindow();
 
-    if (al::isPadTriggerDown(-1) && mIsEnabledMenu && mIsEnabledInput) {
-        mCurrentLine++;
-    } else if (al::isPadTriggerUp(-1) && mIsEnabledMenu && mIsEnabledInput) {
-        mCurrentLine--;
-    }
-    if (al::isPadTriggerPressLeftStick(-1)) {
-        mIsEnabledMenu = !mIsEnabledMenu;
-    }
-
-    if (al::isPadHoldRight(-1) || al::isPadHoldLeft(-1)) {
-        heldDirFrames++;
-    } else {
-        heldDirFrames = 0;
+    if (ImGui::CollapsingHeader("Options")) {
+        ImGui::Checkbox("Moon Refresh", &set->mSettings.mIsEnableMoonRefresh);
+        ImGui::Checkbox("Always Manually Skip Cutscene", &set->mSettings.mIsEnableAlwaysManualCutscene);
+        ImGui::Checkbox("Always Allow Checkpoints", &set->mSettings.mIsEnableAlwaysCheckpoints);
+        ImGui::Checkbox("Disable Auto Save", &set->mSettings.mIsEnableDisableAutoSave);
+        ImGui::Checkbox("Disable Moon Lock", &set->mSettings.mIsEnableDisableMoonLock);
+        ImGui::Checkbox("No Damage", &set->mSettings.mIsEnableNoDamage);
+        ImGui::Checkbox("Disable Music", &set->mSettings.mIsEnableDisableMusic);
     }
 
+    ImGui::End();
 }
 
-void Menu::drawMain(hk::gfx::DebugRenderer* renderer) {
-    TITLE("BTT Studio");
-    MAX_LINE(3);
-    CHANGE_PAGE("Misc", Misc, 0)
-    CHANGE_PAGE("Options", Options, 1);
-    CHANGE_PAGE("Info", Info, 2);
+void Menu::setupStyle() {
+    ImGuiStyle& style = ImGui::GetStyle();
+    ImVec4* colors = style.Colors;
 
+    // Change the color of the title bar
+    colors[ImGuiCol_TitleBg] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+    colors[ImGuiCol_TitleBgActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
 
+    // Change the color of the frame background
+    colors[ImGuiCol_FrameBg] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+    colors[ImGuiCol_FrameBgHovered] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+    colors[ImGuiCol_FrameBgActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+
+    // Change the color of the button
+    colors[ImGuiCol_Button] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+    colors[ImGuiCol_ButtonHovered] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+    colors[ImGuiCol_ButtonActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+
+    colors[ImGuiCol_Header] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+    colors[ImGuiCol_HeaderHovered] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+    colors[ImGuiCol_HeaderActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
+
+    colors[ImGuiCol_NavHighlight] = ImVec4(1, 1, 1, 1);
 }
 
-void Menu::drawOptions(hk::gfx::DebugRenderer* renderer) {
-    TITLE("Options");
-    MAX_LINE(2);
-    BACK_PAGE(Main, 0);
-
-    TOGGLE("Moon Jump", SettingsMgr::instance()->mSettings.mIsEnableMoonJump, 1);
+void Menu::drawInputDisabled() {
+    ImGui::Begin(
+        "Input Disabled", nullptr,
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing
+    );
+    ImGui::SetWindowSize(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+    ImGui::SetWindowPos(ImVec2(mWindowSize.x + 10, 0), ImGuiCond_FirstUseEver);
+    ImGui::SetWindowFontScale(2);
+    ImGui::Text("Input Disabled");
+    ImGui::End();
 }
-
-void Menu::drawInfo(hk::gfx::DebugRenderer* renderer) {
-    TITLE("Info");
-    MAX_LINE(1);
-    BACK_PAGE(Main, 0);
-
-
-    al::LiveActor* player = helpers::tryGetPlayer();
-    if (player) {
-        const sead::Vector3f& trans = al::getTrans(player);
-        const sead::Vector3f& vel = player->getPoseKeeper()->getVelocity();
-        
-        TEXT(1,"Pos: %.2f %.2f %.2f\n", trans.x, trans.y, trans.z);
-        TEXT(2,"Vel: %.2f %.2f %.2f\n", vel.x, vel.y, vel.z);
-    } else {
-        TEXT(1,"No player\n");
-    }
-}
-
-void Menu::drawMisc(hk::gfx::DebugRenderer* renderer) {
-    TITLE("Misc");
-    MAX_LINE(4);
-    BACK_PAGE(Main, 0);
-
-    INDEXRL(currentStage, 0, NUM_STAGES - 1, 1);
-    TEXT(1,"%sStage: %s\n", mCharCursor, stageNames[currentStage]);
-    INDEXRL(currentScenario, 0, 15, 2);
-
-    if (currentScenario != 0) {TEXT(2,"%sScenario: %d\n", mCharCursor, currentScenario);}
-    else TEXT(2,"%sScenario: Don't change\n", mCharCursor);
-
-    TRIGGER("Go", 3, {
-        ChangeStageInfo info = ChangeStageInfo(helpers::tryGetStageScene()->mHolder->mData, "start", stageNames[currentStage], false, currentScenario ?: -1, ChangeStageInfo::NO_SUB_SCENARIO);
-        helpers::tryGetStageScene()->mHolder->mData->changeNextStage(&info, 0);
-        mCurrentLine = 0;
-    });
-
-
-}
-    
 
 } // namespace btt

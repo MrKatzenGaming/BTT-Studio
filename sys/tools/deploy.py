@@ -8,7 +8,7 @@ project_name = sys.argv[2]
 title_id = int(sys.argv[3].removeprefix('0x'), 16)
 module_binary = sys.argv[4]
 is_static = sys.argv[5] == 'TRUE'
-layeredfs_dir = f"atmosphere/contents/{title_id:016X}"
+layeredfs_dir = f"mods/Super-Mario-Odyssey/btt-mod/contents/{title_id:016X}"
 exefs_dir = f"{layeredfs_dir}/exefs"
 sd_exefs_dir = f"{build_dir}/sd/{exefs_dir}"
 

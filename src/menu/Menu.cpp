@@ -59,6 +59,9 @@ void Menu::draw() {
         ImGui::Checkbox("Disable Moon Lock", &set->mSettings.mIsEnableDisableMoonLock);
         ImGui::Checkbox("No Damage", &set->mSettings.mIsEnableNoDamage);
         ImGui::Checkbox("Disable Music", &set->mSettings.mIsEnableDisableMusic);
+        ImGui::Checkbox("Refresh Warp Text", &set->mSettings.mIsEnableRefreshWarpText);
+        ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->mSettings.mIsEnableRefreshKingdomEnter);
+
     }
 
     if (ImGui::CollapsingHeader("Misc")) {

@@ -17,7 +17,7 @@ struct KingdomEnglishName {
 };
 
 bool isShowMenu = false;
-int curScenario = -1;
+s32 curScenario = -1;
 
 KingdomEnglishName names[] = {
     { "CapWorldHomeStage", "Cap Kingdom" },
@@ -238,6 +238,8 @@ void drawStageWarpWindow() {
 
         ImGui::PushItemWidth(200);
         ImGui::InputInt("Scenario", &curScenario);
+        if (curScenario < -1) curScenario = 14;
+        if (curScenario > 14) curScenario = -1;
         ImGui::PopItemWidth();
 
         if (isInGame && ImGui::Button("Force Reload Current Stage")) {
@@ -257,7 +259,7 @@ void drawStageWarpWindow() {
             ImGui::SameLine();
             if (ImGui::Button(warpButtonId)) {
                 ChangeStageInfo stageInfo(
-                    gameSeq->mGameDataHolderAccessor, "start", entry.mainStageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                    gameSeq->mGameDataHolderAccessor, "start", entry.mainStageName, false, curScenario+1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                 );
                 GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
             }
@@ -274,7 +276,7 @@ void drawStageWarpWindow() {
                     if (isInGame) {
                         if (ImGui::MenuItem(getEnglishName(stageName))) {
                             ChangeStageInfo stageInfo(
-                                gameSeq->mGameDataHolderAccessor, "start", stageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                                gameSeq->mGameDataHolderAccessor, "start", stageName, false, curScenario+1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                             );
                             GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
                         }

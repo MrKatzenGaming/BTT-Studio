@@ -23,6 +23,8 @@ public:
         SETTING(DisableAutoSave);
         SETTING(DisableMusic);
         SETTING(AlwaysCheckpoints);
+        SETTING(RefreshWarpText);
+        SETTING(RefreshKingdomEnter);
     } mSettings;
 
     void init(sead::Heap* heap);

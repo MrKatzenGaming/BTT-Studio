@@ -35,7 +35,6 @@ HkTrampoline<void, GameDataHolderWriter, const ShineInfo*> ShineRefreshHook =
 HkTrampoline<void, al::LiveActor*> marioControl = hk::hook::trampoline([](al::LiveActor* player) -> void { marioControl.orig(player); });
 
 HkTrampoline<void, StageScene*> stageSceneControlHook = hk::hook::trampoline([](StageScene* stageScene) -> void {
-    PlayerActorHakoniwa* player = helpers::tryGetPlayerActorHakoniwa(stageScene);
 
     if (SettingsMgr::instance()->mSettings.mIsEnableDisableMusic) {
         if (al::isPlayingBgm(stageScene)) al::stopAllBgm(stageScene, 0);
@@ -63,6 +62,14 @@ HkTrampoline<void, PlayerHitPointData*> NoDamageHook = hk::hook::trampoline([](P
     
 });
 
+HkTrampoline<bool,  GameDataHolderAccessor> kingdomEnterHook = hk::hook::trampoline([]( GameDataHolderAccessor accessor) -> bool {
+    return SettingsMgr::instance()->mSettings.mIsEnableRefreshKingdomEnter ? false : kingdomEnterHook.orig(accessor);
+});
+
+HkTrampoline<bool, GameDataHolderAccessor> warpTextHook = hk::hook::trampoline([](GameDataHolderAccessor accessor) -> bool {
+    return SettingsMgr::instance()->mSettings.mIsEnableRefreshWarpText ? false : warpTextHook.orig(accessor);
+});
+
 void SettingsHooks::installSettingsHooks() {
 
     installDemoHooks();
@@ -75,4 +82,6 @@ void SettingsHooks::installSettingsHooks() {
     checkpointWarpHook.installAtSym<"_ZNK9MapLayout22isEnableCheckpointWarpEv">();
     disableMoonLockHook.installAtSym<"_ZNK14GameDataHolder18findUnlockShineNumEPbi">();
     NoDamageHook.installAtSym<"_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter">();
+    kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
+    warpTextHook.installAtSym<"_ZN16GameDataFunction34isAlreadyShowExplainCheckpointFlagE22GameDataHolderAccessor">();
 }

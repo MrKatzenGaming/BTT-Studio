@@ -23,9 +23,11 @@
 - [ ] this doesnt seem very feasible but some way to manip cycles  
 - [ ] choose moon text from prewritten list  
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
+    - [x] text  
+    - [ ] fix cutscene skips  
 - [ ] tp cam with player  
 - [ ] all persisting states should have the ability to be reset  
 - [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
 - [ ] also shop text thingys  
-- [ ] warp text  
+- [x] warp text  
 - [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  

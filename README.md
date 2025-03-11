@@ -3,14 +3,16 @@
 A modification for Super Mario Odyssey made to make grindin BTT segmnts easier.
 
 ## Controls
-L-Stick -> Toggle Menu  
+L-Stick Press -> Toggle Menu  
 L + DPad-Left -> Toggle Menu Input  
 DPad -> Move Selection  
 A -> Activate Selection  
+L-Stick -> Scroll  
 
 ## Features
 - Stage Warper
 - Settings menu with many options
+- Player Teleport
 
 ## Credits
 - [SMO-Exlaunch-Base](https://github.com/CraftyBoss/SMO-Exlaunch-Base)  

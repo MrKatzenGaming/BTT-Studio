@@ -1,6 +1,6 @@
 ### TODO
 - [x] Page System  
-- [ ] Always Manually Skip Cutscenes  
+- [x] Always Manually Skip Cutscenes  
 - [ ] Disable Telport Puppet only in Moon Anim  
 - [ ] Input Display  
 - [x] Stage Warper
@@ -12,7 +12,7 @@
     - [ ] Speed  
     - [ ] Jumps/Cts  
     - [ ] default stuff  
-- [ ] Multiple tp spots  
+- [x] Multiple tp spots  
 - [ ] custom button layout  
 - [ ] refresh seed & deep woods nut  
 - [ ] refresh shards  

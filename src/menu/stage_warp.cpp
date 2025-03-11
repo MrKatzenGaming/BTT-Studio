@@ -236,7 +236,9 @@ void drawStageWarpWindow() {
 
         bool isInGame = curScene && curScene->mIsAlive;
 
+        ImGui::PushItemWidth(200);
         ImGui::InputInt("Scenario", &curScenario);
+        ImGui::PopItemWidth();
 
         if (isInGame && ImGui::Button("Force Reload Current Stage")) {
             curScene->kill();
@@ -254,7 +256,6 @@ void drawStageWarpWindow() {
             ImGui::BulletText("%s%s", getEnglishName(entry.mainStageName), getScenarioType(entry, curScenario));
             ImGui::SameLine();
             if (ImGui::Button(warpButtonId)) {
-                // PlayerHelper::warpPlayer(entry.mainStageName, gameSeq->mGameDataHolderAccessor, curScenario);
                 ChangeStageInfo stageInfo(
                     gameSeq->mGameDataHolderAccessor, "start", entry.mainStageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                 );
@@ -272,7 +273,6 @@ void drawStageWarpWindow() {
 
                     if (isInGame) {
                         if (ImGui::MenuItem(getEnglishName(stageName))) {
-                            // PlayerHelper::warpPlayer(stageName, gameSeq->mGameDataHolderAccessor, curScenario);
                             ChangeStageInfo stageInfo(
                                 gameSeq->mGameDataHolderAccessor, "start", stageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                             );
@@ -286,7 +286,5 @@ void drawStageWarpWindow() {
                 ImGui::EndPopup();
             }
         }
-
-        // ImGui::End();
     }
 }

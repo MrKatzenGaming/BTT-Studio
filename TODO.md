@@ -31,3 +31,6 @@
 - [ ] also shop text thingys  
 - [x] warp text  
 - [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  
+- [ ] add stage name to tp pos  
+- [ ] save tp pos' to file
+- [ ] refresh purps

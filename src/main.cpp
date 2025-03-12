@@ -7,7 +7,6 @@
 #include "game/System/Application.h"
 #include "game/System/GameSystem.h"
 
-
 #include "al/Library/Memory/HeapUtil.h"
 
 #include "settings/SettingsHooks.h"
@@ -36,7 +35,6 @@ void drawFpsWindow() {
 
 void drawMenu() {
     Menu* menu = Menu::instance();
-    
     if (menu && menu->mIsEnabledMenu) menu->draw();
     menu->handleInput();
 }
@@ -56,8 +54,6 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
 
     gameSystemInit.orig(gameSystem);
 });
-
-
 
 HkTrampoline<void, GameSystem*> drawMainHook = hk::hook::trampoline([](GameSystem* gameSystem) -> void { drawMainHook.orig(gameSystem); });
 

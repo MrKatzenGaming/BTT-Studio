@@ -8,8 +8,10 @@
 #include "game/Sequence/HakoniwaSequence.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
+#include "getHelper.h"
 #include "helpers/InputHelper.h"
 #include "imgui.h"
+#include "imgui_internal.h"
 
 struct KingdomEnglishName {
     const char* mInternal;
@@ -212,18 +214,12 @@ const char* getEnglishName(const char* internalName) {
     return internalName;
 }
 
-inline const char* getScenarioType(WorldListEntry& entry, int scenario)
-{   
-    if(scenario == -1)
-        return " (No Change)";
-    if(scenario == 0)
-        return " ()";
-    if(scenario == entry.clearMainScenario)
-        return " (Peace)";
-    if(scenario == entry.endingScenario)
-        return " (PG)";
-    if(scenario == entry.moonRockScenario)
-        return " (MR)";
+inline const char* getScenarioType(WorldListEntry& entry, int scenario) {
+    if (scenario == -1) return " (NC)";
+    if (scenario == 0) return " ()";
+    if (scenario == entry.clearMainScenario) return " (Peace)";
+    if (scenario == entry.endingScenario) return " (PG)";
+    if (scenario == entry.moonRockScenario) return " (MR)";
 
     return "";
 }
@@ -232,15 +228,18 @@ void drawStageWarpWindow() {
     HakoniwaSequence* gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
 
     if (ImGui::CollapsingHeader("Stage Warp")) {
-        auto curScene = gameSeq->mCurrentScene;
+        auto curScene = helpers::tryGetStageScene(gameSeq);
 
         bool isInGame = curScene && curScene->mIsAlive;
+
+        ImGuiContext* g = ImGui::GetCurrentContext();
 
         ImGui::PushItemWidth(200);
         ImGui::InputInt("Scenario", &curScenario);
         if (curScenario < -1) curScenario = 14;
         if (curScenario > 14) curScenario = -1;
         ImGui::PopItemWidth();
+        if (g->NavId == ImGui::GetID("Scenario")) ImGui::SetTooltip("(NC) = No Change, () = First Arrival,\n(PG) = Post-Game, (MR) = Moon Rock");
 
         if (isInGame && ImGui::Button("Force Reload Current Stage")) {
             curScene->kill();
@@ -258,10 +257,13 @@ void drawStageWarpWindow() {
             ImGui::BulletText("%s%s", getEnglishName(entry.mainStageName), getScenarioType(entry, curScenario));
             ImGui::SameLine();
             if (ImGui::Button(warpButtonId)) {
+                if (!isInGame) continue;
+                if (curScenario != -1) curScenario += 1;
                 ChangeStageInfo stageInfo(
-                    gameSeq->mGameDataHolderAccessor, "start", entry.mainStageName, false, curScenario+1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                    gameSeq->mGameDataHolderAccessor, "start", entry.mainStageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                 );
                 GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
+                if (curScenario != -1) curScenario -= 1;
             }
 
             ImGui::SameLine();
@@ -275,10 +277,12 @@ void drawStageWarpWindow() {
 
                     if (isInGame) {
                         if (ImGui::MenuItem(getEnglishName(stageName))) {
+                            if (curScenario != -1) curScenario += 1;
                             ChangeStageInfo stageInfo(
-                                gameSeq->mGameDataHolderAccessor, "start", stageName, false, curScenario+1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                                gameSeq->mGameDataHolderAccessor, "start", stageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                             );
                             GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
+                            if (curScenario != -1) curScenario -= 1;
                         }
                     } else {
                         ImGui::Text("%s", getEnglishName(stageName));

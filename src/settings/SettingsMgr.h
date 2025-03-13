@@ -32,7 +32,7 @@ public:
 
     // Settings* mSettings = nullptr;
     Settings* getSettings() { return &mSettings; }
-    char* mPath = "sd:/BTT-Studio-Settings.bin";
+    char* mPath = "sd:/BTT-Studio/Settings.bin";
     };
 
 

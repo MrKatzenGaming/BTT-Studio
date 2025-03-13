@@ -60,6 +60,13 @@ void Menu::draw() {
         }
     } 
 
+    if(ImGui::Button("Save Settings")) {
+        set->saveSettings();
+    }
+    if (ImGui::Button("Load Settings")) {
+        set->loadSettings();
+    }
+
     drawStageWarpWindow();
 
     if (ImGui::CollapsingHeader("Options")) {

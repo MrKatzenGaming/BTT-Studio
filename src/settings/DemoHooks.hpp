@@ -4,7 +4,7 @@
 #include "settings/SettingsMgr.h"
 #define HOOK_CALLBACK(NAME)                                                                     \
 inline HkTrampoline<bool, void *> NAME = hk::hook::trampoline([](void *thisPtr) -> bool {              \
-    if (btt::SettingsMgr::instance()->mSettings.mIsEnableAlwaysManualCutscene) return true;     \
+    if (btt::SettingsMgr::instance()->getSettings()->mIsEnableAlwaysManualCutscene) return true;     \
     return NAME.orig(thisPtr);                                                                  \
 });
 

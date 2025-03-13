@@ -27,8 +27,14 @@ public:
         SETTING(RefreshKingdomEnter);
     } mSettings;
 
-    void init(sead::Heap* heap);
+    void loadSettings();
+    void saveSettings();
+
+    // Settings* mSettings = nullptr;
+    Settings* getSettings() { return &mSettings; }
+    char* mPath = "sd:/BTT-Studio-Settings.bin";
     };
+
 
 
 } // namespace btt

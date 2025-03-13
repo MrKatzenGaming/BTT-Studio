@@ -20,7 +20,7 @@ using namespace btt;
 class ShineInfo;
 HkTrampoline<bool, GameDataHolderWriter, const ShineInfo*> GreyShineRefreshHook =
     hk::hook::trampoline([](GameDataHolderWriter writer, const ShineInfo* shineInfo) -> bool {
-        return SettingsMgr::instance()->mSettings.mIsEnableMoonRefresh ? false : GreyShineRefreshHook.orig(writer, shineInfo);
+        return SettingsMgr::instance()->getSettings()->mIsEnableMoonRefresh ? false : GreyShineRefreshHook.orig(writer, shineInfo);
     });
 
 HkTrampoline<void, GameDataHolderWriter, const ShineInfo*> ShineRefreshHook =
@@ -29,14 +29,14 @@ HkTrampoline<void, GameDataHolderWriter, const ShineInfo*> ShineRefreshHook =
         ptr offset = addr - ro::getMainModule()->range().start();
         ro::getMainModule()->writeRo(offset, "BTT Studio", 12);
 
-        if (!SettingsMgr::instance()->mSettings.mIsEnableMoonRefresh) ShineRefreshHook.orig(writer, shineInfo);
+        if (!SettingsMgr::instance()->getSettings()->mIsEnableMoonRefresh) ShineRefreshHook.orig(writer, shineInfo);
     });
 
 HkTrampoline<void, al::LiveActor*> marioControl = hk::hook::trampoline([](al::LiveActor* player) -> void { marioControl.orig(player); });
 
 HkTrampoline<void, StageScene*> stageSceneControlHook = hk::hook::trampoline([](StageScene* stageScene) -> void {
 
-    if (SettingsMgr::instance()->mSettings.mIsEnableDisableMusic) {
+    if (SettingsMgr::instance()->getSettings()->mIsEnableDisableMusic) {
         if (al::isPlayingBgm(stageScene)) al::stopAllBgm(stageScene, 0);
     }
 
@@ -44,30 +44,30 @@ HkTrampoline<void, StageScene*> stageSceneControlHook = hk::hook::trampoline([](
 });
 
 HkTrampoline<bool, StageScene*> saveHook =
-    hk::hook::trampoline([](StageScene* scene) -> bool { return SettingsMgr::instance()->mSettings.mIsEnableDisableAutoSave ? false : saveHook.orig(scene); });
+    hk::hook::trampoline([](StageScene* scene) -> bool { return SettingsMgr::instance()->getSettings()->mIsEnableDisableAutoSave ? false : saveHook.orig(scene); });
 
 HkTrampoline<bool, void*> checkpointWarpHook = hk::hook::trampoline([](void* thisPtr) -> bool {
-    return SettingsMgr::instance()->mSettings.mIsEnableAlwaysCheckpoints ? true : checkpointWarpHook.orig(thisPtr);
+    return SettingsMgr::instance()->getSettings()->mIsEnableAlwaysCheckpoints ? true : checkpointWarpHook.orig(thisPtr);
 });
 
 HkTrampoline<int, GameDataHolder*, bool*, int> disableMoonLockHook = hk::hook::trampoline([](GameDataHolder* thisPtr, bool* isCrashList, int worldID) -> int {
     int lockSize = disableMoonLockHook.orig(thisPtr, isCrashList, worldID);
 
-    return SettingsMgr::instance()->mSettings.mIsEnableDisableMoonLock ? 0 : lockSize;
+    return SettingsMgr::instance()->getSettings()->mIsEnableDisableMoonLock ? 0 : lockSize;
 });
 
 HkTrampoline<void, PlayerHitPointData*> NoDamageHook = hk::hook::trampoline([](PlayerHitPointData* hitPointData) -> void {
-    if (!SettingsMgr::instance()->mSettings.mIsEnableNoDamage) 
+    if (!SettingsMgr::instance()->getSettings()->mIsEnableNoDamage) 
         NoDamageHook.orig(hitPointData);
     
 });
 
 HkTrampoline<bool,  GameDataHolderAccessor> kingdomEnterHook = hk::hook::trampoline([]( GameDataHolderAccessor accessor) -> bool {
-    return SettingsMgr::instance()->mSettings.mIsEnableRefreshKingdomEnter ? false : kingdomEnterHook.orig(accessor);
+    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshKingdomEnter ? false : kingdomEnterHook.orig(accessor);
 });
 
 HkTrampoline<bool, GameDataHolderAccessor> warpTextHook = hk::hook::trampoline([](GameDataHolderAccessor accessor) -> bool {
-    return SettingsMgr::instance()->mSettings.mIsEnableRefreshWarpText ? false : warpTextHook.orig(accessor);
+    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshWarpText ? false : warpTextHook.orig(accessor);
 });
 
 void SettingsHooks::installSettingsHooks() {

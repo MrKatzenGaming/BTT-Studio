@@ -55,7 +55,7 @@ ReflowComments: true
 RemoveParentheses: ReturnStatement
 RemoveSemicolon: true
 SeparateDefinitionBlocks: Always
-SortIncludes: CaseSensitive
+SortIncludes: CaseInsensitive
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
 SpaceAfterTemplateKeyword: true

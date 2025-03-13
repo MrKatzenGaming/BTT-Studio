@@ -18,6 +18,9 @@
 
 #include "imgui.h"
 
+#include "sead/filedevice/seadFileDeviceMgr.h"
+#include "nn/fs.h"
+
 namespace btt {
 
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
@@ -55,20 +58,20 @@ void Menu::draw() {
         if (ImGui::Button("Kill Mario")) {
             GameDataFunction::killPlayer(GameDataHolderWriter(player));
         }
-    }
+    } 
 
     drawStageWarpWindow();
 
     if (ImGui::CollapsingHeader("Options")) {
-        ImGui::Checkbox("Moon Refresh", &set->mSettings.mIsEnableMoonRefresh);
-        ImGui::Checkbox("Always Manually Skip Cutscene", &set->mSettings.mIsEnableAlwaysManualCutscene);
-        ImGui::Checkbox("Always Allow Checkpoints", &set->mSettings.mIsEnableAlwaysCheckpoints);
-        ImGui::Checkbox("Disable Auto Save", &set->mSettings.mIsEnableDisableAutoSave);
-        ImGui::Checkbox("Disable Moon Lock", &set->mSettings.mIsEnableDisableMoonLock);
-        ImGui::Checkbox("No Damage", &set->mSettings.mIsEnableNoDamage);
-        ImGui::Checkbox("Disable Music", &set->mSettings.mIsEnableDisableMusic);
-        ImGui::Checkbox("Refresh Warp Text", &set->mSettings.mIsEnableRefreshWarpText);
-        ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->mSettings.mIsEnableRefreshKingdomEnter);
+        ImGui::Checkbox("Moon Refresh", &set->getSettings()->mIsEnableMoonRefresh);
+        ImGui::Checkbox("Always Manually Skip Cutscene", &set->getSettings()->mIsEnableAlwaysManualCutscene);
+        ImGui::Checkbox("Always Allow Checkpoints", &set->getSettings()->mIsEnableAlwaysCheckpoints);
+        ImGui::Checkbox("Disable Auto Save", &set->getSettings()->mIsEnableDisableAutoSave);
+        ImGui::Checkbox("Disable Moon Lock", &set->getSettings()->mIsEnableDisableMoonLock);
+        ImGui::Checkbox("No Damage", &set->getSettings()->mIsEnableNoDamage);
+        ImGui::Checkbox("Disable Music", &set->getSettings()->mIsEnableDisableMusic);
+        ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
+        ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
     }
 
     if (ImGui::CollapsingHeader("Misc")) {

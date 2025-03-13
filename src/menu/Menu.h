@@ -15,7 +15,7 @@ class Menu {
     SEAD_SINGLETON_DISPOSER(Menu)
 
 private:
-    SettingsMgr::Settings mSettings;
+
     ImVec2 mWindowSize = ImVec2(500, 400);
 
     void drawInputDisabled();
@@ -25,6 +25,7 @@ private:
             bool saved;
             sead::Vector3f pos = {0, 0, 0};
             sead::Quatf quat = {0, 0, 0, 0};
+            char* stageName;
         };
         TpState tpStates[0x8];
         int tpIndex = 0;

@@ -2,8 +2,13 @@
 
 #include <heap/seadDisposer.h>
 
+#include "game/Player/PlayerActorBase.h"
+#include "game/Scene/StageScene.h"
+#include "game/Sequence/HakoniwaSequence.h"
+#include "game/Player/PlayerActorHakoniwa.h"
 #include "imgui.h"
 #include "sead/math/seadQuat.h"
+#include "settings/SettingsMgr.h"
 
 namespace btt {
 
@@ -25,17 +30,23 @@ public:
 
     void draw();
     void setupStyle();
-    void handleInput();
+    void handleAlways();
 
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
+
+    HakoniwaSequence* gameSeq;
+    PlayerActorBase* player;
+    StageScene* stageScene;
+    PlayerActorHakoniwa* playerHak;
+    GameDataHolder* holder;
+    SettingsMgr* set;
 
     void drawInputDisabled();
     void drawMiscCat();
     void drawTeleportCat();
 
     int tpIndex = 0;
-    bool mIsEnabledTpHotkeys = false;
     void saveTeleport(TpState& state);
     void loadTeleport(TpState& state);
 };

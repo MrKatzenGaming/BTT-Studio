@@ -7,7 +7,6 @@
 - [ ] custom button layout  
     - [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  
 - [ ] Disable Telport Puppet only in Moon Anim  
-- [ ] misc stuff from prac mod
 
 ## Less Important
 
@@ -52,6 +51,7 @@
 - [x] Save config to sd  
 - [x] add stage name to tp pos  
 - [x] save tp pos' to file  
+- [x] misc stuff from prac mod  
 
 
 

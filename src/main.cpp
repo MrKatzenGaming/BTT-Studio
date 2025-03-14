@@ -42,7 +42,7 @@ void drawFpsWindow() {
 void drawMenu() {
     Menu* menu = Menu::instance();
     if (menu && menu->mIsEnabledMenu) menu->draw();
-    menu->handleInput();
+    menu->handleAlways();
 }
 
 HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {

@@ -8,7 +8,8 @@
 #include <nn/oe.h>
 #include "al/Library/Camera/CameraUtil.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
-#include "game/Scene/StageScene.h"
+#include "game/Layout/CoinCounter.h"
+#include "game/System/GameDataFile.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
 #include "hk/util/Math.h"
@@ -23,10 +24,12 @@ namespace btt {
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
 void Menu::draw() {
-    HakoniwaSequence* gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
-    PlayerActorBase* player = helpers::tryGetPlayerActor();
-    StageScene* stageScene = helpers::tryGetStageScene();
-    SettingsMgr* set = SettingsMgr::instance();
+    gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
+    player = helpers::tryGetPlayerActor();
+    stageScene = helpers::tryGetStageScene();
+    set = SettingsMgr::instance();
+    playerHak = helpers::tryGetPlayerActorHakoniwa();
+    holder = helpers::tryGetGameDataHolder();
 
     if (InputHelper::isInputToggled()) {
         drawInputDisabled();
@@ -51,15 +54,10 @@ void Menu::draw() {
         if (ImGui::Button("Kill Scene")) stageScene->kill();
     }
 
-    if (player) {
-        if (ImGui::Button("Kill Mario")) {
-            GameDataFunction::killPlayer(GameDataHolderWriter(player));
-        }
-    }
-
     drawStageWarpWindow();
 
     if (ImGui::CollapsingHeader("Options")) {
+        ImGui::Indent();
         ImGui::Checkbox("Moon Refresh", &set->getSettings()->mIsEnableMoonRefresh);
         ImGui::Checkbox("Always Manually Skip Cutscene", &set->getSettings()->mIsEnableAlwaysManualCutscene);
         ImGui::Checkbox("Always Allow Checkpoints", &set->getSettings()->mIsEnableAlwaysCheckpoints);
@@ -69,25 +67,26 @@ void Menu::draw() {
         ImGui::Checkbox("Disable Music", &set->getSettings()->mIsEnableDisableMusic);
         ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
         ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
+        ImGui::Unindent();
     }
 
     if (ImGui::CollapsingHeader("Misc")) {
         ImGui::Indent();
         drawTeleportCat();
-
+        drawMiscCat();
         ImGui::Unindent();
     }
 
     ImGui::End();
 }
 
-void Menu::handleInput() {
+void Menu::handleAlways() {
     if (InputHelper::isPressStickL()) {
         mIsEnabledMenu = !mIsEnabledMenu;
     }
-    if (InputHelper::isPressPadLeft() && mIsEnabledTpHotkeys && !InputHelper::isHoldL() && !InputHelper::isInputToggled()) {
+    if (InputHelper::isPressPadLeft() && set->getSettings()->mIsEnableTpHotkeys && !InputHelper::isHoldL() && !InputHelper::isInputToggled()) {
         saveTeleport(tpStates[tpIndex]);
-    } else if (InputHelper::isPressPadRight() && mIsEnabledTpHotkeys && !InputHelper::isHoldL() && !InputHelper::isInputToggled()) {
+    } else if (InputHelper::isPressPadRight() && set->getSettings()->mIsEnableTpHotkeys && !InputHelper::isHoldL() && !InputHelper::isInputToggled()) {
         loadTeleport(tpStates[tpIndex]);
     }
 }
@@ -134,6 +133,7 @@ void Menu::drawInputDisabled() {
 
 void Menu::drawTeleportCat() {
     if (ImGui::CollapsingHeader("Teleport")) {
+        ImGui::Indent();
         ImGui::PushItemWidth(200);
         ImGui::InputInt("Teleport Index", &tpIndex);
         if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
@@ -144,7 +144,7 @@ void Menu::drawTeleportCat() {
         ImGui::SameLine();
         if (ImGui::Button("Load")) loadTeleport(tpStates[tpIndex]);
         ImGui::SameLine();
-        ImGui::Checkbox("Hotkeys", &mIsEnabledTpHotkeys);
+        ImGui::Checkbox("Hotkeys", &set->getSettings()->mIsEnableTpHotkeys);
         ImGui::SameLine();
         ImGui::BeginDisabled();
         ImGui::Checkbox("Saved", &tpStates[tpIndex].saved);
@@ -159,14 +159,12 @@ void Menu::drawTeleportCat() {
         if (ImGui::Button("Load From File")) {
             SaveFileHelper::instance()->loadTeleport(tpStates, hk::util::arraySize(tpStates));
         }
+        ImGui::Unindent();
     }
 }
 
 void Menu::saveTeleport(TpState& state) {
-    StageScene* stageScene = helpers::tryGetStageScene();
-    if (!stageScene) return;
-    PlayerActorBase* player = helpers::tryGetPlayerActor(stageScene);
-    if (!player) return;
+    if (!stageScene || !player) return;
     sead::LookAtCamera cam = al::getLookAtCamera(stageScene, 0);
 
     state.saved = true;
@@ -176,10 +174,7 @@ void Menu::saveTeleport(TpState& state) {
 }
 
 void Menu::loadTeleport(TpState& state) {
-    StageScene* stageScene = helpers::tryGetStageScene();
-    if (!stageScene) return;
-    PlayerActorBase* player = helpers::tryGetPlayerActor(stageScene);
-    if (!player) return;
+    if (!stageScene || !player) return;
     sead::LookAtCamera cam = al::getLookAtCamera(stageScene, 0);
 
     player->startDemoPuppetable();
@@ -188,5 +183,39 @@ void Menu::loadTeleport(TpState& state) {
     al::updatePoseQuat(player, state.quat);
 
     player->endDemoPuppetable();
+}
+
+void Menu::drawMiscCat() {
+    if (ImGui::Button("Kill Mario")) {
+        if (player) GameDataFunction::killPlayer(GameDataHolderWriter(player));
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Damage Mario")) {
+        if (player) {
+            bool tmpDamage = SettingsMgr::instance()->getSettings()->mIsEnableNoDamage;
+            SettingsMgr::instance()->getSettings()->mIsEnableNoDamage = false;
+            GameDataFunction::damagePlayer(GameDataHolderWriter(player));
+            SettingsMgr::instance()->getSettings()->mIsEnableNoDamage = tmpDamage;
+        }
+    }
+    if (ImGui::Button("Life Up Heart")) {
+        if (player) GameDataFunction::getLifeMaxUpItem(player);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Heal Mario")) {
+        if (player) GameDataFunction::recoveryPlayer(player);
+    }
+    if (ImGui::Button("Add 1000 coins")) {
+        if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Remove 1000 coins")) {
+        if (stageScene) {
+            if (GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene)) >= 1000) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
+        }
+    }
+    if (ImGui::Button("Remove Cappy")) {
+        if (player) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
+    }
 }
 } // namespace btt

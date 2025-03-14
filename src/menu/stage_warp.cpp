@@ -228,6 +228,7 @@ void drawStageWarpWindow() {
     HakoniwaSequence* gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
 
     if (ImGui::CollapsingHeader("Stage Warp")) {
+        ImGui::Indent();
         auto curScene = helpers::tryGetStageScene(gameSeq);
 
         bool isInGame = curScene && curScene->mIsAlive;
@@ -292,5 +293,6 @@ void drawStageWarpWindow() {
                 ImGui::EndPopup();
             }
         }
+        ImGui::Unindent();
     }
 }

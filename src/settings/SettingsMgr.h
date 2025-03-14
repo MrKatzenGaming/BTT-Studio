@@ -25,6 +25,7 @@ public:
         SETTING(AlwaysCheckpoints);
         SETTING(RefreshWarpText);
         SETTING(RefreshKingdomEnter);
+        SETTING(TpHotkeys);
     } mSettings;
 
     void loadSettings();

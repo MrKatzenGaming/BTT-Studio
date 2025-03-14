@@ -7,8 +7,7 @@
 - [ ] custom button layout  
     - [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  
 - [ ] Disable Telport Puppet only in Moon Anim  
-- [ ] add stage name to tp pos  
-- [ ] save tp pos' to file  
+- [ ] misc stuff from prac mod
 
 ## Less Important
 
@@ -22,6 +21,7 @@
     - [ ] default stuff  
 - [ ] choose moon text from prewritten list  
 - [ ] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well
+- [ ] allow moving menu to different corners
 
 ## Hard
 
@@ -50,7 +50,8 @@
     - [x] Btt Studio  
 - [x] warp text  
 - [x] Save config to sd  
-
+- [x] add stage name to tp pos  
+- [x] save tp pos' to file  
 
 
 

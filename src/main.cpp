@@ -13,6 +13,7 @@
 
 #include "helpers.h"
 #include "Menu.h"
+#include "saveFileHelper.h"
 #include "settings/SettingsHooks.h"
 #include "settings/SettingsMgr.h"
 
@@ -45,11 +46,12 @@ void drawMenu() {
 }
 
 HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
-
     sBTTStudioHeap = sead::ExpHeap::create(1_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
 
     SettingsMgr::createInstance(sBTTStudioHeap);
+    SaveFileHelper::createInstance(sBTTStudioHeap);
     Menu* menu = Menu::createInstance(sBTTStudioHeap);
+    
 
     menu->setupStyle();
 
@@ -60,9 +62,8 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
 
     gameSystemInit.orig(gameSystem);
 
-    SettingsMgr::instance()->loadSettings();
-
-    
+    SaveFileHelper::instance()->loadSettings();
+    SaveFileHelper::instance()->loadTeleport(menu->tpStates, hk::util::arraySize(menu->tpStates));
 });
 
 HkTrampoline<void, GameSystem*> drawMainHook = hk::hook::trampoline([](GameSystem* gameSystem) -> void { drawMainHook.orig(gameSystem); });
@@ -71,16 +72,15 @@ HkTrampoline<void, sead::FileDeviceMgr*> fileDeviceMgrHook = hk::hook::trampolin
     fileDeviceMgrHook.orig(fileDeviceMgr);
 
     fileDeviceMgr->mMountedSd = nn::fs::MountSdCardForDebug("sd") == 0;
-    
 });
 int timer = 0;
 HkTrampoline<void, HakoniwaSequence*> hakoniwaSequenceUpdate = hk::hook::trampoline([](HakoniwaSequence* hakoniwaSequence) -> void {
     hakoniwaSequenceUpdate.orig(hakoniwaSequence);
 
- 
-    SettingsMgr* settingsMgr = SettingsMgr::instance();
+    
     if (timer % 3600 == 0) {
-        settingsMgr->saveSettings();
+        SaveFileHelper::instance()->saveSettings();
+        // SaveFileHelper::instance()->saveTeleport(Menu::instance()->tpStates, hk::util::arraySize(Menu::instance()->tpStates));
     }
     timer++;
 });

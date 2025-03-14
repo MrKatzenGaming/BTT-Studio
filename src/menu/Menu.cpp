@@ -1,25 +1,22 @@
 #include "Menu.h"
 
-#include "InputHelper.h"
 #include "helpers/getHelper.h"
+#include "InputHelper.h"
 
 #include <cstdio>
 #include <heap/seadHeapMgr.h>
 #include <nn/oe.h>
 #include "al/Library/Camera/CameraUtil.h"
-#include "al/Library/LiveActor/ActorPoseKeeper.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "game/Scene/StageScene.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
 #include "hk/util/Math.h"
+#include "saveFileHelper.h"
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
 
 #include "imgui.h"
-
-#include "sead/filedevice/seadFileDeviceMgr.h"
-#include "nn/fs.h"
 
 namespace btt {
 
@@ -58,13 +55,6 @@ void Menu::draw() {
         if (ImGui::Button("Kill Mario")) {
             GameDataFunction::killPlayer(GameDataHolderWriter(player));
         }
-    } 
-
-    if(ImGui::Button("Save Settings")) {
-        set->saveSettings();
-    }
-    if (ImGui::Button("Load Settings")) {
-        set->loadSettings();
     }
 
     drawStageWarpWindow();
@@ -158,7 +148,17 @@ void Menu::drawTeleportCat() {
         ImGui::SameLine();
         ImGui::BeginDisabled();
         ImGui::Checkbox("Saved", &tpStates[tpIndex].saved);
+        ImGui::Text("Stage: %s", tpStates[tpIndex].stageName);
         ImGui::EndDisabled();
+
+        if (ImGui::Button("Save To File")) {
+            SaveFileHelper::instance()->saveTeleport(tpStates, hk::util::arraySize(tpStates));
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Load From File")) {
+            SaveFileHelper::instance()->loadTeleport(tpStates, hk::util::arraySize(tpStates));
+        }
     }
 }
 
@@ -172,6 +172,7 @@ void Menu::saveTeleport(TpState& state) {
     state.saved = true;
     state.pos = al::getTrans(player);
     state.quat = al::getQuat(player);
+    strcpy(state.stageName, getEnglishName(((HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence)->mStageName.cstr()));
 }
 
 void Menu::loadTeleport(TpState& state) {

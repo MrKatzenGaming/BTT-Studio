@@ -1,5 +1,6 @@
 #include <nn/oe.h>
 #include "imgui_nvn.h"
+#include "Menu.h"
 #include "hk/hook/Trampoline.h"
 
 #include "imgui_backend/imgui_impl_nvn.hpp"
@@ -116,7 +117,7 @@ nvn::GenericFuncPtrFunc getProc(nvn::Device *device, const char *procName) {
 }
 
 void disableButtons(nn::hid::NpadBaseState *state) {
-    if (!InputHelper::isReadInputs() && InputHelper::isInputToggled()) {
+    if (!InputHelper::isReadInputs() && InputHelper::isInputToggled() && btt::Menu::instance()->mIsEnabledMenu) {
         // clear out the data within the state (except for the sampling number and attributes)
         state->mButtons = nn::hid::NpadButtonSet();
         state->mAnalogStickL = nn::hid::AnalogStickState();

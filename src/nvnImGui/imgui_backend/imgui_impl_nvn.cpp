@@ -1,5 +1,6 @@
 #include "imgui_impl_nvn.hpp"
 // #include "helpers.h"
+#include "Menu.h"
 #include "helpers/fsHelper.h"
 // #include "imgui_bin.h"
 #include "hk/diag/diag.h"
@@ -439,7 +440,7 @@ namespace ImguiNvnBackend {
         if (nn::oe::GetOperationMode() == nn::oe::OperationMode_Handheld)
             updateTouch(io);
 
-        if (InputHelper::isInputToggled())
+        if (InputHelper::isInputToggled() && btt::Menu::instance()->mIsEnabledMenu) 
             updateGamepad(io);
     }
 

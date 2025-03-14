@@ -13,6 +13,7 @@ L-Stick -> Scroll
 - Stage Warper
 - Settings menu with many options
 - Player Teleport
+- Input Display
 
 ## Credits
 - [SMO-Exlaunch-Base](https://github.com/CraftyBoss/SMO-Exlaunch-Base)  

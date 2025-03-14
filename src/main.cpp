@@ -48,7 +48,7 @@ void drawMenu() {
 HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
     sBTTStudioHeap = sead::ExpHeap::create(1_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
 
-    SettingsMgr::createInstance(sBTTStudioHeap);
+    SettingsMgr* set = SettingsMgr::createInstance(sBTTStudioHeap);
     SaveFileHelper::createInstance(sBTTStudioHeap);
     Menu* menu = Menu::createInstance(sBTTStudioHeap);
     

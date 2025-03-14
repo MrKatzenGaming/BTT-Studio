@@ -2,8 +2,6 @@
 
 ## Important
 
-
-- [ ] Input Display  
 - [ ] custom button layout  
     - [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  
 
@@ -52,6 +50,7 @@
 - [x] misc stuff from prac mod  
 - [x] Disable Telport Puppet only in Moon Anim  
 - [x] refresh purps  
+- [x] Input Display  
 
 
 

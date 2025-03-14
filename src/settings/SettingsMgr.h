@@ -2,6 +2,7 @@
 
 #include <heap/seadDisposer.h>
 #include "settings/SettingsHooks.h"
+#include "imgui.h"
 
 namespace btt {
 
@@ -14,6 +15,21 @@ private:
     sead::Heap* mHeap;
 public:
     SettingsMgr() = default;
+
+    enum class InputDisplayColor : u8 {
+        None,
+        White,
+        Gray,
+        Black,
+        Red,
+        Blue,
+        Yellow,
+        Green,
+        Orange,
+        Purple,
+        Pink,
+        LightBlue
+    };
 
     struct Settings {
         SETTING(MoonRefresh);
@@ -28,10 +44,16 @@ public:
         SETTING(TpHotkeys);
         SETTING(DisableTpPuppet);
         SETTING(RefreshPurps);
-    } mSettings;
+        SETTING(InputDisplay);
+        InputDisplayColor mInputDisplayButtonColor = InputDisplayColor::White;
+        InputDisplayColor mInputDisplayButtonPressedColor = InputDisplayColor::Pink;
+        InputDisplayColor mInputDisplayStickColor = InputDisplayColor::White;
+        InputDisplayColor mInputDisplayRingColor = InputDisplayColor::Gray;
+        InputDisplayColor mInputDisplayBackColor = InputDisplayColor::Black;
+        ImVec2 mInputDisplayPos = ImVec2(1600.f / 2, 900.f / 2);
 
-    void loadSettings();
-    void saveSettings();
+        
+    } mSettings;
 
     // Settings* mSettings = nullptr;
     Settings* getSettings() { return &mSettings; }

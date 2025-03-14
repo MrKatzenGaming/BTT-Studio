@@ -26,6 +26,7 @@ public:
         SETTING(RefreshWarpText);
         SETTING(RefreshKingdomEnter);
         SETTING(TpHotkeys);
+        SETTING(DisableTpPuppet);
     } mSettings;
 
     void loadSettings();

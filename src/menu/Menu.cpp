@@ -12,6 +12,7 @@
 #include "game/System/GameDataFile.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
+#include "hk/types.h"
 #include "hk/util/Math.h"
 #include "saveFileHelper.h"
 #include "settings/SettingsMgr.h"
@@ -43,6 +44,10 @@ void Menu::draw() {
     ImGui::Text("Toggle Input: L + DPad-Left");
     ImGui::Separator();
 
+
+    ImGui::Text("IsGetShineState: %d", helpers::isGetShineState(stageScene));
+
+
     char fmt[17] = "Toggle Mouse OFF";
     snprintf(fmt, 17, "Toggle Mouse %s", InputHelper::isDisableMouse() ? "ON" : "OFF");
 
@@ -67,6 +72,7 @@ void Menu::draw() {
         ImGui::Checkbox("Disable Music", &set->getSettings()->mIsEnableDisableMusic);
         ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
         ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
+        ImGui::Checkbox("Disable Teleport Puppet", &set->getSettings()->mIsEnableDisableTpPuppet);
         ImGui::Unindent();
     }
 
@@ -175,14 +181,15 @@ void Menu::saveTeleport(TpState& state) {
 
 void Menu::loadTeleport(TpState& state) {
     if (!stageScene || !player) return;
-    sead::LookAtCamera cam = al::getLookAtCamera(stageScene, 0);
-
-    player->startDemoPuppetable();
-
-    al::setTrans(player, state.pos);
-    al::updatePoseQuat(player, state.quat);
-
-    player->endDemoPuppetable();
+    if (set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) {
+        al::setTrans(player, state.pos);
+        al::updatePoseQuat(player, state.quat);
+    } else {
+        player->startDemoPuppetable();
+        al::setTrans(player, state.pos);
+        al::updatePoseQuat(player, state.quat);
+        player->endDemoPuppetable();
+    }
 }
 
 void Menu::drawMiscCat() {

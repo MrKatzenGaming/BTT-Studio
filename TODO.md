@@ -6,7 +6,6 @@
 - [ ] Input Display  
 - [ ] custom button layout  
     - [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  
-- [ ] Disable Telport Puppet only in Moon Anim  
 
 ## Less Important
 
@@ -34,7 +33,7 @@
 - [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
 - [ ] also shop text thingys  
 
-## very Hard
+## very Hard / Mby Impossible
 
 - [ ] this doesnt seem very feasible but some way to manip cycles  
 - [ ] tp cam with player  
@@ -52,6 +51,7 @@
 - [x] add stage name to tp pos  
 - [x] save tp pos' to file  
 - [x] misc stuff from prac mod  
+- [x] Disable Telport Puppet only in Moon Anim  
 
 
 

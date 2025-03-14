@@ -38,4 +38,6 @@ namespace helpers {
     PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(HakoniwaSequence* curSequence);
     PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(al::Scene* scene);
 
+    bool isGetShineState(StageScene* stageScene);
+
 } // namespace helpers

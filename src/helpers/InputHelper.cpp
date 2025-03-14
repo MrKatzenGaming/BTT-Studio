@@ -1,6 +1,7 @@
 #include "InputHelper.h"
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "menu/Menu.h"
 
 static const char *styleNames[] = {
         "Pro Controller",
@@ -80,7 +81,7 @@ void InputHelper::updatePadState() {
     prevTouchState = curTouchState;
     nn::hid::GetTouchScreenState(&curTouchState);
 
-    if (isHoldL() && isPressPadLeft()) {
+    if (isHoldL() && isPressPadLeft() && btt::Menu::instance()->mIsEnabledMenu) {
         toggleInput = !toggleInput;
     }
 }

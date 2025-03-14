@@ -216,7 +216,7 @@ const char* getEnglishName(const char* internalName) {
 
 inline const char* getScenarioType(WorldListEntry& entry, int scenario) {
     if (scenario == -1) return " (NC)";
-    if (scenario == 0) return " ()";
+    if (scenario == 1) return " ()";
     if (scenario == entry.clearMainScenario) return " (Peace)";
     if (scenario == entry.endingScenario) return " (PG)";
     if (scenario == entry.moonRockScenario) return " (MR)";
@@ -242,10 +242,6 @@ void drawStageWarpWindow() {
         ImGui::PopItemWidth();
         if (g->NavId == ImGui::GetID("Scenario")) ImGui::SetTooltip("(NC) = No Change, () = First Arrival,\n(PG) = Post-Game, (MR) = Moon Rock");
 
-        if (isInGame && ImGui::Button("Force Reload Current Stage")) {
-            curScene->kill();
-        }
-
         for (auto& entry : gameSeq->mGameDataHolderAccessor.mData->mWorldList->mWorldList) {
             char popupStr[0x60] = {};
             snprintf(popupStr, sizeof(popupStr), "SubAreaList_%s", entry.mainStageName);
@@ -255,7 +251,9 @@ void drawStageWarpWindow() {
             sprintf(subAreaButtonId, "Sub-Areas##%s", entry.mainStageName);
 
             ImGui::AlignTextToFramePadding();
-            ImGui::BulletText("%s%s", getEnglishName(entry.mainStageName), getScenarioType(entry, curScenario));
+            int temp = -1;
+            if (curScenario > -1) temp = curScenario + 1;
+            ImGui::BulletText("%s%s", getEnglishName(entry.mainStageName), getScenarioType(entry, temp));
             ImGui::SameLine();
             if (ImGui::Button(warpButtonId)) {
                 if (!isInGame) continue;

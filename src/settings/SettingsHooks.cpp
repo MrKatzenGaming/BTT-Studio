@@ -70,6 +70,10 @@ HkTrampoline<bool, GameDataHolderAccessor> warpTextHook = hk::hook::trampoline([
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshWarpText ? false : warpTextHook.orig(accessor);
 });
 
+HkTrampoline<bool, GameDataHolderAccessor, al::ActorInitInfo*> refreshPurpsHook = hk::hook::trampoline([](GameDataHolderAccessor accessor, al::ActorInitInfo* actorInitInfo) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshPurps ? false : refreshPurpsHook.orig(accessor, actorInitInfo);
+});
+
 void SettingsHooks::installSettingsHooks() {
 
     installDemoHooks();
@@ -84,4 +88,5 @@ void SettingsHooks::installSettingsHooks() {
     NoDamageHook.installAtSym<"_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter">();
     kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
     warpTextHook.installAtSym<"_ZN16GameDataFunction34isAlreadyShowExplainCheckpointFlagE22GameDataHolderAccessor">();
+    refreshPurpsHook.installAtSym<"_ZN16GameDataFunction16isGotCoinCollectE22GameDataHolderAccessorRKN2al13ActorInitInfoE">();
 }

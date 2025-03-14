@@ -44,10 +44,6 @@ void Menu::draw() {
     ImGui::Text("Toggle Input: L + DPad-Left");
     ImGui::Separator();
 
-
-    ImGui::Text("IsGetShineState: %d", helpers::isGetShineState(stageScene));
-
-
     char fmt[17] = "Toggle Mouse OFF";
     snprintf(fmt, 17, "Toggle Mouse %s", InputHelper::isDisableMouse() ? "ON" : "OFF");
 
@@ -73,6 +69,7 @@ void Menu::draw() {
         ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
         ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
         ImGui::Checkbox("Disable Teleport Puppet", &set->getSettings()->mIsEnableDisableTpPuppet);
+        ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
         ImGui::Unindent();
     }
 

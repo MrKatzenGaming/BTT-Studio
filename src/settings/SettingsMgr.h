@@ -27,6 +27,7 @@ public:
         SETTING(RefreshKingdomEnter);
         SETTING(TpHotkeys);
         SETTING(DisableTpPuppet);
+        SETTING(RefreshPurps);
     } mSettings;
 
     void loadSettings();

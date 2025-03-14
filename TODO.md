@@ -12,7 +12,6 @@
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
-- [ ] refresh purps  
 - [ ] Info Viewer  
     - [ ] Speed  
     - [ ] Jumps/Cts  
@@ -52,6 +51,7 @@
 - [x] save tp pos' to file  
 - [x] misc stuff from prac mod  
 - [x] Disable Telport Puppet only in Moon Anim  
+- [x] refresh purps  
 
 
 

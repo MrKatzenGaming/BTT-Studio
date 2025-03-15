@@ -60,6 +60,7 @@ private:
     void drawHotkeysCat();
     bool isHotkey(int& key);
         constexpr static const char* Keys[] {
+            "Disabled",
             "None",
             "L",
             "R",

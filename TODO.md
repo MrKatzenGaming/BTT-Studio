@@ -3,7 +3,6 @@
 ## Important
 
 - [ ] keep selected item after menu reopen
-- [ ] make hotkey option none be just dpad up and add disalbed options
 
 ### 1.2
 - [ ] fix stage warp
@@ -71,3 +70,4 @@
 - [x] fix moon text on all versions
 - [x] fix skip cloud
 - [x] fix tp in escape/ all captures
+- [x] make hotkey option none be just dpad up and add disalbed options

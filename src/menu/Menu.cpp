@@ -7,9 +7,11 @@
 #include <heap/seadHeapMgr.h>
 #include <nn/oe.h>
 #include "al/Library/Camera/CameraUtil.h"
+#include "al/Library/LiveActor/ActorFlagFunction.h"
 #include "al/Library/LiveActor/ActorMovementFunction.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "game/Layout/CoinCounter.h"
+#include "game/Player/PlayerHackKeeper.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
 #include "game/Util/AchievementUtil.h"
@@ -19,19 +21,14 @@
 #include "saveFileHelper.h"
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
-#include "game/Player/PlayerHackKeeper.h"
-#include "al/Library/LiveActor/ActorFlagFunction.h"
 
 #include "imgui.h"
-#include "imgui_internal.h"
 
 namespace btt {
 
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
 void Menu::draw() {
-    ImGuiContext* ctx = ImGui::GetCurrentContext();
-
     if (InputHelper::isInputToggled()) {
         drawInputDisabled();
     }
@@ -131,7 +128,6 @@ void Menu::draw() {
 }
 
 void Menu::handleAlways() {
-    ImGuiContext* ctx = ImGui::GetCurrentContext();
     set = SettingsMgr::instance();
     gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
     stageScene = helpers::tryGetStageScene(gameSeq);
@@ -322,15 +318,16 @@ bool Menu::isHotkey(int& key) {
     bool ZL = InputHelper::isHoldZL();
     bool ZR = InputHelper::isHoldZR();
     if (key == 0) return 0;
-    if (key == 1) return Up && L;
-    if (key == 2) return Up && R;
-    if (key == 3) return Up && ZL;
-    if (key == 4) return Up && ZR;
-    if (key == 5) return Up && L && R;
-    if (key == 6) return Up && L && ZL;
-    if (key == 7) return Up && L && ZR;
-    if (key == 8) return Up && R && ZL;
-    if (key == 9) return Up && R && ZR;
+    if (key == 1) return Up;
+    if (key == 2) return Up && L;
+    if (key == 3) return Up && R;
+    if (key == 4) return Up && ZL;
+    if (key == 5) return Up && ZR;
+    if (key == 6) return Up && L && R;
+    if (key == 7) return Up && L && ZL;
+    if (key == 8) return Up && L && ZR;
+    if (key == 9) return Up && R && ZL;
+    if (key == 10) return Up && R && ZR;
     return 0;
 }
 

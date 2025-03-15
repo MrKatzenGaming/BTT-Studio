@@ -2,7 +2,7 @@
 
 ## Important
 
-- [ ] keep selected item after menu reopen
+- [ ] fix game crashes when saving a tp location in wooded tower
 
 ### 1.2
 - [ ] fix stage warp
@@ -71,3 +71,4 @@
 - [x] fix skip cloud
 - [x] fix tp in escape/ all captures
 - [x] make hotkey option none be just dpad up and add disalbed options
+- [x] keep selected item after menu reopen

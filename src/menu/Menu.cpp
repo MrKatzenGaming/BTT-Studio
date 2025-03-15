@@ -23,6 +23,7 @@
 #include "stage_warp.h"
 
 #include "imgui.h"
+#include "imgui_internal.h"
 
 namespace btt {
 
@@ -141,9 +142,18 @@ void Menu::handleAlways() {
     }
     holder = helpers::tryGetGameDataHolder();
 
-    if (InputHelper::isPressStickL()) {
-        mIsEnabledMenu = !mIsEnabledMenu;
+    if (InputHelper::isPressStickL() && mIsEnabledMenu) {
+        prevNavId = GImGui->NavId;
+        mIsEnabledMenu = false;
+    } else if (InputHelper::isPressStickL() && !mIsEnabledMenu) {
+        mIsEnabledMenu = true;
+        prevTime = globalTimer;
     }
+    if (globalTimer - prevTime < 5) {
+        if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
+        GImGui->NavDisableHighlight = false;
+    }
+
     if (InputHelper::isPressPadLeft() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {
         saveTeleport(tpStates[tpIndex]);
     } else if (InputHelper::isPressPadRight() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {

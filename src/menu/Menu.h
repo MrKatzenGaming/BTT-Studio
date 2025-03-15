@@ -34,6 +34,7 @@ public:
     const char* getMoonRefreshText();
 
     bool noGetPlayer = false;
+    u64 globalTimer = 0;
 
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
@@ -44,6 +45,9 @@ private:
     PlayerActorHakoniwa* playerHak;
     GameDataHolder* holder;
     SettingsMgr* set;
+
+    ImGuiID prevNavId = 0;
+    u64 prevTime = 0;
 
     void drawInputDisabled();
     void drawMiscCat();
@@ -78,8 +82,7 @@ private:
         int sliderValue = 2;
         char format[16];
         char textBuffer[64];
-    
-    
+
     int tpIndex = 0;
     void saveTeleport(TpState& state);
     void loadTeleport(TpState& state);

@@ -77,12 +77,13 @@ int timer = 0;
 HkTrampoline<void, HakoniwaSequence*> hakoniwaSequenceUpdate = hk::hook::trampoline([](HakoniwaSequence* hakoniwaSequence) -> void {
     hakoniwaSequenceUpdate.orig(hakoniwaSequence);
 
+    Menu* menu = Menu::instance();
     
-    if (timer % 3600 == 0) {
+    if (menu->globalTimer % 3600 == 0) {
         SaveFileHelper::instance()->saveSettings();
         // SaveFileHelper::instance()->saveTeleport(Menu::instance()->tpStates, hk::util::arraySize(Menu::instance()->tpStates));
     }
-    timer++;
+    menu->globalTimer++;
 });
 
 extern "C" void hkMain() {

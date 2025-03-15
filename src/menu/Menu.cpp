@@ -42,7 +42,7 @@ void Menu::draw() {
     ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
 
     ImGui::Text("Toggle Menu: L-Stick");
-    ImGui::Text("Toggle Input: L + DPad-Left");
+    ImGui::Text("Toggle Input: R + ZR + L");
     ImGui::Separator();
 
     char fmt[17] = "Toggle Mouse OFF";
@@ -128,9 +128,9 @@ void Menu::handleAlways() {
     if (InputHelper::isPressStickL()) {
         mIsEnabledMenu = !mIsEnabledMenu;
     }
-    if (InputHelper::isPressPadLeft() && set->getSettings()->mIsEnableTpHotkeys && !InputHelper::isHoldL() && !InputHelper::isInputToggled()) {
+    if (InputHelper::isPressPadLeft() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {
         saveTeleport(tpStates[tpIndex]);
-    } else if (InputHelper::isPressPadRight() && set->getSettings()->mIsEnableTpHotkeys && !InputHelper::isHoldL() && !InputHelper::isInputToggled()) {
+    } else if (InputHelper::isPressPadRight() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {
         loadTeleport(tpStates[tpIndex]);
     }
 

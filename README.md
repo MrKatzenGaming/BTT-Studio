@@ -4,7 +4,7 @@ A modification for Super Mario Odyssey made to make grindin BTT segmnts easier.
 
 ## Controls
 L-Stick Press -> Toggle Menu  
-L + DPad-Left -> Toggle Menu Input  
+R + ZR + L -> Toggle Menu Input  
 DPad -> Move Selection  
 A -> Activate Selection  
 L-Stick -> Scroll  

@@ -81,7 +81,7 @@ void InputHelper::updatePadState() {
     prevTouchState = curTouchState;
     nn::hid::GetTouchScreenState(&curTouchState);
 
-    if (isHoldL() && isPressPadLeft() && btt::Menu::instance()->mIsEnabledMenu) {
+    if (isHoldR() && isHoldZR() && isPressL() && btt::Menu::instance()->mIsEnabledMenu) {
         toggleInput = !toggleInput;
     }
 }

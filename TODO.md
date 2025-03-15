@@ -2,13 +2,13 @@
 
 ## Important
 
+- [ ] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well
+
 ## Less Important
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
-- [ ] choose moon text from prewritten list  
-- [ ] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well
 - [ ] allow moving menu to different corners
 
 ## Hard
@@ -47,6 +47,7 @@
 - [x] custom button layout  
 - [x] Info Viewer  
     - [x] Jumps/Cts  
+- [x] choose moon text from prewritten list  
 
 
 

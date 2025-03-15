@@ -1,5 +1,6 @@
 #include "SettingsHooks.h"
 
+#include "Menu.h"
 #include "SettingsMgr.h"
 #include "al/Library/Bgm/BgmLineFunction.h"
 #include "al/Library/LiveActor/ActorPoseKeeper.h"
@@ -28,7 +29,8 @@ HkTrampoline<void, GameDataHolderWriter, const ShineInfo*> ShineRefreshHook =
     hk::hook::trampoline([](GameDataHolderWriter writer, const ShineInfo* shineInfo) -> void {
         ptr addr = sail::lookupSymbolFromDb<>("MoonRefreshText");
         ptr offset = addr - ro::getMainModule()->range().start();
-        ro::getMainModule()->writeRo(offset, "BTT Studio", 12);
+        const char* text = Menu::instance()->getMoonRefreshText();
+        ro::getMainModule()->writeRo(offset, text, strlen(text) + 1);
 
         if (!SettingsMgr::instance()->getSettings()->mIsEnableMoonRefresh) ShineRefreshHook.orig(writer, shineInfo);
     });

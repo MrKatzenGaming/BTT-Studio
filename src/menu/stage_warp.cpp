@@ -251,9 +251,7 @@ void drawStageWarpWindow() {
             sprintf(subAreaButtonId, "Sub-Areas##%s", entry.mainStageName);
 
             ImGui::AlignTextToFramePadding();
-            int temp = -1;
-            if (curScenario > -1) temp = curScenario + 1;
-            ImGui::BulletText("%s%s", getEnglishName(entry.mainStageName), getScenarioType(entry, temp));
+            ImGui::BulletText("%s%s", getEnglishName(entry.mainStageName), getScenarioType(entry, curScenario));
             ImGui::SameLine();
             if (ImGui::Button(warpButtonId)) {
                 if (!isInGame) continue;

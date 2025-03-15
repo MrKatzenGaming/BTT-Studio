@@ -31,6 +31,7 @@ public:
     void draw();
     void setupStyle();
     void handleAlways();
+    const char* getMoonRefreshText();
 
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
@@ -44,6 +45,15 @@ private:
 
     void drawInputDisabled();
     void drawMiscCat();
+        constexpr static const char* MoonRefreshTexts[] {
+            "BTT Studio",
+            "BTT",
+            "Hi BTT",
+            "I am Cool",
+            "Super Mario Odyssey",
+            "Entrance to Shiveria",
+            "<blank>"
+        };
     void drawTeleportCat();
     void drawHotkeysCat();
     bool isHotkey(int& key);

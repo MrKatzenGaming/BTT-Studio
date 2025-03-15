@@ -278,6 +278,9 @@ void Menu::drawMiscCat() {
     if (ImGui::Button("Remove Cappy")) {
         if (player) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
     }
+    ImGui::PushItemWidth(200);
+    ImGui::Combo("Moon Refresh Text", &set->getSettings()->mMoonRefreshText, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts));
+    ImGui::PopItemWidth();
 }
 
 void Menu::drawHotkeysCat() {
@@ -331,6 +334,15 @@ void Menu::drawInfoCat() {
         ImGui::Text("Play Time Across File: %lu", playTimeAcrossFile);
         ImGui::Unindent();
     }
+}
+
+const char* Menu::getMoonRefreshText() {
+    if (strcmp(MoonRefreshTexts[set->getSettings()->mMoonRefreshText], "<blank>") != 0) {
+        return MoonRefreshTexts[set->getSettings()->mMoonRefreshText];
+    } else {
+        return "";
+    }
+    
 }
 
 } // namespace btt

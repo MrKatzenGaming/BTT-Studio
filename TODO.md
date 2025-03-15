@@ -3,7 +3,6 @@
 ## Important
 
 ### 1.2
-- [ ] fix moon text
 - [ ] fix stage warp
 
 ## Less Important
@@ -66,3 +65,4 @@
 - [x] choose moon text from prewritten list  
 - [x] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well
 - [x] Cloud skip
+- [x] fix moon text on all versions

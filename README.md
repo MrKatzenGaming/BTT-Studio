@@ -2,6 +2,19 @@
 
 A modification for Super Mario Odyssey made to make grindin BTT segmnts easier.
 
+## Installing
+
+### With Simple Mod Manager (Only for Realeases after 1.0.1)
+- Download *Btt-Studio-SimpleModManager.zip* from [here](https://github.com/MrKatzenGaming/BTT-Studio/releases/latest/download/BTT-Studio-SimpleModManager.zip)
+- Extract the ZIP file with your tool of choice
+- Drag and Drop the *BTT-Studio* folder into your mods folder on the SD-Card
+- Now you should see *BTT-Studio* as a mod in SMM
+
+### Without Simple Mod Manager
+- Download *Btt-Studio.zip* from [here](https://github.com/MrKatzenGaming/BTT-Studio/releases/latest/download/BTT-Studio.zip)
+- Extract the ZIP file with your tool of choice
+- Drag and Drop the *atmosphere* folder into your SD-Card
+
 ## Controls
 L-Stick Press -> Toggle Menu  
 R + ZR + L -> Toggle Menu Input  

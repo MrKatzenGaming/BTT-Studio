@@ -236,7 +236,6 @@ void Menu::saveTeleport(TpState& state) {
     state.pos = al::getTrans(player);
     state.quat = al::getQuat(player);
     strcpy(state.stageName, getEnglishName(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene))));
-    // strcpy(state.stageName, gameSeq->mGameDataHolderAccessor.mData->getCurrentStageName());
 }
 
 void Menu::loadTeleport(TpState& state) {

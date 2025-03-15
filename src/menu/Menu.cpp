@@ -231,12 +231,12 @@ void Menu::drawTeleportCat() {
 
 void Menu::saveTeleport(TpState& state) {
     if (!stageScene || !player) return;
-    sead::LookAtCamera cam = al::getLookAtCamera(stageScene, 0);
 
     state.saved = true;
     state.pos = al::getTrans(player);
     state.quat = al::getQuat(player);
-    strcpy(state.stageName, getEnglishName(((HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence)->mStageName.cstr()));
+    strcpy(state.stageName, getEnglishName(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene))));
+    // strcpy(state.stageName, gameSeq->mGameDataHolderAccessor.mData->getCurrentStageName());
 }
 
 void Menu::loadTeleport(TpState& state) {

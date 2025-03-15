@@ -2,6 +2,10 @@
 
 ## Important
 
+### 1.2
+- [ ] fix moon text
+- [ ] fix stage warp
+
 ## Less Important
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
@@ -15,9 +19,12 @@
     - [ ] change tp index  
     - [ ] Coins  
     - [ ] Timer  
-    - [ ] Life Up
-- [ ] Travel tu current kingdom
-- [ ] completely custom moon text (read bin file, make bin file with website)
+    - [ ] Life Up  
+- [ ] Travel to current kingdom  
+- [ ] completely custom moon text (read bin file, make bin file with website)  
+- [ ] enable all checkpoints  
+- [ ] walk on lava/poison  
+- [ ] noclip
 
 
 ## Hard

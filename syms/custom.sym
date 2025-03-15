@@ -1,5 +1,7 @@
-@smo:100,101,110,120
-
-MoonRefreshText = 0x01832301
-
+@smo:100
+MoonRefreshText = 0x01832301 
+@smo:101
+MoonRefreshText = 0x01834066
+@smo:110
+@smo:120
 @smo:130

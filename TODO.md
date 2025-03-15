@@ -2,8 +2,6 @@
 
 ## Important
 
-- [ ] Cloud skip
-
 ## Less Important
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
@@ -60,3 +58,4 @@
     - [x] Jumps/Cts  
 - [x] choose moon text from prewritten list  
 - [x] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well
+- [x] Cloud skip

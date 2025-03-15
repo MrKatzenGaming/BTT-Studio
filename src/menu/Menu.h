@@ -45,6 +45,22 @@ private:
     void drawInputDisabled();
     void drawMiscCat();
     void drawTeleportCat();
+    void drawHotkeysCat();
+    bool isHotkey(int& key);
+        constexpr static const char* Keys[] {
+            "None",
+            "L",
+            "R",
+            "ZL",
+            "ZR",
+            "L + R",
+            "L + ZL",
+            "L + ZR",
+            "R + ZL",
+            "R + ZR",
+        };
+        int killSceneKey = 0;
+        int healMarioKey = 0;
 
     int tpIndex = 0;
     void saveTeleport(TpState& state);

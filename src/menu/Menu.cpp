@@ -120,6 +120,7 @@ void Menu::draw() {
         }
         ImGui::Unindent();
     }
+    drawHotkeysCat();
 
     ImGui::End();
 }
@@ -132,6 +133,13 @@ void Menu::handleAlways() {
         saveTeleport(tpStates[tpIndex]);
     } else if (InputHelper::isPressPadRight() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {
         loadTeleport(tpStates[tpIndex]);
+    }
+
+    if (isHotkey(set->getSettings()->mKillSceneKey)) {
+        if (stageScene) stageScene->kill();
+    }
+    if (isHotkey(set->getSettings()->mHealMarioKey)) {
+        if (player) GameDataFunction::recoveryPlayer(player);
     }
 
     drawInputDisplay();
@@ -265,4 +273,32 @@ void Menu::drawMiscCat() {
         if (player) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
     }
 }
+void Menu::drawHotkeysCat() {
+    if (ImGui::CollapsingHeader("Hotkeys")) {
+        ImGui::Indent();
+            ImGui::Combo("Kill Scene", &set->mSettings.mKillSceneKey, Keys, IM_ARRAYSIZE(Keys));
+            ImGui::Combo("Heal Mario", &set->mSettings.mHealMarioKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Unindent();
+    }
+}
+
+bool Menu::isHotkey(int& key) {
+    bool Up = InputHelper::isPressPadUp();
+    bool L = InputHelper::isHoldL();
+    bool R = InputHelper::isHoldR();
+    bool ZL = InputHelper::isHoldZL();
+    bool ZR = InputHelper::isHoldZR();
+    if (key == 0) return 0;
+    if (key == 1) return Up && L;
+    if (key == 2) return Up && R;
+    if (key == 3) return Up && ZL;
+    if (key == 4) return Up && ZR;
+    if (key == 5) return Up && L && R;
+    if (key == 6) return Up && L && ZL;
+    if (key == 7) return Up && L && ZR;
+    if (key == 8) return Up && R && ZL;
+    if (key == 9) return Up && R && ZR;
+    return 0;
+}
+
 } // namespace btt

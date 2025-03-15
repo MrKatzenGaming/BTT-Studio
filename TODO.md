@@ -2,9 +2,6 @@
 
 ## Important
 
-- [ ] custom button layout  
-    - [ ] That im able to change button mapping for the inputs: Like reload scene kill mario etc  
-
 ## Less Important
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
@@ -51,6 +48,7 @@
 - [x] Disable Telport Puppet only in Moon Anim  
 - [x] refresh purps  
 - [x] Input Display  
+- [x] custom button layout  
 
 
 

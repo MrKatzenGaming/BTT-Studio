@@ -51,7 +51,8 @@ public:
         InputDisplayColor mInputDisplayRingColor = InputDisplayColor::Gray;
         InputDisplayColor mInputDisplayBackColor = InputDisplayColor::Black;
         ImVec2 mInputDisplayPos = ImVec2(1600.f / 2, 900.f / 2);
-
+        int mKillSceneKey = 0;
+        int mHealMarioKey = 0;
         
     } mSettings;
 

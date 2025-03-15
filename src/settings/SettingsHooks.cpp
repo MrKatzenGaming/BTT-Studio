@@ -89,6 +89,11 @@ class GrowFlowerPot;
 HkTrampoline<bool, GrowFlowerPot*> flowerPotRefreshHook = hk::hook::trampoline([](GrowFlowerPot* flowerPot) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : flowerPotRefreshHook.orig(flowerPot);
 });
+class CheckpointFlag;
+HkTrampoline<void, CheckpointFlag*> checkpointFlagHook = hk::hook::trampoline([](CheckpointFlag* checkpointFlag) -> void {
+    if (!SettingsMgr::instance()->getSettings()->mIsEnableNoCheckpointTouch)
+        checkpointFlagHook.orig(checkpointFlag);
+});
 
 void SettingsHooks::installSettingsHooks() {
 
@@ -108,5 +113,6 @@ void SettingsHooks::installSettingsHooks() {
     // shardRefreshHook.installAtSym<"_ZNK9ShineChip5isGotEv">();
     // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
     // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot12isEnableGrowEv">();
+    checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
 
 }

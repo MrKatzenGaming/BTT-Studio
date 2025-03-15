@@ -48,6 +48,7 @@ public:
         SETTING(DoorRefresh);
         SETTING(ShardRefresh);
         SETTING(FlowerPotRefresh);
+        SETTING(NoCheckpointTouch);
         InputDisplayColor mInputDisplayButtonColor = InputDisplayColor::White;
         InputDisplayColor mInputDisplayButtonPressedColor = InputDisplayColor::Pink;
         InputDisplayColor mInputDisplayStickColor = InputDisplayColor::White;

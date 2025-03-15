@@ -171,6 +171,7 @@ PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence) {
 
 PlayerActorBase* tryGetPlayerActor(al::Scene* scene) {
     if (!isInStageScene(scene)) return nullptr;
+    if (!scene) return nullptr;
 
     al::PlayerHolder* pHolder = al::getScenePlayerHolder(scene);
     if (!pHolder) return nullptr;

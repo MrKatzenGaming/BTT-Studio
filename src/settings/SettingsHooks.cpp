@@ -94,6 +94,25 @@ HkTrampoline<void, CheckpointFlag*> checkpointFlagHook = hk::hook::trampoline([]
     if (!SettingsMgr::instance()->getSettings()->mIsEnableNoCheckpointTouch)
         checkpointFlagHook.orig(checkpointFlag);
 });
+HkTrampoline<bool, StageScene*> cloudSkipHook = hk::hook::trampoline([](StageScene* stageScene) -> bool {
+    static int functionCalls = 0;
+    if (!SettingsMgr::instance()->getSettings()->mIsEnableSkipCloud) {
+        functionCalls = 0;
+        return cloudSkipHook.orig(stageScene);
+    }
+    // When debugging, returning true right away will skip Lost and go straight to (Day!) Metro with a broken Odyssey back in Wooded.
+    // Since isDefeatKoopaLv1 is called multiple times, we can return false the first time, then return true the second time, which
+    // seems to correctly skip the Bowser fight. This is a very hacky way of skipping the Bowser fight, so if there is some way to
+    // deduce from other game variables which function call we're in, that would be ideal. It would eliminate the need to introduce
+    // our own variable to keep track of the number of isDefeatKoopaLv1 calls.
+    functionCalls++;
+    if (functionCalls == 2) {
+        functionCalls = 0;
+        return true;
+    }
+
+    return false;
+});
 
 void SettingsHooks::installSettingsHooks() {
 
@@ -114,5 +133,6 @@ void SettingsHooks::installSettingsHooks() {
     // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
     // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot12isEnableGrowEv">();
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
+    cloudSkipHook.installAtSym<"_ZNK10StageScene16isDefeatKoopaLv1Ev">();
 
 }

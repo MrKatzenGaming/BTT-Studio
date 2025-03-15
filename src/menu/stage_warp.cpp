@@ -233,14 +233,14 @@ void drawStageWarpWindow() {
 
         bool isInGame = curScene && curScene->mIsAlive;
 
-        ImGuiContext* g = ImGui::GetCurrentContext();
+        ImGuiContext* ctx = ImGui::GetCurrentContext();
 
         ImGui::PushItemWidth(200);
         ImGui::InputInt("Scenario", &curScenario);
         if (curScenario < 0) curScenario = 15;
         if (curScenario > 15) curScenario = 0;
         ImGui::PopItemWidth();
-        if (g->NavId == ImGui::GetID("Scenario")) ImGui::SetTooltip("(NC) = No Change, () = First Arrival,\n(PG) = Post-Game, (MR) = Moon Rock");
+        if (ctx->NavId == ImGui::GetID("Scenario")) ImGui::SetTooltip("(NC) = No Change, () = First Arrival,\n(PG) = Post-Game, (MR) = Moon Rock");
 
         for (auto& entry : gameSeq->mGameDataHolderAccessor.mData->mWorldList->mWorldList) {
             char popupStr[0x60] = {};

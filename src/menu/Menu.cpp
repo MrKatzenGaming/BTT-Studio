@@ -23,19 +23,24 @@
 #include "al/Library/LiveActor/ActorPoseKeeper.h"
 
 #include "imgui.h"
+#include "imgui_internal.h"
 
 namespace btt {
 
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
 void Menu::draw() {
-    gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
-    player = helpers::tryGetPlayerActor();
-    stageScene = helpers::tryGetStageScene();
+    ImGuiContext* ctx = ImGui::GetCurrentContext();
     set = SettingsMgr::instance();
-    playerHak = helpers::tryGetPlayerActorHakoniwa();
-    holder = helpers::tryGetGameDataHolder();
-
+    gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
+    if (gameSeq) {
+        stageScene = helpers::tryGetStageScene(gameSeq);
+        if (stageScene) {
+            player = helpers::tryGetPlayerActor(stageScene);
+            playerHak = helpers::tryGetPlayerActorHakoniwa(stageScene);
+            holder = helpers::tryGetGameDataHolder(stageScene);
+        }
+    }
     if (InputHelper::isInputToggled()) {
         drawInputDisabled();
     }
@@ -70,6 +75,9 @@ void Menu::draw() {
         ImGui::Checkbox("Disable Teleport Puppet", &set->getSettings()->mIsEnableDisableTpPuppet);
         ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
         ImGui::Checkbox("No Checkpoint Touch", &set->getSettings()->mIsEnableNoCheckpointTouch);
+        ImGui::Checkbox("Skip Cloud", &set->getSettings()->mIsEnableSkipCloud);
+        if (ctx->NavId == ImGui::GetID("Skip Cloud")) ImGui::SetTooltip("Close menu before traveling to Cloud/Lost/Metro");
+
         ImGui::BeginDisabled();
         ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);
         ImGui::Checkbox("Refresh Moon Shards", &set->getSettings()->mIsEnableShardRefresh);

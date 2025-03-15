@@ -33,14 +33,11 @@ void Menu::draw() {
     ImGuiContext* ctx = ImGui::GetCurrentContext();
     set = SettingsMgr::instance();
     gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
-    if (gameSeq) {
-        stageScene = helpers::tryGetStageScene(gameSeq);
-        if (stageScene) {
-            player = helpers::tryGetPlayerActor(stageScene);
-            playerHak = helpers::tryGetPlayerActorHakoniwa(stageScene);
-            holder = helpers::tryGetGameDataHolder(stageScene);
-        }
-    }
+    stageScene = helpers::tryGetStageScene(gameSeq);
+    player = helpers::tryGetPlayerActor();
+    playerHak = helpers::tryGetPlayerActorHakoniwa();
+    holder = helpers::tryGetGameDataHolder();
+        
     if (InputHelper::isInputToggled()) {
         drawInputDisabled();
     }

@@ -14,6 +14,7 @@ L-Stick -> Scroll
 - Settings menu with many options
 - Player Teleport
 - Input Display
+- Hotkey System (DUp + L/R/ZL/ZR)
 
 ## Credits
 - [SMO-Exlaunch-Base](https://github.com/CraftyBoss/SMO-Exlaunch-Base)  

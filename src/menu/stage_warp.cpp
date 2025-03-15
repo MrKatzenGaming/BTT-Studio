@@ -19,7 +19,7 @@ struct KingdomEnglishName {
 };
 
 bool isShowMenu = false;
-s32 curScenario = -1;
+s32 curScenario = 0;
 
 KingdomEnglishName names[] = {
     { "CapWorldHomeStage", "Cap Kingdom" },
@@ -215,7 +215,7 @@ const char* getEnglishName(const char* internalName) {
 }
 
 inline const char* getScenarioType(WorldListEntry& entry, int scenario) {
-    if (scenario == -1) return " (NC)";
+    if (scenario == 0) return " (NC)";
     if (scenario == 1) return " ()";
     if (scenario == entry.clearMainScenario) return " (Peace)";
     if (scenario == entry.endingScenario) return " (PG)";
@@ -237,8 +237,8 @@ void drawStageWarpWindow() {
 
         ImGui::PushItemWidth(200);
         ImGui::InputInt("Scenario", &curScenario);
-        if (curScenario < -1) curScenario = 14;
-        if (curScenario > 14) curScenario = -1;
+        if (curScenario < 0) curScenario = 15;
+        if (curScenario > 15) curScenario = 0;
         ImGui::PopItemWidth();
         if (g->NavId == ImGui::GetID("Scenario")) ImGui::SetTooltip("(NC) = No Change, () = First Arrival,\n(PG) = Post-Game, (MR) = Moon Rock");
 
@@ -257,12 +257,12 @@ void drawStageWarpWindow() {
             ImGui::SameLine();
             if (ImGui::Button(warpButtonId)) {
                 if (!isInGame) continue;
-                if (curScenario != -1) curScenario += 1;
+                if (curScenario == 0) curScenario = -1;
                 ChangeStageInfo stageInfo(
                     gameSeq->mGameDataHolderAccessor, "start", entry.mainStageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                 );
                 GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
-                if (curScenario != -1) curScenario -= 1;
+                if (curScenario == -1) curScenario = 0;
             }
 
             ImGui::SameLine();
@@ -276,12 +276,12 @@ void drawStageWarpWindow() {
 
                     if (isInGame) {
                         if (ImGui::MenuItem(getEnglishName(stageName))) {
-                            if (curScenario != -1) curScenario += 1;
+                            if (curScenario == 0) curScenario = -1;
                             ChangeStageInfo stageInfo(
                                 gameSeq->mGameDataHolderAccessor, "start", stageName, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                             );
                             GameDataFunction::tryChangeNextStage(GameDataHolderWriter(curScene), &stageInfo);
-                            if (curScenario != -1) curScenario -= 1;
+                            if (curScenario == -1) curScenario = 0;
                         }
                     } else {
                         ImGui::Text("%s", getEnglishName(stageName));

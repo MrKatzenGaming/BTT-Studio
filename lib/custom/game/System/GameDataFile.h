@@ -255,8 +255,8 @@
          int getWorldWarpHoleThroughNumMax(void);
          void getCheckpointObjIdInWorld(int);
          void getCheckpointNumMaxInWorld(void);
-         void getPlayerThrowCapCount(void);
-         void getPlayerJumpCount(void);
+         int getPlayerThrowCapCount(void);
+         int getPlayerJumpCount(void);
          void getGrowFlowerGrowLevel(al::PlacementId const*);
          void getGrowFlowerTime(al::PlacementId const*);
          void getWorldTravelingStatus(void);
@@ -270,7 +270,7 @@
          void getStageNameCurrent(void);
          PlayerHitPointData* getPlayerHitPointData() const;
          void getLastUpdateTime(void);
-         void getPlayTimeTotal(void);
+         u64 getPlayTimeTotal(void);
          int getMainScenarioNo(int) const;
          void getCollectedBgmMaxNum(void);
          int getScenarioNo(void) const;

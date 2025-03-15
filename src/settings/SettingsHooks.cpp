@@ -13,6 +13,7 @@
 #include "hk/sail/detail.h"
 #include "game/System/PlayerHitPointData.h"
 #include "settings/DemoHooks.hpp"
+#include "al/Library/Nerve/NerveUtil.h"
 
 using namespace hk;
 using namespace btt;
@@ -73,6 +74,19 @@ HkTrampoline<bool, GameDataHolderAccessor> warpTextHook = hk::hook::trampoline([
 HkTrampoline<bool, GameDataHolderAccessor, al::ActorInitInfo*> refreshPurpsHook = hk::hook::trampoline([](GameDataHolderAccessor accessor, al::ActorInitInfo* actorInitInfo) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshPurps ? false : refreshPurpsHook.orig(accessor, actorInitInfo);
 });
+class DoorAreaChange;
+HkTrampoline<bool, DoorAreaChange*> doorRefreshHook = hk::hook::trampoline([](DoorAreaChange* doorAreaChange) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableDoorRefresh ? false : doorRefreshHook.orig(doorAreaChange);
+});
+class ShineChip;
+HkTrampoline<bool, ShineChip*> shardRefreshHook = hk::hook::trampoline([](ShineChip* shineChip) -> bool {
+    al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf8));
+    return SettingsMgr::instance()->getSettings()->mIsEnableShardRefresh ? false : shardRefreshHook.orig(shineChip);
+});
+class GrowFlowerPot;
+HkTrampoline<bool, GrowFlowerPot*> flowerPotRefreshHook = hk::hook::trampoline([](GrowFlowerPot* flowerPot) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : flowerPotRefreshHook.orig(flowerPot);
+});
 
 void SettingsHooks::installSettingsHooks() {
 
@@ -86,7 +100,11 @@ void SettingsHooks::installSettingsHooks() {
     checkpointWarpHook.installAtSym<"_ZNK9MapLayout22isEnableCheckpointWarpEv">();
     disableMoonLockHook.installAtSym<"_ZNK14GameDataHolder18findUnlockShineNumEPbi">();
     NoDamageHook.installAtSym<"_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter">();
-    kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
     warpTextHook.installAtSym<"_ZN16GameDataFunction34isAlreadyShowExplainCheckpointFlagE22GameDataHolderAccessor">();
     refreshPurpsHook.installAtSym<"_ZN16GameDataFunction16isGotCoinCollectE22GameDataHolderAccessorRKN2al13ActorInitInfoE">();
+    // doorRefreshHook.installAtSym<"_ZNK14DoorAreaChange6isOpenEv">();
+    // shardRefreshHook.installAtSym<"_ZNK9ShineChip5isGotEv">();
+    // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
+    // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot12isEnableGrowEv">();
+
 }

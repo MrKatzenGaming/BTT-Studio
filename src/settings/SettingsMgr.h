@@ -45,6 +45,9 @@ public:
         SETTING(DisableTpPuppet);
         SETTING(RefreshPurps);
         SETTING(InputDisplay);
+        SETTING(DoorRefresh);
+        SETTING(ShardRefresh);
+        SETTING(FlowerPotRefresh);
         InputDisplayColor mInputDisplayButtonColor = InputDisplayColor::White;
         InputDisplayColor mInputDisplayButtonPressedColor = InputDisplayColor::Pink;
         InputDisplayColor mInputDisplayStickColor = InputDisplayColor::White;

@@ -12,12 +12,15 @@
 #include "game/System/GameDataFile.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
+#include "game/Util/AchievementUtil.h"
 #include "hk/types.h"
 #include "hk/util/Math.h"
 #include "InputDisplay.h"
 #include "saveFileHelper.h"
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
+#include "al/Library/LiveActor/ActorMovementFunction.h"
+#include "al/Library/LiveActor/ActorPoseKeeper.h"
 
 #include "imgui.h"
 
@@ -52,10 +55,6 @@ void Menu::draw() {
         InputHelper::setDisableMouse(!InputHelper::isDisableMouse());
     }
 
-    if (stageScene) {
-        if (ImGui::Button("Kill Scene")) stageScene->kill();
-    }
-
     drawStageWarpWindow();
 
     if (ImGui::CollapsingHeader("Options")) {
@@ -68,9 +67,15 @@ void Menu::draw() {
         ImGui::Checkbox("No Damage", &set->getSettings()->mIsEnableNoDamage);
         ImGui::Checkbox("Disable Music", &set->getSettings()->mIsEnableDisableMusic);
         ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
-        ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
         ImGui::Checkbox("Disable Teleport Puppet", &set->getSettings()->mIsEnableDisableTpPuppet);
         ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
+        ImGui::BeginDisabled();
+        ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);
+        ImGui::Checkbox("Refresh Moon Shards", &set->getSettings()->mIsEnableShardRefresh);
+        ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
+        ImGui::Checkbox("Refresh Seeds", &set->getSettings()->mIsEnableFlowerPotRefresh);
+        ImGui::EndDisabled();
+
         ImGui::Unindent();
     }
 
@@ -121,6 +126,7 @@ void Menu::draw() {
         ImGui::Unindent();
     }
     drawHotkeysCat();
+    drawInfoCat();
 
     ImGui::End();
 }
@@ -273,11 +279,12 @@ void Menu::drawMiscCat() {
         if (player) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
     }
 }
+
 void Menu::drawHotkeysCat() {
     if (ImGui::CollapsingHeader("Hotkeys")) {
         ImGui::Indent();
-            ImGui::Combo("Kill Scene", &set->mSettings.mKillSceneKey, Keys, IM_ARRAYSIZE(Keys));
-            ImGui::Combo("Heal Mario", &set->mSettings.mHealMarioKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Kill Scene", &set->mSettings.mKillSceneKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Heal Mario", &set->mSettings.mHealMarioKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Unindent();
     }
 }
@@ -299,6 +306,31 @@ bool Menu::isHotkey(int& key) {
     if (key == 8) return Up && R && ZL;
     if (key == 9) return Up && R && ZR;
     return 0;
+}
+
+void Menu::drawInfoCat() {
+    if (ImGui::CollapsingHeader("Info")) {
+        ImGui::Indent();
+
+        GameDataHolderAccessor* accessor = helpers::tryGetGameDataHolderAccess();
+
+        if (!holder || !accessor) {
+            ImGui::Text("No Game Data Holder");
+            ImGui::Unindent();
+            return;
+        }
+        s32 jumpCount = rs::getPlayerJumpCount(holder);
+        s32 throwCapCount = rs::getPlayerThrowCapCount(holder);
+        u64 playTimeTotal = GameDataFunction::getPlayTimeTotal(*accessor);
+        u64 playTimeAcrossFile = GameDataFunction::getPlayTimeAcrossFile(*accessor);
+        s32 totalCoinNum = rs::getTotalCoinNum(holder);
+        ImGui::Text("Jumps: %d", jumpCount);
+        ImGui::Text("Cap Throws: %d", throwCapCount);
+        ImGui::Text("Total Coins: %d", totalCoinNum);
+        ImGui::Text("Play Time Total: %lu", playTimeTotal);
+        ImGui::Text("Play Time Across File: %lu", playTimeAcrossFile);
+        ImGui::Unindent();
+    }
 }
 
 } // namespace btt

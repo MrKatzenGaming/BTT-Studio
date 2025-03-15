@@ -61,6 +61,10 @@ private:
         };
         int killSceneKey = 0;
         int healMarioKey = 0;
+    void drawInfoCat();
+        int sliderValue = 2;
+        char format[16];
+        char textBuffer[64];
 
     int tpIndex = 0;
     void saveTeleport(TpState& state);

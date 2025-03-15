@@ -7,9 +7,9 @@
 #include <heap/seadHeapMgr.h>
 #include <nn/oe.h>
 #include "al/Library/Camera/CameraUtil.h"
+#include "al/Library/LiveActor/ActorMovementFunction.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "game/Layout/CoinCounter.h"
-#include "game/System/GameDataFile.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
 #include "game/Util/AchievementUtil.h"
@@ -19,8 +19,8 @@
 #include "saveFileHelper.h"
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
-#include "al/Library/LiveActor/ActorMovementFunction.h"
-#include "al/Library/LiveActor/ActorPoseKeeper.h"
+#include "game/Player/PlayerHackKeeper.h"
+#include "al/Library/LiveActor/ActorFlagFunction.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -31,18 +31,12 @@ SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
 void Menu::draw() {
     ImGuiContext* ctx = ImGui::GetCurrentContext();
-    set = SettingsMgr::instance();
-    gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
-    stageScene = helpers::tryGetStageScene(gameSeq);
-    player = helpers::tryGetPlayerActor();
-    playerHak = helpers::tryGetPlayerActorHakoniwa();
-    holder = helpers::tryGetGameDataHolder();
-        
+
     if (InputHelper::isInputToggled()) {
         drawInputDisabled();
     }
 
-    ImGui::Begin("BTT Studio", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("BTT Studio", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavFocus);
     ImGui::SetWindowSize(mWindowSize, ImGuiCond_FirstUseEver);
     ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
 
@@ -73,7 +67,6 @@ void Menu::draw() {
         ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
         ImGui::Checkbox("No Checkpoint Touch", &set->getSettings()->mIsEnableNoCheckpointTouch);
         ImGui::Checkbox("Skip Cloud", &set->getSettings()->mIsEnableSkipCloud);
-        if (ctx->NavId == ImGui::GetID("Skip Cloud")) ImGui::SetTooltip("Close menu before traveling to Cloud/Lost/Metro");
 
         ImGui::BeginDisabled();
         ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);
@@ -138,6 +131,20 @@ void Menu::draw() {
 }
 
 void Menu::handleAlways() {
+    ImGuiContext* ctx = ImGui::GetCurrentContext();
+    set = SettingsMgr::instance();
+    gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
+    stageScene = helpers::tryGetStageScene(gameSeq);
+    // BAAAADD
+    if (stageScene) {
+        if (strcmp(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene)), "ClashWorldHomeStage") == 0) noGetPlayer = false;
+    }
+    if (!noGetPlayer) {
+        player = helpers::tryGetPlayerActor();
+        playerHak = helpers::tryGetPlayerActorHakoniwa();
+    }
+    holder = helpers::tryGetGameDataHolder();
+
     if (InputHelper::isPressStickL()) {
         mIsEnabledMenu = !mIsEnabledMenu;
     }
@@ -151,7 +158,7 @@ void Menu::handleAlways() {
         if (stageScene) stageScene->kill();
     }
     if (isHotkey(set->getSettings()->mHealMarioKey)) {
-        if (player) GameDataFunction::recoveryPlayer(player);
+        if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
     }
 
     drawInputDisplay();
@@ -210,7 +217,9 @@ void Menu::drawTeleportCat() {
         ImGui::SameLine();
         if (ImGui::Button("Load")) loadTeleport(tpStates[tpIndex]);
         ImGui::SameLine();
+        ImGui::PushID("TpHotkeys");
         ImGui::Checkbox("Hotkeys", &set->getSettings()->mIsEnableTpHotkeys);
+        ImGui::PopID();
         ImGui::SameLine();
         ImGui::BeginDisabled();
         ImGui::Checkbox("Saved", &tpStates[tpIndex].saved);
@@ -230,46 +239,55 @@ void Menu::drawTeleportCat() {
 }
 
 void Menu::saveTeleport(TpState& state) {
-    if (!stageScene || !player) return;
+    if (!stageScene || !playerHak) return;
 
     state.saved = true;
-    state.pos = al::getTrans(player);
-    state.quat = al::getQuat(player);
+    state.pos = al::getTrans(playerHak);
+    state.quat = al::getQuat(playerHak);
     strcpy(state.stageName, getEnglishName(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene))));
 }
 
 void Menu::loadTeleport(TpState& state) {
-    if (!stageScene || !player) return;
+    if (!stageScene || !playerHak) return;
+    al::LiveActor* hack = playerHak->mHackKeeper->mCurrentHackActor;
+
+    if (hack) {
+        al::setTrans(hack, state.pos);
+        al::updatePoseQuat(hack, state.quat);
+        al::setVelocityZero(hack);
+        return;
+    }
+
     if (set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) {
-        al::setTrans(player, state.pos);
-        al::updatePoseQuat(player, state.quat);
+        al::setTrans(playerHak, state.pos);
+        al::updatePoseQuat(playerHak, state.quat);
     } else {
-        player->startDemoPuppetable();
-        al::setTrans(player, state.pos);
-        al::updatePoseQuat(player, state.quat);
-        player->endDemoPuppetable();
+        playerHak->startDemoPuppetable();
+        al::setTrans(playerHak, state.pos);
+        al::updatePoseQuat(playerHak, state.quat);
+        playerHak->endDemoPuppetable();
     }
 }
 
 void Menu::drawMiscCat() {
     if (ImGui::Button("Kill Mario")) {
-        if (player) GameDataFunction::killPlayer(GameDataHolderWriter(player));
+        if (playerHak) GameDataFunction::killPlayer(GameDataHolderWriter(playerHak));
     }
     ImGui::SameLine();
     if (ImGui::Button("Damage Mario")) {
-        if (player) {
+        if (playerHak) {
             bool tmpDamage = SettingsMgr::instance()->getSettings()->mIsEnableNoDamage;
             SettingsMgr::instance()->getSettings()->mIsEnableNoDamage = false;
-            GameDataFunction::damagePlayer(GameDataHolderWriter(player));
+            GameDataFunction::damagePlayer(GameDataHolderWriter(playerHak));
             SettingsMgr::instance()->getSettings()->mIsEnableNoDamage = tmpDamage;
         }
     }
     if (ImGui::Button("Life Up Heart")) {
-        if (player) GameDataFunction::getLifeMaxUpItem(player);
+        if (playerHak) GameDataFunction::getLifeMaxUpItem(playerHak);
     }
     ImGui::SameLine();
     if (ImGui::Button("Heal Mario")) {
-        if (player) GameDataFunction::recoveryPlayer(player);
+        if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
     }
     if (ImGui::Button("Add 1000 coins")) {
         if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
@@ -281,7 +299,7 @@ void Menu::drawMiscCat() {
         }
     }
     if (ImGui::Button("Remove Cappy")) {
-        if (player) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
+        if (playerHak) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
     }
     ImGui::PushItemWidth(200);
     ImGui::Combo("Moon Refresh Text", &set->getSettings()->mMoonRefreshText, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts));
@@ -347,7 +365,6 @@ const char* Menu::getMoonRefreshText() {
     } else {
         return "";
     }
-    
 }
 
 } // namespace btt

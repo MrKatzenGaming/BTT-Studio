@@ -2,6 +2,9 @@
 
 ## Important
 
+- [ ] keep selected item after menu reopen
+- [ ] make hotkey option none be just dpad up and add disalbed options
+
 ### 1.2
 - [ ] fix stage warp
 
@@ -66,3 +69,5 @@
 - [x] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well
 - [x] Cloud skip
 - [x] fix moon text on all versions
+- [x] fix skip cloud
+- [x] fix tp in escape/ all captures

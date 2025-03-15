@@ -95,9 +95,11 @@ HkTrampoline<void, CheckpointFlag*> checkpointFlagHook = hk::hook::trampoline([]
         checkpointFlagHook.orig(checkpointFlag);
 });
 HkTrampoline<bool, StageScene*> cloudSkipHook = hk::hook::trampoline([](StageScene* stageScene) -> bool {
+    Menu::instance()->noGetPlayer = true;
     static int functionCalls = 0;
     if (!SettingsMgr::instance()->getSettings()->mIsEnableSkipCloud) {
         functionCalls = 0;
+        Menu::instance()->noGetPlayer = false;
         return cloudSkipHook.orig(stageScene);
     }
     // When debugging, returning true right away will skip Lost and go straight to (Day!) Metro with a broken Odyssey back in Wooded.
@@ -110,6 +112,7 @@ HkTrampoline<bool, StageScene*> cloudSkipHook = hk::hook::trampoline([](StageSce
         functionCalls = 0;
         return true;
     }
+    Menu::instance()->noGetPlayer = false;
 
     return false;
 });

@@ -28,6 +28,7 @@ L-Stick -> Scroll
 - Player Teleport
 - Input Display
 - Hotkey System (DUp + L/R/ZL/ZR)
+- Fix Cap Scenario 1 Spawn
 
 ## Credits
 - [SMO-Exlaunch-Base](https://github.com/CraftyBoss/SMO-Exlaunch-Base)  

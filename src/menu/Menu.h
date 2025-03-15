@@ -33,6 +33,8 @@ public:
     void handleAlways();
     const char* getMoonRefreshText();
 
+    bool noGetPlayer = false;
+
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
 
@@ -75,7 +77,8 @@ private:
         int sliderValue = 2;
         char format[16];
         char textBuffer[64];
-
+    
+    
     int tpIndex = 0;
     void saveTeleport(TpState& state);
     void loadTeleport(TpState& state);

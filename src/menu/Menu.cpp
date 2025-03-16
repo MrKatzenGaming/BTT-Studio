@@ -328,16 +328,16 @@ bool Menu::isHotkey(int& key) {
     bool ZL = InputHelper::isHoldZL();
     bool ZR = InputHelper::isHoldZR();
     if (key == 0) return 0;
-    if (key == 1) return Up && !mIsEnabledMenu;
-    if (key == 2) return Up && L;
-    if (key == 3) return Up && R;
-    if (key == 4) return Up && ZL;
-    if (key == 5) return Up && ZR;
-    if (key == 6) return Up && L && R;
-    if (key == 7) return Up && L && ZL;
-    if (key == 8) return Up && L && ZR;
-    if (key == 9) return Up && R && ZL;
-    if (key == 10) return Up && R && ZR;
+    if (key == 1) return Up && !InputHelper::isInputToggled();
+    if (key == 2) return Up && L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
+    if (key == 3) return Up && R && !L && !ZL && !ZR && !InputHelper::isInputToggled(); 
+    if (key == 4) return Up && ZL && !L && !R && !ZR && !InputHelper::isInputToggled();
+    if (key == 5) return Up && ZR && !L && !R && !ZL && !InputHelper::isInputToggled();
+    if (key == 6) return Up && L && R && !ZL && !ZR && !InputHelper::isInputToggled(); 
+    if (key == 7) return Up && L && ZL && !R && !ZR && !InputHelper::isInputToggled();
+    if (key == 8) return Up && L && ZR && !R && !ZL && !InputHelper::isInputToggled();
+    if (key == 9) return Up && R && ZL && !L && !ZR && !InputHelper::isInputToggled();
+    if (key == 10) return Up && R && ZR && !L && !ZL && !InputHelper::isInputToggled();
     return 0;
 }
 

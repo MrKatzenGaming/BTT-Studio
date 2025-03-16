@@ -328,7 +328,7 @@ bool Menu::isHotkey(int& key) {
     bool ZL = InputHelper::isHoldZL();
     bool ZR = InputHelper::isHoldZR();
     if (key == 0) return 0;
-    if (key == 1) return Up;
+    if (key == 1) return Up && mIsEnabledMenu;
     if (key == 2) return Up && L;
     if (key == 3) return Up && R;
     if (key == 4) return Up && ZL;

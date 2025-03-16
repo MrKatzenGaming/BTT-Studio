@@ -226,11 +226,7 @@ bool tryReloadStage() {
 bool isGetShineState(StageScene* stageScene) {
     if (!stageScene) return false;
 
-    size_t demangledSize = 0xff;
     char* stateName = nullptr;
-    char* demangledBuf = static_cast<char*>(nn::init::GetAllocator()->Allocate(demangledSize));
-    int status;
-    bool cmp = false;
 
     const al::Nerve* stageNerve = stageScene->getNerveKeeper()->getCurrentNerve();
     if (!stageScene->getNerveKeeper()->mStateCtrl) return false;
@@ -238,12 +234,21 @@ bool isGetShineState(StageScene* stageScene) {
     al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->findStateInfo(stageNerve);
     if (!state) return false;
     
-    const al::Nerve* stateNerve = state->state->getNerveKeeper()->getCurrentNerve();
-    stateName = abi::__cxa_demangle(typeid(*state->state).name(), demangledBuf, &demangledSize, &status);
-    cmp = strcmp(stateName, "StageSceneStateGetShine") == 0;
+    stateName = demangle(typeid(*state->state).name());
+
+    return strcmp(stateName, "StageSceneStateGetShine") == 0;
+}
+
+char* demangle(const char* mangled_name) {
+    size_t demangledSize = 0xff;
+    char* demangledName = nullptr;
+    char* demangledBuf = static_cast<char*>(nn::init::GetAllocator()->Allocate(demangledSize));
+    int status;
+
+    demangledName = abi::__cxa_demangle(mangled_name, demangledBuf, &demangledSize, &status);
     nn::init::GetAllocator()->Free(demangledBuf);
 
-    return cmp;
+    return demangledName;
 }
 
 } // namespace helpers

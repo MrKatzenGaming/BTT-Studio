@@ -40,4 +40,6 @@ namespace helpers {
 
     bool isGetShineState(StageScene* stageScene);
 
+    char* demangle(const char* mangled_name);
+
 } // namespace helpers

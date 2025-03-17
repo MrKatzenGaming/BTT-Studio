@@ -16,6 +16,7 @@
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
 #include "game/Util/AchievementUtil.h"
+#include "hk/diag/diag.h"
 #include "hk/types.h"
 #include "hk/util/Math.h"
 #include "InputDisplay.h"
@@ -146,11 +147,14 @@ void Menu::handleAlways() {
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
         prevNavId = GImGui->NavId;
         mIsEnabledMenu = false;
+        prevMouseDis = InputHelper::isDisableMouse();
+        InputHelper::setDisableMouse(true);
     } else if (InputHelper::isPressStickL() && !mIsEnabledMenu) {
         mIsEnabledMenu = true;
         prevTime = globalTimer;
+        InputHelper::setDisableMouse(prevMouseDis);
     }
-    if (globalTimer - prevTime == 5) {
+    if (globalTimer - prevTime < 5) {
         if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
         GImGui->NavDisableHighlight = false;
     }

@@ -36,6 +36,8 @@ public:
     bool noGetPlayer = false;
     u64 globalTimer = 0;
 
+    bool prevMouseDis = true;
+
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
 

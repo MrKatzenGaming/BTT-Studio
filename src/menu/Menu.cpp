@@ -171,6 +171,30 @@ void Menu::handleAlways() {
     if (isHotkey(set->getSettings()->mHealMarioKey)) {
         if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
     }
+    if (isHotkey(set->getSettings()->mPrevSceneKey)) {
+        if (holder) holder->returnPrevStage();
+    }
+    if (isHotkey(set->getSettings()->mIncTpIndexKey)) {
+        tpIndex++;
+        if (tpIndex >= hk::util::arraySize(tpStates)) tpIndex = 0;
+    }
+    if (isHotkey(set->getSettings()->mDecTpIndexKey)) {
+        tpIndex--;
+        if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
+    }
+    if (isHotkey(set->getSettings()->mAddCoinsKey)) {
+        if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
+    }
+    if (isHotkey(set->getSettings()->mDecCoinsKey)) {
+        if (stageScene) {
+            int coinNum = GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene));
+            if (coinNum < 1000) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -(1000-coinNum));
+            else GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
+        }
+    }
+    if (isHotkey(set->getSettings()->mLifeUpKey)) {
+        if (playerHak) GameDataFunction::getLifeMaxUpItem(playerHak);
+    }
 
     drawInputDisplay();
 }
@@ -306,7 +330,9 @@ void Menu::drawMiscCat() {
     ImGui::SameLine();
     if (ImGui::Button("Remove 1000 coins")) {
         if (stageScene) {
-            if (GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene)) >= 1000) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
+            int coinNum = GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene));
+            if (coinNum < 1000) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -(1000-coinNum));
+            else GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
         }
     }
     if (ImGui::Button("Remove Cappy")) {
@@ -320,8 +346,16 @@ void Menu::drawMiscCat() {
 void Menu::drawHotkeysCat() {
     if (ImGui::CollapsingHeader("Hotkeys")) {
         ImGui::Indent();
-        ImGui::Combo("Kill Scene", &set->mSettings.mKillSceneKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Heal Mario", &set->mSettings.mHealMarioKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::PushItemWidth(200);
+        ImGui::Combo("Kill Scene##Key", &set->mSettings.mKillSceneKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Heal Mario##Key", &set->mSettings.mHealMarioKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Life Up Heart##Key", &set->mSettings.mLifeUpKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Prev Scene##Key", &set->mSettings.mPrevSceneKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Increment Tp Index##Key", &set->mSettings.mIncTpIndexKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Decrement Tp Index##Key", &set->mSettings.mDecTpIndexKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Add 1000 Coins##Key", &set->mSettings.mAddCoinsKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Remove 1000 Coins##Key", &set->mSettings.mDecCoinsKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::PopItemWidth();
         ImGui::Unindent();
     }
 }

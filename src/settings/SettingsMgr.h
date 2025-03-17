@@ -59,6 +59,12 @@ public:
         int mKillSceneKey = 0;
         int mHealMarioKey = 0;
         int mMoonRefreshText = 0;
+        int mPrevSceneKey = 0;
+        int mIncTpIndexKey = 0;
+        int mDecTpIndexKey = 0;
+        int mAddCoinsKey = 0;
+        int mDecCoinsKey = 0;
+        int mLifeUpKey = 0;
         
     } mSettings;
 

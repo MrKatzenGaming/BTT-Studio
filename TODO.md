@@ -9,13 +9,13 @@
     - [ ] fix cutscene skips  
 - [ ] allow moving menu to different corners  
 - [ ] Hotkeys  
-    - [ ] warp to last checkpoint  
     - [ ] wiggler pattern  
-    - [ ] previous scene  
-    - [ ] change tp index  
-    - [ ] Coins  
+    - [x] previous scene  
+    - [x] change tp index  
+    - [x] Coins  
     - [ ] Timer  
-    - [ ] Life Up  
+    - [x] Life Up  
+    - [ ] warp to last checkpoint  
 - [ ] Travel to current kingdom  
 - [ ] completely custom moon text (read bin file, make bin file with website)  
 - [ ] enable all checkpoints  

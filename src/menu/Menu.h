@@ -35,9 +35,6 @@ public:
 
     bool noGetPlayer = false;
     u64 globalTimer = 0;
-
-    bool prevMouseDis = true;
-
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
 
@@ -85,5 +82,8 @@ private:
     int tpIndex = 0;
     void saveTeleport(TpState& state);
     void loadTeleport(TpState& state);
+
+    bool prevMouseDis = true;
+
 };
 } // namespace btt

@@ -16,6 +16,7 @@
 #include "saveFileHelper.h"
 #include "settings/SettingsHooks.h"
 #include "settings/SettingsMgr.h"
+#include "stage_warp.h"
 
 #include "imgui.h"
 

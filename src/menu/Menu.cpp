@@ -3,6 +3,7 @@
 #include "helpers/getHelper.h"
 #include "InputHelper.h"
 
+#include <cstdint>
 #include <cstdio>
 #include <heap/seadHeapMgr.h>
 #include <nn/oe.h>
@@ -149,7 +150,7 @@ void Menu::handleAlways() {
         mIsEnabledMenu = true;
         prevTime = globalTimer;
     }
-    if (globalTimer - prevTime < 5) {
+    if (globalTimer - prevTime == 5) {
         if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
         GImGui->NavDisableHighlight = false;
     }
@@ -321,24 +322,36 @@ void Menu::drawHotkeysCat() {
     }
 }
 
-bool Menu::isHotkey(int& key) {
+bool Menu::isHotkey(int key) {
     bool Up = InputHelper::isPressPadUp();
     bool L = InputHelper::isHoldL();
     bool R = InputHelper::isHoldR();
     bool ZL = InputHelper::isHoldZL();
     bool ZR = InputHelper::isHoldZR();
-    if (key == 0) return 0;
-    if (key == 1) return Up && !InputHelper::isInputToggled();
-    if (key == 2) return Up && L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
-    if (key == 3) return Up && R && !L && !ZL && !ZR && !InputHelper::isInputToggled(); 
-    if (key == 4) return Up && ZL && !L && !R && !ZR && !InputHelper::isInputToggled();
-    if (key == 5) return Up && ZR && !L && !R && !ZL && !InputHelper::isInputToggled();
-    if (key == 6) return Up && L && R && !ZL && !ZR && !InputHelper::isInputToggled(); 
-    if (key == 7) return Up && L && ZL && !R && !ZR && !InputHelper::isInputToggled();
-    if (key == 8) return Up && L && ZR && !R && !ZL && !InputHelper::isInputToggled();
-    if (key == 9) return Up && R && ZL && !L && !ZR && !InputHelper::isInputToggled();
-    if (key == 10) return Up && R && ZR && !L && !ZL && !InputHelper::isInputToggled();
-    return 0;
+    switch (key) {
+        case 1:
+            return Up && !L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
+        case 2:
+            return Up && L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
+        case 3:
+            return Up && R && !L && !ZL && !ZR && !InputHelper::isInputToggled();
+        case 4:
+            return Up && ZL && !L && !R && !ZR && !InputHelper::isInputToggled();
+        case 5:
+            return Up && ZR && !L && !R && !ZL && !InputHelper::isInputToggled();
+        case 6:
+            return Up && L && R && !ZL && !ZR && !InputHelper::isInputToggled();
+        case 7:
+            return Up && L && ZL && !R && !ZR && !InputHelper::isInputToggled();
+        case 8:
+            return Up && L && ZR && !R && !ZL && !InputHelper::isInputToggled();
+        case 9:
+            return Up && R && ZL && !L && !ZR && !InputHelper::isInputToggled();
+        case 10:
+            return Up && R && ZR && !L && !ZL && !InputHelper::isInputToggled();
+        default:
+            return 0;
+    }
 }
 
 void Menu::drawInfoCat() {

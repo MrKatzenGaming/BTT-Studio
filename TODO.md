@@ -2,11 +2,6 @@
 
 ## Important
 
-- [ ] fix game crashes when saving a tp location in wooded tower
-
-### 1.2
-- [ ] fix stage warp
-
 ## Less Important
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
@@ -26,6 +21,9 @@
 - [ ] enable all checkpoints  
 - [ ] walk on lava/poison  
 - [ ] noclip
+- [ ] outfit changer
+- [ ] hide mouse when menu is hidden
+- [ ] separate info viewer(like input display)
 
 
 ## Hard
@@ -72,3 +70,5 @@
 - [x] fix tp in escape/ all captures
 - [x] make hotkey option none be just dpad up and add disalbed options
 - [x] keep selected item after menu reopen
+- [x] fix game crashes when saving a tp location in wooded tower
+- [x] fix stage warp on 1.2

@@ -195,6 +195,14 @@ void Menu::handleAlways() {
     if (isHotkey(set->getSettings()->mLifeUpKey)) {
         if (playerHak) GameDataFunction::getLifeMaxUpItem(playerHak);
     }
+    if (isHotkey(set->getSettings()->mIncPatternKey)) {
+        set->getSettings()->mWigglerPattern++;
+        if (set->getSettings()->mWigglerPattern >= hk::util::arraySize(WigglerPatterns)) set->getSettings()->mWigglerPattern = 0;
+    }
+    if (isHotkey(set->getSettings()->mDecPatternKey)) {
+        set->getSettings()->mWigglerPattern--;
+        if (set->getSettings()->mWigglerPattern < 0) set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
+    }
 
     drawInputDisplay();
 }
@@ -362,6 +370,8 @@ void Menu::drawHotkeysCat() {
         ImGui::Combo("Decrement Tp Index##Key", &set->mSettings.mDecTpIndexKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Add 1000 Coins##Key", &set->mSettings.mAddCoinsKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Remove 1000 Coins##Key", &set->mSettings.mDecCoinsKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Increment Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Decrement Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }

@@ -66,6 +66,8 @@ public:
         int mDecCoinsKey = 0;
         int mLifeUpKey = 0;
         int mWigglerPattern = 0;
+        int mIncPatternKey = 0;
+        int mDecPatternKey = 0;
         
     } mSettings;
 

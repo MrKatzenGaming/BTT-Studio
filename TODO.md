@@ -9,7 +9,7 @@
     - [ ] fix cutscene skips  
 - [ ] allow moving menu to different corners  
 - [ ] Hotkeys  
-    - [ ] wiggler pattern  
+    - [x] wiggler pattern  
     - [x] previous scene  
     - [x] change tp index  
     - [x] Coins  

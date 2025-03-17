@@ -35,6 +35,9 @@ public:
 
     bool noGetPlayer = false;
     u64 globalTimer = 0;
+
+    bool isPatternReverse();
+    int getPatternTarget(int a);
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
 
@@ -58,6 +61,11 @@ private:
             "Super Mario Odyssey",
             "Entrance to Shiveria",
             "<blank>"
+        };
+        constexpr static const char* WigglerPatterns[23] {"Random", "Ghost", "Nose", "C", "W",
+            "J", "Medal", "Plane", "5",
+            "Hangman", "Spanish", "Siblings", "Snake", "8", "Mushroom", "Z", "Tetris",
+            "Ear", "Bomb", "Bird", "L", "O", "Star"
         };
     void drawTeleportCat();
     void drawHotkeysCat();

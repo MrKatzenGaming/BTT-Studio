@@ -1,10 +1,20 @@
 @smo:100
 MoonRefreshText = 0x01832301 
+WigglerPatternReverse = 0x0b07a8
+WigglerPatternTarget = 0x0b07f8
 @smo:101
 MoonRefreshText = 0x01834066
+WigglerPatternReverse = 0x0b0840
+WigglerPatternTarget = 0x0b0890
 @smo:110
 MoonRefreshText = 0x01835426
+WigglerPatternReverse = 0x0b0840
+WigglerPatternTarget = 0x0b0890
 @smo:120
 MoonRefreshText = 0x018c0436
+WigglerPatternReverse = 0x0b05b0
+WigglerPatternTarget = 0x0b0600
 @smo:130
 MoonRefreshText = 0x00e6dedd
+WigglerPatternReverse = 0x000a4698
+WigglerPatternTarget = 0x000a46ec

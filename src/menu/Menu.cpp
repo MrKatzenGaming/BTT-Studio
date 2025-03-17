@@ -305,6 +305,13 @@ void Menu::loadTeleport(TpState& state) {
 }
 
 void Menu::drawMiscCat() {
+    if (ImGui::CollapsingHeader("Wiggle")) {
+        ImGui::Indent();
+        ImGui::PushItemWidth(200);
+        ImGui::Combo("Wiggler Pattern", &set->getSettings()->mWigglerPattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns));
+        ImGui::PopItemWidth();
+        ImGui::Unindent();
+    }
     if (ImGui::Button("Kill Mario")) {
         if (playerHak) GameDataFunction::killPlayer(GameDataHolderWriter(playerHak));
     }

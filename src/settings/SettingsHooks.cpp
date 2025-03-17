@@ -9,12 +9,14 @@
 #include "game/System/GameDataHolderWriter.h"
 #include "getHelper.h"
 #include "helpers.h"
+#include "hk/hook/InstrUtil.h"
 #include "hk/hook/Trampoline.h"
 #include "hk/ro/RoUtil.h"
 #include "hk/sail/detail.h"
 #include "game/System/PlayerHitPointData.h"
 #include "settings/DemoHooks.hpp"
 #include "al/Library/Nerve/NerveUtil.h"
+#include "al/Library/Math/MathUtil.h"
 
 using namespace hk;
 using namespace btt;
@@ -117,9 +119,43 @@ HkTrampoline<bool, StageScene*> cloudSkipHook = hk::hook::trampoline([](StageSce
     return false;
 });
 
+struct MofumofuPatternEntry {
+    const char* typeStr;
+    int target;
+    bool reverse;
+};
+constexpr static const MofumofuPatternEntry mPatternEntries[22] = {
+    { "Ghost", 0, false }, { "Nose", 0, true }, { "C", 1, false }, { "W", 1, true }, { "J", 2, false }, { "Medal", 2, true }, { "Plane", 3, false }, { "5", 3, true }, { "Hangman", 4, false }, { "Spanish", 4, true },
+    { "Siblings", 5, false }, { "Snake", 5, true }, { "8", 6, false }, { "Mushroom", 6, true }, { "Z", 7, false }, { "Tetris", 7, true }, { "Ear", 8, false }, { "Bomb", 8, true }, { "Bird", 9, false }, { "L", 9, true }, { "O", 10, false }, { "Star", 10, true }
+};
+
+bool isPatternReverse() {
+    bool b = al::isHalfProbability();
+    if (SettingsMgr::instance()->getSettings()->mWigglerPattern != 0)
+        b = mPatternEntries[SettingsMgr::instance()->getSettings()->mWigglerPattern].reverse == 1;
+    return b;
+}
+
+int getPatternTarget(int a) {
+    int r = al::getRandom(a);
+    if (SettingsMgr::instance()->getSettings()->mWigglerPattern == 0) return r;
+    return mPatternEntries[SettingsMgr::instance()->getSettings()->mWigglerPattern].target;
+}
+
+void installWigglerHooks() {
+    ptr addr = sail::lookupSymbolFromDb<>("WigglerPatternReverse");
+    ptr offset = addr - ro::getMainModule()->range().start();
+    hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)isPatternReverse);
+
+    addr = sail::lookupSymbolFromDb<>("WigglerPatternTarget");
+    offset = addr - ro::getMainModule()->range().start();
+    hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)getPatternTarget);
+}
+
 void SettingsHooks::installSettingsHooks() {
 
     installDemoHooks();
+    installWigglerHooks();
 
     GreyShineRefreshHook.installAtSym<"_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo">();
     ShineRefreshHook.installAtSym<"_ZN16GameDataFunction11setGotShineE20GameDataHolderWriterPK9ShineInfo">();
@@ -137,5 +173,4 @@ void SettingsHooks::installSettingsHooks() {
     // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot12isEnableGrowEv">();
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
     cloudSkipHook.installAtSym<"_ZNK10StageScene16isDefeatKoopaLv1Ev">();
-
 }

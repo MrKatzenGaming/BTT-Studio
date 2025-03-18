@@ -2,5 +2,10 @@
 
 _ZN4sead14SafeStringBaseIcE12cEmptyStringE
 _ZN4sead14SafeStringBaseIcEaSERKS1_
+_ZN4sead14SafeStringBaseIcE9cNullCharE
+
+_ZNK4sead22BufferedSafeStringBaseIcE22assureTerminationImpl_Ev
+_ZN4sead22BufferedSafeStringBaseIcEaSERKNS_14SafeStringBaseIcEE
+
 
 @smo:130

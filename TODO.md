@@ -18,7 +18,6 @@
     - [ ] warp to last checkpoint  
 - [ ] Travel to current kingdom  
 - [ ] completely custom moon text (read bin file, make bin file with website)  
-- [ ] enable all checkpoints  
 - [ ] walk on lava/poison  
 - [ ] noclip
 - [ ] outfit changer
@@ -72,3 +71,4 @@
 - [x] fix game crashes when saving a tp location in wooded tower
 - [x] fix stage warp on 1.2
 - [x] hide mouse when menu is hidden
+- [x] enable all checkpoints  

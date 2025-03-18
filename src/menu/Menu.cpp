@@ -67,6 +67,7 @@ void Menu::draw() {
         ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
         ImGui::Checkbox("No Checkpoint Touch", &set->getSettings()->mIsEnableNoCheckpointTouch);
         ImGui::Checkbox("Skip Cloud", &set->getSettings()->mIsEnableSkipCloud);
+        ImGui::Checkbox("Enable All Checkpoints", &set->getSettings()->mIsEnableAllCheckpoints);
 
         ImGui::BeginDisabled();
         ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);

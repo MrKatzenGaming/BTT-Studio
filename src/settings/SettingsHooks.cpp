@@ -9,6 +9,7 @@
 #include "game/System/GameDataHolderWriter.h"
 #include "getHelper.h"
 #include "helpers.h"
+#include "hk/diag/diag.h"
 #include "hk/hook/InstrUtil.h"
 #include "hk/hook/Trampoline.h"
 #include "hk/ro/RoUtil.h"
@@ -17,6 +18,8 @@
 #include "settings/DemoHooks.hpp"
 #include "al/Library/Nerve/NerveUtil.h"
 #include "al/Library/Math/MathUtil.h"
+#include "game/System/GameDataFile.h"
+#include "game/System/GameDataFunction.h"
 
 using namespace hk;
 using namespace btt;
@@ -151,6 +154,17 @@ void installWigglerHooks() {
     offset = addr - ro::getMainModule()->range().start();
     hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)getPatternTarget);
 }
+HkTrampoline<bool, GameDataHolderAccessor, int> allCheckpointsHook = hk::hook::trampoline([](GameDataHolderAccessor acc, int checkpointIdx) -> bool {
+    if (SettingsMgr::instance()->getSettings()->mIsEnableAllCheckpoints) {
+        auto checkpointTrans = GameDataFunction::getCheckpointTransInWorld(acc, checkpointIdx);
+        if (checkpointTrans.x == 0 && checkpointTrans.y == 0 && checkpointTrans.z == 0) {
+            return allCheckpointsHook.orig(acc, checkpointIdx);
+        }
+        return true;
+    }
+    return allCheckpointsHook.orig(acc, checkpointIdx);
+    
+});
 
 void SettingsHooks::installSettingsHooks() {
 
@@ -173,4 +187,5 @@ void SettingsHooks::installSettingsHooks() {
     // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot12isEnableGrowEv">();
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
     cloudSkipHook.installAtSym<"_ZNK10StageScene16isDefeatKoopaLv1Ev">();
+    allCheckpointsHook.installAtSym<"_ZN16GameDataFunction22isGotCheckpointInWorldE22GameDataHolderAccessori">();
 }

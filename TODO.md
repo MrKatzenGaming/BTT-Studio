@@ -1,13 +1,14 @@
 # TODO
 
 ## Important
+- [ ] separate info viewer(like input display)
+- [ ] allow moving menu to different corners  
 
 ## Less Important
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
-- [ ] allow moving menu to different corners  
 - [ ] Hotkeys  
     - [x] wiggler pattern  
     - [x] previous scene  
@@ -21,8 +22,7 @@
 - [ ] walk on lava/poison  
 - [ ] noclip
 - [ ] outfit changer
-- [ ] separate info viewer(like input display)
-
+- [ ] Add build instructions to main readme
 
 ## Hard
 

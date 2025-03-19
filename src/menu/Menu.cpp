@@ -69,6 +69,7 @@ void Menu::draw() {
         ImGui::Checkbox("Disable Music", &set->getSettings()->mIsEnableDisableMusic);
         ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
         ImGui::Checkbox("Disable Teleport Puppet", &set->getSettings()->mIsEnableDisableTpPuppet);
+        if (GImGui->NavId == ImGui::GetID("Disable Teleport Puppet")) ImGui::SetTooltip("Only in Moon Get Animation");
         ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
         ImGui::Checkbox("No Checkpoint Touch", &set->getSettings()->mIsEnableNoCheckpointTouch);
         ImGui::Checkbox("Skip Cloud", &set->getSettings()->mIsEnableSkipCloud);
@@ -380,8 +381,8 @@ void Menu::drawHotkeysCat() {
         ImGui::Combo("Decrement Tp Index##Key", &set->mSettings.mDecTpIndexKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Add 1000 Coins##Key", &set->mSettings.mAddCoinsKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Remove 1000 Coins##Key", &set->mSettings.mDecCoinsKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Increment Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Decrement Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Next Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Prev Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }

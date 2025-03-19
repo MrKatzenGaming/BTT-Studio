@@ -43,7 +43,9 @@ void Menu::draw() {
 
     ImGui::Begin("BTT Studio", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavFocus);
     ImGui::SetWindowSize(mWindowSize, ImGuiCond_FirstUseEver);
-    ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+    if (!set) ImGui::SetWindowPos(ImVec2(0,0), ImGuiCond_Always);
+    else ImGui::SetWindowPos(getCornerPos(set->getSettings()->mMenuCorner), ImGuiCond_Always);
+
 
     ImGui::Text("Toggle Menu: L-Stick");
     ImGui::Text("Toggle Input: R + ZR + L");
@@ -366,6 +368,7 @@ void Menu::drawMiscCat() {
     }
     ImGui::PushItemWidth(200);
     ImGui::Combo("Moon Refresh Text", &set->getSettings()->mMoonRefreshText, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts));
+    ImGui::Combo("Menu Corner", &set->getSettings()->mMenuCorner, Corners, IM_ARRAYSIZE(Corners));
     ImGui::PopItemWidth();
 }
 
@@ -440,6 +443,27 @@ const char* Menu::getMoonRefreshText() {
     } else {
         return "";
     }
+}
+
+ImVec2 Menu::getCornerPos(int corner) {
+    ImVec2 pos = ImVec2(0, 0);
+    nn::oe::OperationMode mode = nn::oe::GetOperationMode();
+    if (mode == nn::oe::OperationMode_Docked){
+    switch (corner) {
+        case 0: pos = ImVec2(0, 0); break;
+        case 1: pos = ImVec2(1600 - mWindowSize.x, 0); break;
+        case 2: pos = ImVec2(0, 900 - mWindowSize.y); break;
+        case 3: pos = ImVec2(1600 - mWindowSize.x, 900 - mWindowSize.y); break;
+    }
+    } else {
+        switch (corner) {
+        case 0: pos = ImVec2(0, 0); break;
+        case 1: pos = ImVec2(1280 - mWindowSize.x, 0); break;
+        case 2: pos = ImVec2(0, 720 - mWindowSize.y); break;
+        case 3: pos = ImVec2(1280 - mWindowSize.x, 720 - mWindowSize.y); break;
+        }
+    }
+    return pos;
 }
 
 } // namespace btt

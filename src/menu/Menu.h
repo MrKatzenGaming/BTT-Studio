@@ -67,6 +67,8 @@ private:
             "Hangman", "Spanish", "Siblings", "Snake", "8", "Mushroom", "Z", "Tetris",
             "Ear", "Bomb", "Bird", "L", "O", "Star"
         };
+        constexpr static const char* Corners[4] {"Top Left", "Top Right", "Bottom Left", "Bottom Right"};
+        ImVec2 getCornerPos(int corner);
     void drawTeleportCat();
     void drawHotkeysCat();
     bool isHotkey(int key);

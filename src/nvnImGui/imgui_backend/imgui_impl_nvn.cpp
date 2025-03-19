@@ -451,7 +451,7 @@ namespace ImguiNvnBackend {
     void updateScale(bool isDocked) {
         static float prevScale = 0.0f;
 
-        float scale = isDocked ? 1.3f : 1.f;
+        float scale = isDocked ? 1.3f : 1.3f;
 
         ImGuiStyle &stylePtr = ImGui::GetStyle();
         ImGuiViewport *viewport = ImGui::GetMainViewport();

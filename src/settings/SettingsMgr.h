@@ -69,6 +69,7 @@ public:
         int mWigglerPattern = 0;
         int mIncPatternKey = 0;
         int mDecPatternKey = 0;
+        int mMenuCorner = 0;
         
     } mSettings;
 

@@ -1,8 +1,7 @@
 # TODO
 
 ## Important
-- [ ] separate info viewer(like input display)
-- [ ] allow moving menu to different corners  
+- [ ] separate info viewer(like input display)  
 
 ## Less Important
 
@@ -20,9 +19,9 @@
 - [ ] Travel to current kingdom  
 - [ ] completely custom moon text (read bin file, make bin file with website)  
 - [ ] walk on lava/poison  
-- [ ] noclip
-- [ ] outfit changer
-- [ ] Add build instructions to main readme
+- [ ] noclip  
+- [ ] outfit changer  
+- [ ] Add build instructions to main readme  
 
 ## Hard
 
@@ -72,3 +71,4 @@
 - [x] fix stage warp on 1.2
 - [x] hide mouse when menu is hidden
 - [x] enable all checkpoints  
+- [x] allow moving menu to different corners  

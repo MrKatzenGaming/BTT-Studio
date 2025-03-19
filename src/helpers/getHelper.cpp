@@ -1,5 +1,6 @@
 #include "getHelper.h"
 
+#include <cstring>
 #include <cxxabi.h>
 #include <nn/init.h>
 #include <typeinfo>
@@ -233,10 +234,10 @@ bool isGetShineState(StageScene* stageScene) {
 
     al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->findStateInfo(stageNerve);
     if (!state) return false;
-    
-    stateName = demangle(typeid(*state->state).name());
 
-    return strcmp(stateName, "StageSceneStateGetShine") == 0;
+    stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
+
+    return strcmp(stateName, "GetShine") == 0;
 }
 
 char* demangle(const char* mangled_name) {

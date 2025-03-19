@@ -7,6 +7,7 @@ set(WARN_OPTIONS -Werror=return-type)
 
 set(DEFINITIONS "-DSEAD_RTTI_SOURCE_DYNAMIC")
 set(INCLUDES include include/agl)
+set(EXCEPTION_FLAGS "-fno-exceptions")
 
 set(ASM_OPTIONS "")
 set(C_OPTIONS -ffunction-sections -fdata-sections)

@@ -1,5 +1,0 @@
-build/
-.cache/
-compile_commands.json
-lib/std
-__pycache__/

@@ -5,8 +5,10 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <heap/seadHeapMgr.h>
 #include <nn/oe.h>
+#include <typeinfo>
 #include "al/Library/Camera/CameraUtil.h"
 #include "al/Library/LiveActor/ActorFlagFunction.h"
 #include "al/Library/LiveActor/ActorMovementFunction.h"
@@ -26,6 +28,9 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+
+#include "al/Library/Nerve/NerveKeeper.h"
+#include "al/Library/Nerve/NerveStateCtrl.h"
 
 namespace btt {
 
@@ -189,8 +194,10 @@ void Menu::handleAlways() {
     if (isHotkey(set->getSettings()->mDecCoinsKey)) {
         if (stageScene) {
             int coinNum = GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene));
-            if (coinNum < 1000) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -(1000-coinNum));
-            else GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
+            if (coinNum < 1000)
+                GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -(1000 - coinNum));
+            else
+                GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
         }
     }
     if (isHotkey(set->getSettings()->mLifeUpKey)) {
@@ -347,8 +354,10 @@ void Menu::drawMiscCat() {
     if (ImGui::Button("Remove 1000 coins")) {
         if (stageScene) {
             int coinNum = GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene));
-            if (coinNum < 1000) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -(1000-coinNum));
-            else GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
+            if (coinNum < 1000)
+                GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -(1000 - coinNum));
+            else
+                GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
         }
     }
     if (ImGui::Button("Remove Cappy")) {
@@ -385,28 +394,17 @@ bool Menu::isHotkey(int key) {
     bool ZL = InputHelper::isHoldZL();
     bool ZR = InputHelper::isHoldZR();
     switch (key) {
-        case 1:
-            return Up && !L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
-        case 2:
-            return Up && L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
-        case 3:
-            return Up && R && !L && !ZL && !ZR && !InputHelper::isInputToggled();
-        case 4:
-            return Up && ZL && !L && !R && !ZR && !InputHelper::isInputToggled();
-        case 5:
-            return Up && ZR && !L && !R && !ZL && !InputHelper::isInputToggled();
-        case 6:
-            return Up && L && R && !ZL && !ZR && !InputHelper::isInputToggled();
-        case 7:
-            return Up && L && ZL && !R && !ZR && !InputHelper::isInputToggled();
-        case 8:
-            return Up && L && ZR && !R && !ZL && !InputHelper::isInputToggled();
-        case 9:
-            return Up && R && ZL && !L && !ZR && !InputHelper::isInputToggled();
-        case 10:
-            return Up && R && ZR && !L && !ZL && !InputHelper::isInputToggled();
-        default:
-            return 0;
+    case 1: return Up && !L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
+    case 2: return Up && L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
+    case 3: return Up && R && !L && !ZL && !ZR && !InputHelper::isInputToggled();
+    case 4: return Up && ZL && !L && !R && !ZR && !InputHelper::isInputToggled();
+    case 5: return Up && ZR && !L && !R && !ZL && !InputHelper::isInputToggled();
+    case 6: return Up && L && R && !ZL && !ZR && !InputHelper::isInputToggled();
+    case 7: return Up && L && ZL && !R && !ZR && !InputHelper::isInputToggled();
+    case 8: return Up && L && ZR && !R && !ZL && !InputHelper::isInputToggled();
+    case 9: return Up && R && ZL && !L && !ZR && !InputHelper::isInputToggled();
+    case 10: return Up && R && ZR && !L && !ZL && !InputHelper::isInputToggled();
+    default: return 0;
     }
 }
 

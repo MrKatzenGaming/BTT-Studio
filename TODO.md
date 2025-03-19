@@ -1,7 +1,6 @@
 # TODO
 
 ## Important
-- [ ] separate info viewer(like input display)  
 
 ## Less Important
 
@@ -72,3 +71,4 @@
 - [x] hide mouse when menu is hidden
 - [x] enable all checkpoints  
 - [x] allow moving menu to different corners  
+- [x] separate info viewer(like input display)  

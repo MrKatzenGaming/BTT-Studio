@@ -216,6 +216,7 @@ void Menu::handleAlways() {
     }
 
     drawInputDisplay();
+    drawInfoWindow();
 }
 
 void Menu::setupStyle() {
@@ -415,26 +416,47 @@ bool Menu::isHotkey(int key) {
 void Menu::drawInfoCat() {
     if (ImGui::CollapsingHeader("Info")) {
         ImGui::Indent();
-
-        GameDataHolderAccessor* accessor = helpers::tryGetGameDataHolderAccess();
-
-        if (!holder || !accessor) {
-            ImGui::Text("No Game Data Holder");
-            ImGui::Unindent();
-            return;
+        static int posX = set->getSettings()->mInfoPos.x;
+        static int posY = set->getSettings()->mInfoPos.y;
+        ImGui::Checkbox("Enable Info Window", &isEnableInfoWindow);
+        if (ImGui::InputInt("Position X##Info", &posX, 5)) set->getSettings()->mInfoPos.x = posX;
+        if (ImGui::InputInt("Position Y##Info", &posY, 5)) set->getSettings()->mInfoPos.y = posY;
+        if (ImGui::Button("Reset Position##Info")) {
+            set->getSettings()->mInfoPos = ImVec2(0, 0);
+            posX = set->getSettings()->mInfoPos.x;
+            posY = set->getSettings()->mInfoPos.y;
         }
-        s32 jumpCount = rs::getPlayerJumpCount(holder);
-        s32 throwCapCount = rs::getPlayerThrowCapCount(holder);
-        u64 playTimeTotal = GameDataFunction::getPlayTimeTotal(*accessor);
-        u64 playTimeAcrossFile = GameDataFunction::getPlayTimeAcrossFile(*accessor);
-        s32 totalCoinNum = rs::getTotalCoinNum(holder);
-        ImGui::Text("Jumps: %d", jumpCount);
-        ImGui::Text("Cap Throws: %d", throwCapCount);
-        ImGui::Text("Total Coins: %d", totalCoinNum);
-        ImGui::Text("Play Time Total: %lu", playTimeTotal);
-        ImGui::Text("Play Time Across File: %lu", playTimeAcrossFile);
+        
         ImGui::Unindent();
     }
+}
+
+void Menu::drawInfoWindow() {
+    if (!isEnableInfoWindow) return;
+    ImGui::Begin("Info", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::SetWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+    if (!set) ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+    else ImGui::SetWindowPos(set->getSettings()->mInfoPos, ImGuiCond_Always);
+
+    GameDataHolderAccessor* accessor = helpers::tryGetGameDataHolderAccess();
+
+    if (!holder || !accessor) {
+        ImGui::Text("No Game Data Holder");
+        return;
+    }
+    s32 jumpCount = rs::getPlayerJumpCount(holder);
+    s32 throwCapCount = rs::getPlayerThrowCapCount(holder);
+    u64 playTimeTotal = GameDataFunction::getPlayTimeTotal(*accessor);
+    u64 playTimeAcrossFile = GameDataFunction::getPlayTimeAcrossFile(*accessor);
+    s32 totalCoinNum = rs::getTotalCoinNum(holder);
+    ImGui::Text("Jumps: %d", jumpCount);
+    ImGui::Text("Cap Throws: %d", throwCapCount);
+    ImGui::Text("Total Coins: %d", totalCoinNum);
+    ImGui::Text("Play Time Total: %lu", playTimeTotal);
+    ImGui::Text("Play Time Across File: %lu", playTimeAcrossFile);
+
+    ImGui::End();
 }
 
 const char* Menu::getMoonRefreshText() {

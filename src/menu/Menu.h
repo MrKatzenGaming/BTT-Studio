@@ -88,6 +88,8 @@ private:
         int killSceneKey = 0;
         int healMarioKey = 0;
     void drawInfoCat();
+        void drawInfoWindow();
+        bool isEnableInfoWindow = false;
 
     int tpIndex = 0;
     void saveTeleport(TpState& state);

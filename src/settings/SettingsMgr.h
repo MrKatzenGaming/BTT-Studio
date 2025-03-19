@@ -70,6 +70,7 @@ public:
         int mIncPatternKey = 0;
         int mDecPatternKey = 0;
         int mMenuCorner = 0;
+        ImVec2 mInfoPos = ImVec2(0, 0);
         
     } mSettings;
 

@@ -43,9 +43,10 @@ void Menu::draw() {
 
     ImGui::Begin("BTT Studio", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavFocus);
     ImGui::SetWindowSize(mWindowSize, ImGuiCond_FirstUseEver);
-    if (!set) ImGui::SetWindowPos(ImVec2(0,0), ImGuiCond_Always);
-    else ImGui::SetWindowPos(getCornerPos(set->getSettings()->mMenuCorner), ImGuiCond_Always);
-
+    if (!set)
+        ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+    else
+        ImGui::SetWindowPos(getCornerPos(set->getSettings()->mMenuCorner), ImGuiCond_Always);
 
     ImGui::Text("Toggle Menu: L-Stick");
     ImGui::Text("Toggle Input: R + ZR + L");
@@ -166,6 +167,7 @@ void Menu::handleAlways() {
     if (globalTimer - prevTime < 5) {
         if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
         GImGui->NavDisableHighlight = false;
+        if (playerHak) al::requestCancelCameraInterpole(playerHak, 0);
     }
 
     if (InputHelper::isPressPadLeft() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {
@@ -310,17 +312,20 @@ void Menu::loadTeleport(TpState& state) {
         al::setTrans(hack, state.pos);
         al::updatePoseQuat(hack, state.quat);
         al::setVelocityZero(hack);
+        prevTime = globalTimer;
         return;
     }
 
     if (set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) {
         al::setTrans(playerHak, state.pos);
         al::updatePoseQuat(playerHak, state.quat);
+        prevTime = globalTimer;
     } else {
         playerHak->startDemoPuppetable();
         al::setTrans(playerHak, state.pos);
         al::updatePoseQuat(playerHak, state.quat);
         playerHak->endDemoPuppetable();
+        prevTime = globalTimer;
     }
 }
 
@@ -426,18 +431,23 @@ void Menu::drawInfoCat() {
             posX = set->getSettings()->mInfoPos.x;
             posY = set->getSettings()->mInfoPos.y;
         }
-        
+
         ImGui::Unindent();
     }
 }
 
 void Menu::drawInfoWindow() {
     if (!isEnableInfoWindow) return;
-    ImGui::Begin("Info", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
-        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin(
+        "Info", nullptr,
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
+    );
     ImGui::SetWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
-    if (!set) ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-    else ImGui::SetWindowPos(set->getSettings()->mInfoPos, ImGuiCond_Always);
+    if (!set)
+        ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+    else
+        ImGui::SetWindowPos(set->getSettings()->mInfoPos, ImGuiCond_Always);
 
     GameDataHolderAccessor* accessor = helpers::tryGetGameDataHolderAccess();
 
@@ -470,13 +480,13 @@ const char* Menu::getMoonRefreshText() {
 ImVec2 Menu::getCornerPos(int corner) {
     ImVec2 pos = ImVec2(0, 0);
     nn::oe::OperationMode mode = nn::oe::GetOperationMode();
-    if (mode == nn::oe::OperationMode_Docked){
-    switch (corner) {
+    if (mode == nn::oe::OperationMode_Docked) {
+        switch (corner) {
         case 0: pos = ImVec2(0, 0); break;
         case 1: pos = ImVec2(1600 - mWindowSize.x, 0); break;
         case 2: pos = ImVec2(0, 900 - mWindowSize.y); break;
         case 3: pos = ImVec2(1600 - mWindowSize.x, 900 - mWindowSize.y); break;
-    }
+        }
     } else {
         switch (corner) {
         case 0: pos = ImVec2(0, 0); break;

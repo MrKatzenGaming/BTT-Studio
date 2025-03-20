@@ -21,6 +21,7 @@
 - [ ] noclip  
 - [ ] outfit changer  
 - [ ] Add build instructions to main readme  
+- [ ] add real info viewer
 
 ## Hard
 
@@ -33,6 +34,7 @@
 - [ ] all persisting states should have the ability to be reset  
 - [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
 - [ ] also shop text thingys  
+- [ ] 1.3 (someday)
 
 ## very Hard / Mby Impossible
 

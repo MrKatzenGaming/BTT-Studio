@@ -1,4 +1,4 @@
-# BTT-Mod
+# BTT-Studio
 
 A modification for Super Mario Odyssey made to make grindin BTT segmnts easier.
 

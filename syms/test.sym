@@ -6,3 +6,8 @@ _ZNK9ShineChip5isGotEv
 _ZN2al8setNerveEPNS_9IUseNerveEPKNS_5NerveE
 
 _ZNK13GrowFlowerPot12isEnableGrowEv
+
+
+
+_ZN2al28requestCancelCameraInterpoleEPKNS_10IUseCameraEi
+_ZN2al23isActiveCameraInterpoleEPKNS_10IUseCameraEi

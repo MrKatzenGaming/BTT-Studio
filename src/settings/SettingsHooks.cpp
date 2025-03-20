@@ -1,12 +1,15 @@
 #include "SettingsHooks.h"
 
-#include "Menu.h"
-#include "SettingsMgr.h"
 #include "al/Library/Bgm/BgmLineFunction.h"
 #include "al/Library/LiveActor/ActorPoseKeeper.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "al/Library/LiveActor/LiveActor.h"
+#include "al/Library/Math/MathUtil.h"
+#include "al/Library/Nerve/NerveUtil.h"
+#include "game/System/GameDataFile.h"
+#include "game/System/GameDataFunction.h"
 #include "game/System/GameDataHolderWriter.h"
+#include "game/System/PlayerHitPointData.h"
 #include "getHelper.h"
 #include "helpers.h"
 #include "hk/diag/diag.h"
@@ -14,17 +17,19 @@
 #include "hk/hook/Trampoline.h"
 #include "hk/ro/RoUtil.h"
 #include "hk/sail/detail.h"
-#include "game/System/PlayerHitPointData.h"
+#include "Menu.h"
 #include "settings/DemoHooks.hpp"
-#include "al/Library/Nerve/NerveUtil.h"
-#include "al/Library/Math/MathUtil.h"
-#include "game/System/GameDataFile.h"
-#include "game/System/GameDataFunction.h"
+#include "SettingsMgr.h"
 
 using namespace hk;
 using namespace btt;
 
 class ShineInfo;
+class DoorAreaChange;
+class ShineChip;
+class GrowFlowerPot;
+class CheckpointFlag;
+
 HkTrampoline<bool, GameDataHolderWriter, const ShineInfo*> GreyShineRefreshHook =
     hk::hook::trampoline([](GameDataHolderWriter writer, const ShineInfo* shineInfo) -> bool {
         return SettingsMgr::instance()->getSettings()->mIsEnableMoonRefresh ? false : GreyShineRefreshHook.orig(writer, shineInfo);
@@ -43,7 +48,6 @@ HkTrampoline<void, GameDataHolderWriter, const ShineInfo*> ShineRefreshHook =
 HkTrampoline<void, al::LiveActor*> marioControl = hk::hook::trampoline([](al::LiveActor* player) -> void { marioControl.orig(player); });
 
 HkTrampoline<void, StageScene*> stageSceneControlHook = hk::hook::trampoline([](StageScene* stageScene) -> void {
-
     if (SettingsMgr::instance()->getSettings()->mIsEnableDisableMusic) {
         if (al::isPlayingBgm(stageScene)) al::stopAllBgm(stageScene, 0);
     }
@@ -51,8 +55,9 @@ HkTrampoline<void, StageScene*> stageSceneControlHook = hk::hook::trampoline([](
     stageSceneControlHook.orig(stageScene);
 });
 
-HkTrampoline<bool, StageScene*> saveHook =
-    hk::hook::trampoline([](StageScene* scene) -> bool { return SettingsMgr::instance()->getSettings()->mIsEnableDisableAutoSave ? false : saveHook.orig(scene); });
+HkTrampoline<bool, StageScene*> saveHook = hk::hook::trampoline([](StageScene* scene) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableDisableAutoSave ? false : saveHook.orig(scene);
+});
 
 HkTrampoline<bool, void*> checkpointWarpHook = hk::hook::trampoline([](void* thisPtr) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableAlwaysCheckpoints ? true : checkpointWarpHook.orig(thisPtr);
@@ -65,12 +70,10 @@ HkTrampoline<int, GameDataHolder*, bool*, int> disableMoonLockHook = hk::hook::t
 });
 
 HkTrampoline<void, PlayerHitPointData*> NoDamageHook = hk::hook::trampoline([](PlayerHitPointData* hitPointData) -> void {
-    if (!SettingsMgr::instance()->getSettings()->mIsEnableNoDamage) 
-        NoDamageHook.orig(hitPointData);
-    
+    if (!SettingsMgr::instance()->getSettings()->mIsEnableNoDamage) NoDamageHook.orig(hitPointData);
 });
 
-HkTrampoline<bool,  GameDataHolderAccessor> kingdomEnterHook = hk::hook::trampoline([]( GameDataHolderAccessor accessor) -> bool {
+HkTrampoline<bool, GameDataHolderAccessor> kingdomEnterHook = hk::hook::trampoline([](GameDataHolderAccessor accessor) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshKingdomEnter ? false : kingdomEnterHook.orig(accessor);
 });
 
@@ -78,27 +81,28 @@ HkTrampoline<bool, GameDataHolderAccessor> warpTextHook = hk::hook::trampoline([
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshWarpText ? false : warpTextHook.orig(accessor);
 });
 
-HkTrampoline<bool, GameDataHolderAccessor, al::ActorInitInfo*> refreshPurpsHook = hk::hook::trampoline([](GameDataHolderAccessor accessor, al::ActorInitInfo* actorInitInfo) -> bool {
-    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshPurps ? false : refreshPurpsHook.orig(accessor, actorInitInfo);
-});
-class DoorAreaChange;
+HkTrampoline<bool, GameDataHolderAccessor, al::ActorInitInfo*> refreshPurpsHook =
+    hk::hook::trampoline([](GameDataHolderAccessor accessor, al::ActorInitInfo* actorInitInfo) -> bool {
+        return SettingsMgr::instance()->getSettings()->mIsEnableRefreshPurps ? false : refreshPurpsHook.orig(accessor, actorInitInfo);
+    });
+
 HkTrampoline<bool, DoorAreaChange*> doorRefreshHook = hk::hook::trampoline([](DoorAreaChange* doorAreaChange) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableDoorRefresh ? false : doorRefreshHook.orig(doorAreaChange);
 });
-class ShineChip;
+
 HkTrampoline<bool, ShineChip*> shardRefreshHook = hk::hook::trampoline([](ShineChip* shineChip) -> bool {
     al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf8));
     return SettingsMgr::instance()->getSettings()->mIsEnableShardRefresh ? false : shardRefreshHook.orig(shineChip);
 });
-class GrowFlowerPot;
+
 HkTrampoline<bool, GrowFlowerPot*> flowerPotRefreshHook = hk::hook::trampoline([](GrowFlowerPot* flowerPot) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : flowerPotRefreshHook.orig(flowerPot);
 });
-class CheckpointFlag;
+
 HkTrampoline<void, CheckpointFlag*> checkpointFlagHook = hk::hook::trampoline([](CheckpointFlag* checkpointFlag) -> void {
-    if (!SettingsMgr::instance()->getSettings()->mIsEnableNoCheckpointTouch)
-        checkpointFlagHook.orig(checkpointFlag);
+    if (!SettingsMgr::instance()->getSettings()->mIsEnableNoCheckpointTouch) checkpointFlagHook.orig(checkpointFlag);
 });
+
 HkTrampoline<bool, StageScene*> cloudSkipHook = hk::hook::trampoline([](StageScene* stageScene) -> bool {
     Menu::instance()->noGetPlayer = true;
     static int functionCalls = 0;
@@ -127,22 +131,25 @@ struct MofumofuPatternEntry {
     int target;
     bool reverse;
 };
+
 constexpr static const MofumofuPatternEntry mPatternEntries[22] = {
-    { "Ghost", 0, false }, { "Nose", 0, true }, { "C", 1, false }, { "W", 1, true }, { "J", 2, false }, { "Medal", 2, true }, { "Plane", 3, false }, { "5", 3, true }, { "Hangman", 4, false }, { "Spanish", 4, true },
-    { "Siblings", 5, false }, { "Snake", 5, true }, { "8", 6, false }, { "Mushroom", 6, true }, { "Z", 7, false }, { "Tetris", 7, true }, { "Ear", 8, false }, { "Bomb", 8, true }, { "Bird", 9, false }, { "L", 9, true }, { "O", 10, false }, { "Star", 10, true }
+    { "Ghost", 0, false }, { "Nose", 0, true },     { "C", 1, false },       { "W", 1, true },       { "J", 2, false },        { "Medal", 2, true },
+    { "Plane", 3, false }, { "5", 3, true },        { "Hangman", 4, false }, { "Spanish", 4, true }, { "Siblings", 5, false }, { "Snake", 5, true },
+    { "8", 6, false },     { "Mushroom", 6, true }, { "Z", 7, false },       { "Tetris", 7, true },  { "Ear", 8, false },      { "Bomb", 8, true },
+    { "Bird", 9, false },  { "L", 9, true },        { "O", 10, false },      { "Star", 10, true }
 };
 
 bool isPatternReverse() {
     bool b = al::isHalfProbability();
     if (SettingsMgr::instance()->getSettings()->mWigglerPattern != 0)
-        b = mPatternEntries[SettingsMgr::instance()->getSettings()->mWigglerPattern].reverse == 1;
+        b = mPatternEntries[SettingsMgr::instance()->getSettings()->mWigglerPattern - 1].reverse == 1;
     return b;
 }
 
 int getPatternTarget(int a) {
     int r = al::getRandom(a);
     if (SettingsMgr::instance()->getSettings()->mWigglerPattern == 0) return r;
-    return mPatternEntries[SettingsMgr::instance()->getSettings()->mWigglerPattern].target;
+    return mPatternEntries[SettingsMgr::instance()->getSettings()->mWigglerPattern - 1].target;
 }
 
 void installWigglerHooks() {
@@ -154,6 +161,7 @@ void installWigglerHooks() {
     offset = addr - ro::getMainModule()->range().start();
     hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)getPatternTarget);
 }
+
 HkTrampoline<bool, GameDataHolderAccessor, int> allCheckpointsHook = hk::hook::trampoline([](GameDataHolderAccessor acc, int checkpointIdx) -> bool {
     if (SettingsMgr::instance()->getSettings()->mIsEnableAllCheckpoints) {
         auto checkpointTrans = GameDataFunction::getCheckpointTransInWorld(acc, checkpointIdx);
@@ -163,11 +171,9 @@ HkTrampoline<bool, GameDataHolderAccessor, int> allCheckpointsHook = hk::hook::t
         return true;
     }
     return allCheckpointsHook.orig(acc, checkpointIdx);
-    
 });
 
 void SettingsHooks::installSettingsHooks() {
-
     installDemoHooks();
     installWigglerHooks();
 

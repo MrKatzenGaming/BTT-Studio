@@ -74,3 +74,4 @@
 - [x] enable all checkpoints  
 - [x] allow moving menu to different corners  
 - [x] separate info viewer(like input display)  
+- [x] fix wiggler patter

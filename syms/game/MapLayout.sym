@@ -3,3 +3,5 @@
 _ZNK9MapLayout22isEnableCheckpointWarpEv
 
 @smo:130
+
+_ZNK9MapLayout22isEnableCheckpointWarpEv = 0x001d0b00

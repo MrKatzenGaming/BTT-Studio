@@ -4,26 +4,35 @@ def parse_symbols(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
-    symbols = {}
+    symbols_100 = []
+    symbols_130 = []
     current_smo = None
 
     for line in lines:
         line = line.strip()
         if line.startswith('@smo:'):
             current_smo = line.split(':')[1]
-            symbols[current_smo] = set()
-        elif line and current_smo:
-            symbols[current_smo].add(line)
+        elif line.startswith("@sdk"):
+            return symbols_100, symbols_130
+        elif line and current_smo == '100,101,110,120':
+            symbols_100.append(line)
+        elif line and current_smo == '130':
+            symbols_130.append(line.split(" ")[0])
 
-    return symbols
+    return symbols_100, symbols_130
 
 def process_symbol_file(file_path):
+    if "custom" in file_path:
+        return
     symbols = parse_symbols(file_path)
+    
+    smo_100_101_110_120 = symbols[0]
+    smo_130 = symbols[1]
+    
+    result = smo_100_101_110_120
 
-    smo_100_101_110_120 = symbols.get('100,101,110,120', set())
-    smo_130 = symbols.get('130', set())
+    result = [symbol for symbol in result if symbol not in smo_130]
 
-    result = smo_100_101_110_120 - smo_130
 
     if not result:
         return

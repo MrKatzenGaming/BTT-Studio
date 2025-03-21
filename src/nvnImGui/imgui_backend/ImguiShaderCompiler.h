@@ -25,9 +25,3 @@ struct BinaryHeader {
     u32 mFragmentDataOffset;
 
 };
-
-namespace ImguiShaderCompiler {
-    bool CheckIsValidVersion(nvn::Device *device);
-    CompiledData CompileShader(const char *shaderName);
-    void InitializeCompiler();
-};

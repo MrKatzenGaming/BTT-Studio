@@ -2,5 +2,6 @@
 
 _ZN2al15getLookAtCameraEPKNS_10IUseCameraEi
 _ZN2al28requestCancelCameraInterpoleEPKNS_10IUseCameraEi
+_ZN2al12getCameraPosEPKNS_10IUseCameraEi
 
 @smo:130

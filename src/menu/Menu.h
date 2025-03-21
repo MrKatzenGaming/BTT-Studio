@@ -38,6 +38,8 @@ public:
 
     bool isPatternReverse();
     int getPatternTarget(int a);
+
+    bool mIsEnableNoclip = false;
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
 

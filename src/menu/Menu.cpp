@@ -373,6 +373,8 @@ void Menu::drawMiscCat() {
     if (ImGui::Button("Remove Cappy")) {
         if (playerHak) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
     }
+    ImGui::SameLine();
+    ImGui::Checkbox("Noclip", &mIsEnableNoclip);
     ImGui::PushItemWidth(200);
     ImGui::Combo("Moon Refresh Text", &set->getSettings()->mMoonRefreshText, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts));
     ImGui::Combo("Menu Corner", &set->getSettings()->mMenuCorner, Corners, IM_ARRAYSIZE(Corners));

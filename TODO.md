@@ -1,9 +1,5 @@
 # TODO
 
-## Important
-
-## Less Important
-
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
@@ -18,7 +14,6 @@
 - [ ] Travel to current kingdom  
 - [ ] completely custom moon text (read bin file, make bin file with website)  
 - [ ] walk on lava/poison  
-- [ ] noclip  
 - [ ] outfit changer  
 - [ ] Add build instructions to main readme  
 - [ ] spawn all hint art moons(HintPhoto)
@@ -39,7 +34,6 @@
 ## very Hard / Mby Impossible
 
 - [ ] this doesnt seem very feasible but some way to manip cycles  
-- [ ] tp cam with player  
 
 ## Done
 
@@ -60,19 +54,21 @@
 - [x] custom button layout  
 - [x] Info Viewer  
     - [x] Jumps/Cts  
+    - [x] Player Info
 - [x] choose moon text from prewritten list  
-- [x] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well
-- [x] Cloud skip
-- [x] fix moon text on all versions
-- [x] fix skip cloud
-- [x] fix tp in escape/ all captures
-- [x] make hotkey option none be just dpad up and add disalbed options
-- [x] keep selected item after menu reopen
-- [x] fix game crashes when saving a tp location in wooded tower
-- [x] fix stage warp on 1.2
-- [x] hide mouse when menu is hidden
+- [x] theres also a feature in the new practicemod called no checkpoint touch that would be cool as well  
+- [x] Cloud skip  
+- [x] fix moon text on all versions  
+- [x] fix skip cloud  
+- [x] fix tp in escape/ all captures  
+- [x] make hotkey option none be just dpad up and add disalbed options  
+- [x] keep selected item after menu reopen  
+- [x] fix game crashes when saving a tp location in wooded tower  
+- [x] fix stage warp on 1.2  
+- [x] hide mouse when menu is hidden  
 - [x] enable all checkpoints  
 - [x] allow moving menu to different corners  
 - [x] separate info viewer(like input display)  
-- [x] fix wiggler patter
-- [x] add real info viewer
+- [x] fix wiggler patter  
+- [x] tp cam with player  
+- [x] noclip  

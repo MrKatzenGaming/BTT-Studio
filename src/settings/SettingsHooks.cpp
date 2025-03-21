@@ -1,5 +1,6 @@
 #include "SettingsHooks.h"
 
+#include "InputHelper.h"
 #include "al/Library/Bgm/BgmLineFunction.h"
 #include "al/Library/LiveActor/ActorPoseKeeper.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
@@ -20,6 +21,9 @@
 #include "Menu.h"
 #include "settings/DemoHooks.hpp"
 #include "SettingsMgr.h"
+#include "al/Library/LiveActor/ActorFlagFunction.h"
+#include "al/Library/Camera/CameraUtil.h"
+#include "al/Library/LiveActor/ActorMovementFunction.h"
 
 using namespace hk;
 using namespace btt;
@@ -173,6 +177,53 @@ HkTrampoline<bool, GameDataHolderAccessor, int> allCheckpointsHook = hk::hook::t
     return allCheckpointsHook.orig(acc, checkpointIdx);
 });
 
+HkTrampoline<void, PlayerActorHakoniwa*> noclipHook = hk::hook::trampoline([](PlayerActorHakoniwa* player) -> void {
+    static bool wasNoclipOn = false;
+    bool isNoclip = Menu::instance()->mIsEnableNoclip;
+    if (!isNoclip && wasNoclipOn)
+        player->endDemoPuppetable();
+    wasNoclipOn = isNoclip;
+
+    if(!isNoclip) {
+        noclipHook.orig(player);
+        return;
+    }
+
+    if (isNoclip) {
+        static float speed = 20.0f;
+        static float speedMax = 250.0f;
+        static float vspeed = 10.0f;
+        static float speedGain = 0.0f;
+
+        sead::Vector3f *playerPos = al::getTransPtr(player);
+        sead::Vector3f cameraPos = al::getCameraPos(player, 0);
+        sead::Vector2f leftStick = {InputHelper::getLeftStickX(), InputHelper::getLeftStickY()};
+
+        player->startDemoPuppetable();
+
+        float d = sqrt((playerPos->x - cameraPos.x) * (playerPos->x - cameraPos.x) + ((playerPos->z - cameraPos.z)*(playerPos->z - cameraPos.z)));
+        float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos.x);
+        float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos.z);
+
+        playerPos->x -= leftStick.x * vz;
+        playerPos->z += leftStick.x * vx;
+
+        playerPos->x += leftStick.y * vx;
+        playerPos->z += leftStick.y * vz;
+
+        if (InputHelper::isHoldX() || InputHelper::isHoldY()) speedGain += 0.5f;
+        if (InputHelper::isHoldA() || InputHelper::isHoldB()) speedGain -= 0.5f;
+        if (speedGain <= 0.0f) speedGain = 0.0f;
+        if (speedGain >= speedMax) speedGain = speedMax;
+
+        if (InputHelper::isHoldZL()) playerPos->y -= (vspeed + speedGain / 3);
+        if (InputHelper::isHoldZR()) playerPos->y += (vspeed + speedGain / 3);
+    }
+
+    noclipHook.orig(player);
+});
+
+
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();
     installWigglerHooks();
@@ -194,4 +245,5 @@ void SettingsHooks::installSettingsHooks() {
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
     cloudSkipHook.installAtSym<"_ZNK10StageScene16isDefeatKoopaLv1Ev">();
     allCheckpointsHook.installAtSym<"_ZN16GameDataFunction22isGotCheckpointInWorldE22GameDataHolderAccessori">();
+    noclipHook.installAtSym<"_ZN19PlayerActorHakoniwa8movementEv">();
 }

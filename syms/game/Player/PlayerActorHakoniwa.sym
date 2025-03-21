@@ -2,6 +2,7 @@
 
 _ZN19PlayerActorHakoniwa7controlEv
 _ZTI19PlayerActorHakoniwa
+_ZN19PlayerActorHakoniwa8movementEv
 
 @smo:130
 _ZN19PlayerActorHakoniwa7controlEv = 0x003c3200

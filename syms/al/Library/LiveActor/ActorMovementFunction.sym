@@ -1,5 +1,8 @@
 @smo:100,101,110,120
 
 _ZN2al15setVelocityZeroEPNS_9LiveActorE
+_ZN2al10calcSpeedHEPKNS_9LiveActorE
+_ZN2al10calcSpeedVEPKNS_9LiveActorE
+_ZN2al9calcSpeedEPKNS_9LiveActorE
 
 @smo:130

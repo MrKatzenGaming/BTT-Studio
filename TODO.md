@@ -21,7 +21,7 @@
 - [ ] noclip  
 - [ ] outfit changer  
 - [ ] Add build instructions to main readme  
-- [ ] add real info viewer
+- [ ] spawn all hint art moons(HintPhoto)
 
 ## Hard
 
@@ -75,3 +75,4 @@
 - [x] allow moving menu to different corners  
 - [x] separate info viewer(like input display)  
 - [x] fix wiggler patter
+- [x] add real info viewer

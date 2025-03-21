@@ -90,6 +90,7 @@ private:
     void drawInfoCat();
         void drawInfoWindow();
         bool isEnableInfoWindow = false;
+        bool isEnablePlayerInfo = false;
 
     int tpIndex = 0;
     void saveTeleport(TpState& state);

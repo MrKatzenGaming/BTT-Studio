@@ -25,21 +25,6 @@ using namespace btt;
 
 static sead::Heap* sBTTStudioHeap = nullptr;
 
-void drawFpsWindow() {
-    if (!Menu::instance()->mIsEnabledMenu) return;
-    ImGui::SetNextWindowPos(ImVec2(120.f, -8.f));
-
-    ImGui::Begin(
-        "FPSCounter", nullptr,
-        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
-            ImGuiWindowFlags_NoBackground
-    );
-
-    ImGui::Text("FPS: %2.f\n", Application::instance()->mGameFramework->calcFps());
-
-    ImGui::End();
-}
-
 void drawMenu() {
     Menu* menu = Menu::instance();
     if (menu && menu->mIsEnabledMenu) menu->draw();
@@ -57,7 +42,6 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
     menu->setupStyle();
 
     nvnImGui::addDrawFunc(drawMenu);
-    // nvnImGui::addDrawFunc(drawFpsWindow);
 
     InputHelper::setDisableMouse(true);
 

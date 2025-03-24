@@ -1,5 +1,7 @@
 import os
 
+count = 0
+
 def parse_symbols(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
@@ -21,10 +23,12 @@ def parse_symbols(file_path):
 
     return symbols_100, symbols_130
 
-def process_symbol_file(file_path):
+def process_symbol_file(file_path, output_file):
     if "custom" in file_path:
         return
     symbols = parse_symbols(file_path)
+    
+    global count
     
     smo_100_101_110_120 = symbols[0]
     smo_130 = symbols[1]
@@ -33,22 +37,31 @@ def process_symbol_file(file_path):
 
     result = [symbol for symbol in result if symbol not in smo_130]
 
-
     if not result:
         return
-    # print(f"Symbols in {file_path} defined for smo:100,101,110,120 but not smo:130:")
-    print(f"{file_path}")
-    for symbol in result:
-        print(symbol)
-    print()
+    
+    with open(output_file, 'a') as out_file:
+        out_file.write(f"{file_path}\n")
+        for symbol in result:
+            out_file.write(f"{symbol}\n")
+            count += 1
+        out_file.write("\n")
 
 def main():
     directory = '/home/kassu/btt-mod/syms'
+    output_file = '/home/kassu/btt-mod/missing.txt'
+    
+    # Clear the output file before writing
+    open(output_file, 'w').close()
+    
     for root, _, files in os.walk(directory):
         for file_name in files:
             if file_name.endswith('.sym'):
                 file_path = os.path.join(root, file_name)
-                process_symbol_file(file_path)
+                process_symbol_file(file_path, output_file)
 
 if __name__ == "__main__":
     main()
+    print(f"Total Missing 1.3 Symbols: {count}")
+    if count:
+        exit(1)

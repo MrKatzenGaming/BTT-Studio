@@ -1,5 +1,9 @@
 # TODO
 
+
+- [ ] fix wiggler hotkeys
+
+
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
@@ -30,6 +34,8 @@
 - [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
 - [ ] also shop text thingys  
 - [ ] 1.3 (someday)
+- [ ] reset sand wall and wooded gate
+- [ ] warp to last cp
 
 ## very Hard / Mby Impossible
 

@@ -5,3 +5,7 @@ _ZN4sead13FileDeviceMgrC1Ev
 _ZN4sead13FileDeviceMgr9sInstanceE
 
 @smo:130
+
+_ZN4sead13FileDeviceMgrC1Ev = 0x00943d60
+_ZN4sead13FileDeviceMgr9sInstanceE = 0x014add30
+_ZN4sead13FileDeviceMgr5mountEPNS_10FileDeviceERKNS_14SafeStringBaseIcEE = 0x00943e30

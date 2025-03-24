@@ -10,3 +10,6 @@ _ZN4sead22BufferedSafeStringBaseIcEaSERKNS_14SafeStringBaseIcEE
 @smo:130
 
 _ZN4sead14SafeStringBaseIcEaSERKS1_ = 0x00956a00
+_ZNK4sead22BufferedSafeStringBaseIcE22assureTerminationImpl_Ev = 0x00956c90
+_ZN4sead14SafeStringBaseIcE9cNullCharE = 0x00f4e610
+_ZN4sead14SafeStringBaseIcE12cEmptyStringE = 0x01352d68

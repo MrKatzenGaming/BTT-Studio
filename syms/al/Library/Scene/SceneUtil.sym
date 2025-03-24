@@ -4,3 +4,6 @@ _ZN2al20getScenePlayerHolderEPKNS_5SceneE
 _ZN2al17tryGetPlayerActorEPKNS_12PlayerHolderEi
 
 @smo:130
+
+_ZN2al20getScenePlayerHolderEPKNS_5SceneE = 0x0074d320
+_ZN2al17tryGetPlayerActorEPKNS_12PlayerHolderEi = 0x00713290

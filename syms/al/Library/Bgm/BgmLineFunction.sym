@@ -4,3 +4,5 @@ _ZN2al12isPlayingBgmEPKNS_15IUseAudioKeeperE
 _ZN2al10stopAllBgmEPKNS_15IUseAudioKeeperEi
 
 @smo:130
+
+_ZN2al10stopAllBgmEPKNS_15IUseAudioKeeperEi = 0x0059b1e0

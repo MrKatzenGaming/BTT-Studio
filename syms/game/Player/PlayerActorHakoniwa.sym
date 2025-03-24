@@ -6,3 +6,4 @@ _ZN19PlayerActorHakoniwa8movementEv
 
 @smo:130
 _ZN19PlayerActorHakoniwa7controlEv = 0x003c3200
+_ZTI19PlayerActorHakoniwa = 0x012b25d0

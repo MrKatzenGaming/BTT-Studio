@@ -351,7 +351,7 @@ void drawStageWarpWindow() {
                     const auto& subEntry = entry.mSubNames[i];
                     const char* stageName = subEntry.mInternal;
 
-                    if (al::isEqualString(stageName, entry.mInternal) || al::isStartWithString(stageName, "Demo")) continue;
+                    if (al::isEqualString(stageName, entry.mInternal)) continue;
 
                     if (isInGame) {
                         if (ImGui::MenuItem(getEnglishName(stageName))) {

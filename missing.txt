@@ -30,9 +30,6 @@ _ZN10StageScene7controlEv
 /home/kassu/btt-mod/syms/game/Util/AchievementUtil.sym
 _ZN2rs15getTotalCoinNumEPK14GameDataHolder
 
-/home/kassu/btt-mod/syms/al/Library/util.sym
-_ZN2al17isStartWithStringEPKcS1_
-
 /home/kassu/btt-mod/syms/al/Library/Bgm/BgmLineFunction.sym
 _ZN2al12isPlayingBgmEPKNS_15IUseAudioKeeperE
 
@@ -47,13 +44,6 @@ _ZN2al7getQuatEPKNS_9LiveActorE
 _ZN2al10getQuatPtrEPNS_9LiveActorE
 
 /home/kassu/btt-mod/syms/al/Library/Camera/CameraUtil.sym
-_ZN2al15getLookAtCameraEPKNS_10IUseCameraEi
 _ZN2al28requestCancelCameraInterpoleEPKNS_10IUseCameraEi
 _ZN2al12getCameraPosEPKNS_10IUseCameraEi
-
-/home/kassu/btt-mod/syms/sead/util.sym
-_ZN4sead22BufferedSafeStringBaseIcEaSERKNS_14SafeStringBaseIcEE
-
-/home/kassu/btt-mod/syms/sead/gfx/seadCamera.sym
-_ZN4sead6CameraD2Ev
 

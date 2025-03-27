@@ -9,3 +9,5 @@ _ZNK13GrowFlowerPot12isEnableGrowEv
 
 @smo:130
 
+_ZN2al8setNerveEPNS_9IUseNerveEPKNS_5NerveE = 0x006c7b20
+_ZNK13GrowFlowerPot12isEnableGrowEv = 0x0025d690

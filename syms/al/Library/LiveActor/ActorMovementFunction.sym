@@ -10,3 +10,4 @@ _ZN2al9calcSpeedEPKNS_9LiveActorE
 _ZN2al15setVelocityZeroEPNS_9LiveActorE = 0x006654b0
 _ZN2al10calcSpeedVEPKNS_9LiveActorE = 0x00668790
 _ZN2al9calcSpeedEPKNS_9LiveActorE = 0x00666da0
+_ZN2al10calcSpeedHEPKNS_9LiveActorE = 0x00668700

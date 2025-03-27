@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "sead/math/seadQuat.h"
 #include "settings/SettingsMgr.h"
+#include "sead/heap/seadExpHeap.h"
 
 namespace btt {
 
@@ -18,7 +19,7 @@ class Menu {
 public:
     Menu() = default;
     bool mIsEnabledMenu = true;
-
+    
     struct TpState {
         bool saved;
         sead::Vector3f pos = { 0, 0, 0 };

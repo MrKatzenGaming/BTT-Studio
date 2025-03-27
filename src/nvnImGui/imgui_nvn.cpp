@@ -7,6 +7,7 @@
 #include "nn/init.h"
 #include "helpers/InputHelper.h"
 #include "nvn/nvn_CppFuncPtrImpl.h"
+#include "al/Library/Memory/HeapUtil.h"
 
 nvn::Device *nvnDevice;
 nvn::Queue *nvnQueue;
@@ -224,11 +225,13 @@ bool nvnImGui::InitImGui() {
         IMGUI_CHECKVERSION();
 
         ImGuiMemAllocFunc allocFunc = [](size_t size, void *user_data) {
-            return nn::init::GetAllocator()->Allocate(size);
+            // return nn::init::GetAllocator()->Allocate(size);
+            return al::getStationedHeap()->alloc(size);
         };
     
         ImGuiMemFreeFunc freeFunc = [](void *ptr, void *user_data) {
-            nn::init::GetAllocator()->Free(ptr);
+            // nn::init::GetAllocator()->Free(ptr);
+            al::getStationedHeap()->free(ptr);
         };
     
         ImGui::SetAllocatorFunctions(allocFunc, freeFunc, nullptr);

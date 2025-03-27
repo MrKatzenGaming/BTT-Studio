@@ -14,3 +14,5 @@ _ZN2al11getTransPtrEPNS_9LiveActorE = 0x0066d810
 _ZN2al8getTransEPKNS_9LiveActorE = 0x0x0066d810 // lol !!!!!!!!!
 _ZN2al14updatePoseQuatEPNS_9LiveActorERKN4sead4QuatIfEE = 0x0066d880
 _ZN2al8setTransEPNS_9LiveActorERKN4sead7Vector3IfEE = 0x0066d6d0
+_ZN2al7getQuatEPKNS_9LiveActorE = 0x0066dfc0
+_ZN2al10getQuatPtrEPNS_9LiveActorE = 0x0066dfc0 // welp this again

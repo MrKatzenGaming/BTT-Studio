@@ -4,3 +4,6 @@ _ZN2al28requestCancelCameraInterpoleEPKNS_10IUseCameraEi
 _ZN2al12getCameraPosEPKNS_10IUseCameraEi
 
 @smo:130
+
+_ZN2al12getCameraPosEPKNS_10IUseCameraEi = 0x005b3e60
+_ZN2al28requestCancelCameraInterpoleEPKNS_10IUseCameraEi = 0x005b67b0

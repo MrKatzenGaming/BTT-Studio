@@ -9,3 +9,7 @@ _ZNK18DemoStateHackFirst20isEnableShowHackDemoEv
 @smo:130
 
 _ZN2rs30isFirstDemoScenarioStartCameraEPKN2al9LiveActorE = 0x004f5a50
+_ZN2rs11isFirstDemoEPKN2al5SceneE = 0x004f5960
+_ZNK12MoonRockData38isEnableShowDemoAfterOpenMoonRockFirstEv = 0x004e4060
+_ZNK18DemoStateHackFirst20isEnableShowHackDemoEv = 0x000c69b0
+_ZN2rs27isFirstDemoWorldIntroCameraEPKN2al5SceneE = 0x004f59e0

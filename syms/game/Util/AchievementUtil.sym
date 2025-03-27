@@ -8,3 +8,4 @@ _ZN2rs15getTotalCoinNumEPK14GameDataHolder
 
 _ZN2rs18getPlayerJumpCountEPK14GameDataHolder = 0x004ed610
 _ZN2rs22getPlayerThrowCapCountEPK14GameDataHolder = 0x004ed640
+_ZN2rs15getTotalCoinNumEPK14GameDataHolder = 0x004ed410

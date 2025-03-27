@@ -15,6 +15,7 @@
 #include "game/Sequence/ChangeStageInfo.h"
 #include "game/System/GameDataFunction.h"
 #include "game/System/GameSystem.h"
+#include "al/Library/Memory/HeapUtil.h"
 
 namespace helpers {
 
@@ -225,29 +226,33 @@ bool tryReloadStage() {
 }
 
 bool isGetShineState(StageScene* stageScene) {
-    if (!stageScene) return false;
+    // if (!stageScene) return false;
 
-    char* stateName = nullptr;
+    // char* stateName = nullptr;
 
-    const al::Nerve* stageNerve = stageScene->getNerveKeeper()->getCurrentNerve();
-    if (!stageScene->getNerveKeeper()->mStateCtrl) return false;
+    // const al::Nerve* stageNerve = stageScene->getNerveKeeper()->getCurrentNerve();
+    // if (!stageScene->getNerveKeeper()->mStateCtrl) return false;
 
-    al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->findStateInfo(stageNerve);
-    if (!state) return false;
+    // al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->findStateInfo(stageNerve);
+    // if (!state) return false;
 
-    stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
+    // stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
 
-    return strcmp(stateName, "GetShine") == 0;
+    // return strcmp(stateName, "GetShine") == 0;
+
+    return false;
 }
 
 char* demangle(const char* mangled_name) {
     size_t demangledSize = 0xff;
     char* demangledName = nullptr;
-    char* demangledBuf = static_cast<char*>(nn::init::GetAllocator()->Allocate(demangledSize));
+    // char* demangledBuf = static_cast<char*>(nn::init::GetAllocator()->Allocate(demangledSize));
+    char* demangledBuf = static_cast<char*>(al::getStationedHeap()->alloc(demangledSize));
     int status;
 
     demangledName = abi::__cxa_demangle(mangled_name, demangledBuf, &demangledSize, &status);
-    nn::init::GetAllocator()->Free(demangledBuf);
+    // nn::init::GetAllocator()->Free(demangledBuf);
+    al::getStationedHeap()->free(demangledBuf);
 
     return demangledName;
 }

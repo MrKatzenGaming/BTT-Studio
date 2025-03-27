@@ -2,6 +2,7 @@
 // #include "logger/Logger.hpp"
 #include "hk/diag/diag.h"
 #include "nn/init.h"
+#include "al/Library/Memory/HeapUtil.h"
 
 namespace FsHelper {
     nn::Result writeFileToPath(void *buf, size_t size, const char *path) {
@@ -47,7 +48,8 @@ namespace FsHelper {
 
         long size = 0;
         nn::fs::GetFileSize(&size, handle);
-        loadData.buffer = nn::init::GetAllocator()->Allocate(size);
+        // loadData.buffer = nn::init::GetAllocator()->Allocate(size);
+        loadData.buffer = al::getStationedHeap()->alloc(size);
         loadData.bufSize = size;
 
         HK_ASSERT(loadData.buffer);//, "Failed to Allocate Buffer! File Size: %ld", size

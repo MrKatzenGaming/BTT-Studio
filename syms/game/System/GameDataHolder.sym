@@ -12,3 +12,4 @@ _ZN14GameDataHolder15changeNextStageEPK15ChangeStageInfoi = 0x004db060
 _ZN14GameDataHolder15returnPrevStageEv = 0x004db150
 _ZN22GameDataHolderAccessorC1EPKN2al18IUseSceneObjHolderE = 0x004dd020
 _ZN22GameDataHolderAccessorC2EPKN2al18IUseSceneObjHolderE = 0x004dd020
+_ZNK14GameDataHolder18findUnlockShineNumEPbi = 0x004dbe90

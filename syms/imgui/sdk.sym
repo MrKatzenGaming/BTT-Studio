@@ -1,6 +1,6 @@
 @sdk
 
-_ZN2nn4init12GetAllocatorEv
+//_ZN2nn4init12GetAllocatorEv
 
 _ZN2nn2oe16GetOperationModeEv
 

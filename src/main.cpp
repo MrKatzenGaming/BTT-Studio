@@ -37,7 +37,6 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
     SettingsMgr* set = SettingsMgr::createInstance(sBTTStudioHeap);
     SaveFileHelper::createInstance(sBTTStudioHeap);
     Menu* menu = Menu::createInstance(sBTTStudioHeap);
-    
 
     menu->setupStyle();
 

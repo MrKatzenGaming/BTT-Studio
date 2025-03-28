@@ -1,7 +1,7 @@
 #pragma once
-#include "nn/fs.h"
+
 #include <vapours/results.hpp>
-#include "sead/heap/seadHeap.h"
+#include <sead/heap/seadHeap.h>
 
 namespace FsHelper {
 

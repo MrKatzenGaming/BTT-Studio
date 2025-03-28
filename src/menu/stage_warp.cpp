@@ -1,17 +1,16 @@
+#include "stage_warp.h"
+
 #include <cstddef>
-#include <stage_warp.h>
-
 #include <cstdio>
-#include <vector>
 
-#include "al/Library/Base/StringUtil.h"
-#include "al/Library/Scene/Scene.h"
-#include "game/Sequence/ChangeStageInfo.h"
-#include "game/Sequence/HakoniwaSequence.h"
-#include "game/System/GameDataFunction.h"
-#include "game/System/GameSystem.h"
+#include <al/Library/Base/StringUtil.h>
+
+#include <game/Sequence/ChangeStageInfo.h>
+#include <game/Sequence/HakoniwaSequence.h>
+#include <game/System/GameDataHolder.h>
+
 #include "getHelper.h"
-#include "helpers/InputHelper.h"
+
 #include "imgui.h"
 #include "imgui_internal.h"
 
@@ -305,7 +304,7 @@ inline const char* getScenarioType(KingdomEnglishNameMain& entry, int scenario) 
 }
 
 void drawStageWarpWindow() {
-    HakoniwaSequence* gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
+    HakoniwaSequence* gameSeq = helpers::tryGetHakoniwaSequence();
 
     if (ImGui::CollapsingHeader("Stage Warp")) {
         ImGui::Indent();

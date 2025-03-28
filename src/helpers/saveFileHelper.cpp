@@ -1,5 +1,9 @@
 #include "saveFileHelper.h"
+
 #include <cstddef>
+
+#include <nn/fs.h>
+
 #include "fsHelper.h"
 #include "settings/SettingsMgr.h"
 

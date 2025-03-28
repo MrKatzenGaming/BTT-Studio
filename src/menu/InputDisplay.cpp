@@ -1,37 +1,45 @@
 #include "InputDisplay.h"
+
+#include <sead/math/seadVector.h>
+
 #include "helpers/InputHelper.h"
-#include "imgui.h"
 #include "settings/SettingsMgr.h"
-#include <math/seadVector.h>
+
+#include "imgui.h"
 
 namespace btt {
 
 using InputCallback = bool;
 
-static ImU32 makeColor(const ImVec4& color) { return IM_COL32(u8(color.x), u8(color.y), u8(color.z), u8(color.w)); }
+static ImU32 makeColor(const ImVec4& color) {
+    return IM_COL32(u8(color.x), u8(color.y), u8(color.z), u8(color.w));
+}
 
-static void drawButton(const ImVec2& pos, InputCallback callback, float radius = 8, ImU32 color = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonColor)), ImU32 pressedColor = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonPressedColor)))
-{
+static void drawButton(
+    const ImVec2& pos, InputCallback callback, float radius = 8,
+    ImU32 color = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonColor)),
+    ImU32 pressedColor = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonPressedColor))
+) {
     const ImU32 col = callback ? pressedColor : color;
     ImGui::GetForegroundDrawList()->AddCircleFilled(pos, radius, col, 16);
 }
 
-static void drawButtonRect(const ImVec2& pos, InputCallback callback, ImU32 color = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonColor)), ImU32 pressedColor = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonPressedColor)))
-{
+static void drawButtonRect(
+    const ImVec2& pos, InputCallback callback, ImU32 color = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonColor)),
+    ImU32 pressedColor = makeColor(getInputDisplayColor(SettingsMgr::instance()->getSettings()->mInputDisplayButtonPressedColor))
+) {
     const ImU32 col = callback ? pressedColor : color;
     const ImVec2 min(pos.x - 13, pos.y - 6);
     const ImVec2 max(pos.x + 13, pos.y + 6);
     ImGui::GetForegroundDrawList()->AddRectFilled(min, max, col, 10.0f);
 }
 
-void drawInputDisplay()
-{
+void drawInputDisplay() {
     SettingsMgr* set = SettingsMgr::instance();
-    if (!set->getSettings()->mIsEnableInputDisplay)
-        return;
+    if (!set->getSettings()->mIsEnableInputDisplay) return;
 
-    const sead::Vector2f leftStick = {InputHelper::getLeftStickX(), InputHelper::getLeftStickY()};
-    const sead::Vector2f rightStick = {InputHelper::getRightStickX(), InputHelper::getRightStickY()};
+    const sead::Vector2f leftStick = { InputHelper::getLeftStickX(), InputHelper::getLeftStickY() };
+    const sead::Vector2f rightStick = { InputHelper::getRightStickX(), InputHelper::getRightStickY() };
 
     ImVec2 pos = set->getSettings()->mInputDisplayPos;
     pos.x -= 200;
@@ -45,7 +53,7 @@ void drawInputDisplay()
 
     ImGui::GetForegroundDrawList()->AddCircle(pos, 25, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayRingColor)), 0, 2);
     ImVec2 leftPos = { pos.x + leftStick.x * 30, pos.y - leftStick.y * 30 };
-    drawButton(leftPos,InputHelper::isHoldStickL(), 16, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor)));
+    drawButton(leftPos, InputHelper::isHoldStickL(), 16, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor)));
 
     pos.x += 40;
     pos.y += 30;
@@ -92,4 +100,4 @@ void drawInputDisplay()
     drawButtonRect(pos, InputHelper::isHoldR());
 }
 
-} // namespace pe
+} // namespace btt

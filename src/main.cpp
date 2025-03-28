@@ -1,27 +1,28 @@
-#include "hk/gfx/ImGuiBackendNvn.h"
-
-#include <al/Library/Memory/HeapUtil.h>
 #include <cstddef>
-#include <game/Sequence/HakoniwaSequence.h>
-#include <game/System/Application.h>
-#include <game/System/GameFrameworkNx.h>
-#include <game/System/GameSystem.h>
+
+#include <hk/gfx/ImGuiBackendNvn.h>
 #include <hk/hook/Trampoline.h>
+
 #include <nn/fs.h>
+
 #include <sead/filedevice/nin/seadNinSDFileDeviceNin.h>
 #include <sead/filedevice/seadFileDeviceMgr.h>
 #include <sead/heap/seadExpHeap.h>
 
+#include <al/Library/Memory/HeapUtil.h>
+#include <al/Library/System/GameSystemInfo.h>
+
+#include <game/Sequence/HakoniwaSequence.h>
+#include <game/System/Application.h>
+#include <game/System/GameFrameworkNx.h>
+#include <game/System/GameSystem.h>
+
 #include "Menu.h"
-#include "imgui_internal.h"
 #include "saveFileHelper.h"
 #include "settings/SettingsHooks.h"
 #include "settings/SettingsMgr.h"
 #include "helpers/InputHelper.h"
-#include "al/Library/System/GameSystemInfo.h"
-
 #include "ImGui.h"
-#include "imgui.h"
 
 using namespace hk;
 using namespace btt;

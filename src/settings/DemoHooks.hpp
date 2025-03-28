@@ -1,15 +1,14 @@
 #pragma once
 
 #include "hk/hook/Trampoline.h"
+
 #include "settings/SettingsMgr.h"
-#define HOOK_CALLBACK(NAME)                                                                     \
-inline HkTrampoline<bool, void *> NAME = hk::hook::trampoline([](void *thisPtr) -> bool {              \
-    if (btt::SettingsMgr::instance()->getSettings()->mIsEnableAlwaysManualCutscene) return true;     \
-    return NAME.orig(thisPtr);                                                                  \
-});
 
-
-
+#define HOOK_CALLBACK(NAME)                                                                            \
+    inline HkTrampoline<bool, void*> NAME = hk::hook::trampoline([](void* thisPtr) -> bool {           \
+        if (btt::SettingsMgr::instance()->getSettings()->mIsEnableAlwaysManualCutscene) return true;   \
+        return NAME.orig(thisPtr);                                                                     \
+    });
 
 HOOK_CALLBACK(RsDemoHook);
 HOOK_CALLBACK(FirstDemoScenarioHook);
@@ -24,4 +23,3 @@ inline void installDemoHooks() {
     FirstDemoMoonRockHook.installAtSym<"_ZNK12MoonRockData38isEnableShowDemoAfterOpenMoonRockFirstEv">();
     ShowDemoHackHook.installAtSym<"_ZNK18DemoStateHackFirst20isEnableShowHackDemoEv">();
 }
-    

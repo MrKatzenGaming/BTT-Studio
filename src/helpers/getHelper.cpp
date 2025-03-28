@@ -2,20 +2,21 @@
 
 #include <cstring>
 #include <cxxabi.h>
-#include <nn/init.h>
 #include <typeinfo>
-#include "al/Library/Base/StringUtil.h"
-#include "al/Library/LiveActor/LiveActorKit.h"
-#include "al/Library/Nerve/Nerve.h"
-#include "al/Library/Nerve/NerveKeeper.h"
-#include "al/Library/Nerve/NerveStateCtrl.h"
-#include "al/Library/Player/PlayerHolder.h"
-#include "al/Library/Player/PlayerUtil.h"
-#include "al/Library/Scene/SceneUtil.h"
-#include "game/Sequence/ChangeStageInfo.h"
-#include "game/System/GameDataFunction.h"
-#include "game/System/GameSystem.h"
-#include "al/Library/Memory/HeapUtil.h"
+
+#include <al/Library/Base/StringUtil.h>
+#include <al/Library/LiveActor/LiveActorKit.h>
+#include <al/Library/Memory/HeapUtil.h>
+#include <al/Library/Nerve/Nerve.h>
+#include <al/Library/Nerve/NerveKeeper.h>
+#include <al/Library/Nerve/NerveStateCtrl.h>
+#include <al/Library/Player/PlayerHolder.h>
+#include <al/Library/Player/PlayerUtil.h>
+#include <al/Library/Scene/SceneUtil.h>
+
+#include <game/Sequence/ChangeStageInfo.h>
+#include <game/System/GameDataFunction.h>
+#include <game/System/GameSystem.h>
 
 namespace helpers {
 
@@ -225,7 +226,7 @@ bool tryReloadStage() {
     return true;
 }
 
-//FIXME: Fix this
+// FIXME: Fix this
 bool isGetShineState(StageScene* stageScene) {
     // if (!stageScene) return false;
 
@@ -249,12 +250,10 @@ bool isGetShineState(StageScene* stageScene) {
 char* demangle(const char* mangled_name) {
     size_t demangledSize = 0xff;
     char* demangledName = nullptr;
-    // char* demangledBuf = static_cast<char*>(nn::init::GetAllocator()->Allocate(demangledSize));
     char* demangledBuf = static_cast<char*>(al::getStationedHeap()->alloc(demangledSize));
     int status;
 
     demangledName = abi::__cxa_demangle(mangled_name, demangledBuf, &demangledSize, &status);
-    // nn::init::GetAllocator()->Free(demangledBuf);
     al::getStationedHeap()->free(demangledBuf);
 
     return demangledName;

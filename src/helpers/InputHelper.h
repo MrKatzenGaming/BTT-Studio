@@ -3,7 +3,6 @@
 #include "nn/hid_custom.h"
 
 class InputHelper {
-
 public:
     static void updatePadState();
 
@@ -47,13 +46,13 @@ public:
 
     // mouse coordinate getters
 
-    static void getMouseCoords(float *x, float *y);
+    static void getMouseCoords(float* x, float* y);
 
-    static void getScrollDelta(float *x, float *y);
+    static void getScrollDelta(float* x, float* y);
 
     // touch input getters
 
-    static bool getTouchCoords(s32 *x, s32 *y);
+    static bool getTouchCoords(s32* x, s32* y);
 
     static bool isHoldTouch();
 
@@ -161,9 +160,9 @@ public:
 
     // analog
 
-    static float getLeftStickX() { return ((float) curControllerState.mAnalogStickL.mX) / 32768.f; }
+    static float getLeftStickX() { return ((float)curControllerState.mAnalogStickL.mX) / 32768.f; }
 
-    static float getLeftStickY() { return ((float) curControllerState.mAnalogStickL.mY) / 32768.f; }
+    static float getLeftStickY() { return ((float)curControllerState.mAnalogStickL.mY) / 32768.f; }
 
     static float getLeftStickLeft() {
         float x = getLeftStickX();
@@ -185,9 +184,9 @@ public:
         return y < 0 ? -y : 0;
     }
 
-    static float getRightStickX() { return ((float) curControllerState.mAnalogStickR.mX) / 32768.f; }
+    static float getRightStickX() { return ((float)curControllerState.mAnalogStickR.mX) / 32768.f; }
 
-    static float getRightStickY() { return ((float) curControllerState.mAnalogStickR.mY) / 32768.f; }
+    static float getRightStickY() { return ((float)curControllerState.mAnalogStickR.mY) / 32768.f; }
 
     static float getRightStickLeft() {
         float x = getRightStickX();
@@ -210,11 +209,11 @@ public:
     }
 
     static void setDisableMouse(bool disable) { disableMouse = disable; }
+
     static bool isDisableMouse() { return disableMouse; }
 
 private:
-
-    static bool tryGetContState(nn::hid::NpadBaseState *state, ulong port);
+    static bool tryGetContState(nn::hid::NpadBaseState* state, ulong port);
 
     static char getKeyValue(nn::hid::KeyboardKey key, bool isUpper, bool isModifier);
 
@@ -231,7 +230,7 @@ private:
     static nn::hid::TouchScreenState<1> prevTouchState;
 
     static ulong selectedPort;
-    
+
     static bool disableMouse;
 
     static bool isReadInput;

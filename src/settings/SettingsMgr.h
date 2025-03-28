@@ -1,7 +1,7 @@
 #pragma once
 
-#include <heap/seadDisposer.h>
-#include "settings/SettingsHooks.h"
+#include <sead/heap/seadDisposer.h>
+
 #include "imgui.h"
 
 namespace btt {
@@ -13,23 +13,11 @@ class SettingsMgr {
 
 private:
     sead::Heap* mHeap;
+
 public:
     SettingsMgr() = default;
 
-    enum class InputDisplayColor : u8 {
-        None,
-        White,
-        Gray,
-        Black,
-        Red,
-        Blue,
-        Yellow,
-        Green,
-        Orange,
-        Purple,
-        Pink,
-        LightBlue
-    };
+    enum class InputDisplayColor : u8 { None, White, Gray, Black, Red, Blue, Yellow, Green, Orange, Purple, Pink, LightBlue };
 
     struct Settings {
         SETTING(MoonRefresh);
@@ -71,14 +59,13 @@ public:
         int mDecPatternKey = 0;
         int mMenuCorner = 0;
         ImVec2 mInfoPos = ImVec2(0, 0);
-        
+
     } mSettings;
 
     // Settings* mSettings = nullptr;
     Settings* getSettings() { return &mSettings; }
-    char* mPath = "sd:/BTT-Studio/Settings.bin";
-    };
 
-
+    char mPath[28] = "sd:/BTT-Studio/Settings.bin";
+};
 
 } // namespace btt

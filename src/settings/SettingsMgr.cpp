@@ -1,10 +1,8 @@
 #include "SettingsMgr.h"
 
-#include <heap/seadHeapMgr.h>
-#include "helpers/fsHelper.h"
-#include "hk/diag/diag.h"
+#include <sead/heap/seadHeapMgr.h>
 
 namespace btt {
-    SEAD_SINGLETON_DISPOSER_IMPL(SettingsMgr);
+SEAD_SINGLETON_DISPOSER_IMPL(SettingsMgr);
 
 } // namespace btt

@@ -1,15 +1,16 @@
 #pragma once
 
-#include <heap/seadDisposer.h>
+#include <sead/heap/seadDisposer.h>
+#include <sead/math/seadQuat.h>
 
-#include "game/Player/PlayerActorBase.h"
-#include "game/Scene/StageScene.h"
-#include "game/Sequence/HakoniwaSequence.h"
-#include "game/Player/PlayerActorHakoniwa.h"
-#include "imgui.h"
-#include "sead/math/seadQuat.h"
+#include <game/Player/PlayerActorBase.h>
+#include <game/Scene/StageScene.h>
+#include <game/Sequence/HakoniwaSequence.h>
+#include <game/Player/PlayerActorHakoniwa.h>
+
 #include "settings/SettingsMgr.h"
-#include "sead/heap/seadExpHeap.h"
+
+#include "imgui.h"
 
 namespace btt {
 

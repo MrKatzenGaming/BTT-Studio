@@ -5,17 +5,16 @@
 
 #pragma once
 
-#include "nn/os/os_tick.hpp"
 #include <type_traits>
-
-#include <nn/time.h>
-#include <nn/types.h>
 
 #include <nn/os/detail/os_InternalCriticalSection.h>
 #include <nn/os/os_MessageQueueTypes.h>
 #include <nn/os/os_Mutex.h>
 #include <nn/os/os_MutexTypes.h>
 #include <nn/os/os_ThreadTypes.h>
+#include <nn/os/os_tick.hpp>
+#include <nn/time.h>
+#include <nn/types.h>
 
 namespace nn {
 namespace os {
@@ -23,6 +22,7 @@ namespace os {
 namespace detail {
 
 class MultiWaitObjectList;
+
 struct InterProcessEventType {
     enum State {
         State_NotInitialized = 0,
@@ -38,7 +38,7 @@ struct InterProcessEventType {
     u32 readableHandle;
     u32 writableHandle;
 };
-}  // namespace detail
+} // namespace detail
 
 // typedef u64 Tick;
 
@@ -57,6 +57,7 @@ struct EventType {
     detail::InternalCriticalSectionStorage _csEvent;
     detail::InternalConditionVariableStorage _cvSignaled;
 };
+
 static_assert(std::is_trivial<EventType>::value, "EventType non trivial");
 typedef EventType Event;
 
@@ -79,8 +80,10 @@ struct SystemEventType {
         nn::os::EventType event;
         nn::os::detail::InterProcessEventType interProcessEvent;
     };
+
     u8 state;
 };
+
 struct SystemEvent {
     SystemEventType m_SystemEventType;
 };
@@ -112,9 +115,9 @@ bool TryReceiveMessageQueue(u64* out, MessageQueueType*);
 void ReceiveMessageQueue(u64* out, MessageQueueType*);
 bool TimedReceiveMessageQueue(u64* out, MessageQueueType*, nn::TimeSpan);
 
-bool TryPeekMessageQueue(u64*, MessageQueueType const*);
-void PeekMessageQueue(u64*, MessageQueueType const*);
-bool TimedPeekMessageQueue(u64*, MessageQueueType const*);
+bool TryPeekMessageQueue(u64*, const MessageQueueType*);
+void PeekMessageQueue(u64*, const MessageQueueType*);
+bool TimedPeekMessageQueue(u64*, const MessageQueueType*);
 
 bool TryJamMessageQueue(nn::os::MessageQueueType*, u64);
 void JamMessageQueue(nn::os::MessageQueueType*, u64);
@@ -130,19 +133,17 @@ void WaitConditionVariable(ConditionVariableType*);
 u8 TimedWaitConditionVariable(ConditionVariableType*, nn::os::MutexType*, nn::TimeSpan);
 
 // THREAD
-Result CreateThread(nn::os::ThreadType*, void (*)(void*), void* arg, void* srcStack, u64 stackSize,
-                    s32 priority, s32 coreNum);
-Result CreateThread(nn::os::ThreadType*, void (*)(void*), void* arg, void* srcStack, u64 stackSize,
-                    s32 priority);
+Result CreateThread(nn::os::ThreadType*, void (*)(void*), void* arg, void* srcStack, u64 stackSize, s32 priority, s32 coreNum);
+Result CreateThread(nn::os::ThreadType*, void (*)(void*), void* arg, void* srcStack, u64 stackSize, s32 priority);
 void DestroyThread(nn::os::ThreadType*);
 void StartThread(nn::os::ThreadType*);
-void SetThreadName(nn::os::ThreadType*, char const* threadName);
-void SetThreadNamePointer(nn::os::ThreadType*, char const*);
-char* GetThreadNamePointer(nn::os::ThreadType const*);
+void SetThreadName(nn::os::ThreadType*, const char* threadName);
+void SetThreadNamePointer(nn::os::ThreadType*, const char*);
+char* GetThreadNamePointer(const nn::os::ThreadType*);
 nn::os::ThreadType* GetCurrentThread();
 void GetCurrentStackInfo(uintptr_t* stack_addr, size_t* stack_size);
 s32 ChangeThreadPriority(nn::os::ThreadType* thread, s32 priority);
-s32 GetThreadPriority(nn::os::ThreadType const* thread);
+s32 GetThreadPriority(const nn::os::ThreadType* thread);
 u64 GetThreadId(const nn::os::ThreadType* thread);
 void YieldThread();
 void SuspendThread(nn::os::ThreadType*);
@@ -179,39 +180,41 @@ void ReleaseSemaphore(SemaphoreType* semaphore);
 
 // EXCEPTION HANDLING
 typedef union {
-    u64 x;  ///< 64-bit AArch64 register view.
-    u32 w;  ///< 32-bit AArch64 register view.
-    u32 r;  ///< AArch32 register view.
+    u64 x; ///< 64-bit AArch64 register view.
+    u32 w; ///< 32-bit AArch64 register view.
+    u32 r; ///< AArch32 register view.
 } CpuRegister;
+
 /// Armv8 NEON register.
 
 typedef union {
-    u128 v;    ///< 128-bit vector view.
-    double d;  ///< 64-bit double-precision view.
-    float s;   ///< 32-bit single-precision view.
+    u128 v;   ///< 128-bit vector view.
+    double d; ///< 64-bit double-precision view.
+    float s;  ///< 32-bit single-precision view.
 } FpuRegister;
 
 struct UserExceptionInfo {
-    u32 ErrorDescription;  ///< See \ref ThreadExceptionDesc.
+    u32 ErrorDescription; ///< See \ref ThreadExceptionDesc.
     u32 pad[3];
 
-    CpuRegister CpuRegisters[29];  ///< GPRs 0..28. Note: also contains AArch32 registers.
-    CpuRegister FP;                ///< Frame pointer.
-    CpuRegister LR;                ///< Link register.
-    CpuRegister SP;                ///< Stack pointer.
-    CpuRegister PC;                ///< Program counter (elr_el1).
+    CpuRegister CpuRegisters[29]; ///< GPRs 0..28. Note: also contains AArch32 registers.
+    CpuRegister FP;               ///< Frame pointer.
+    CpuRegister LR;               ///< Link register.
+    CpuRegister SP;               ///< Stack pointer.
+    CpuRegister PC;               ///< Program counter (elr_el1).
 
     u64 padding;
 
-    FpuRegister FpuRegisters[32];  ///< 32 general-purpose NEON registers.
+    FpuRegister FpuRegisters[32]; ///< 32 general-purpose NEON registers.
 
-    u32 PState;  ///< pstate & 0xFF0FFE20
+    u32 PState; ///< pstate & 0xFF0FFE20
     u32 AFSR0;
     u32 AFSR1;
     u32 ESR;
 
-    CpuRegister FAR;  ///< Fault Address Register.
+    CpuRegister FAR; ///< Fault Address Register.
 };
+
 void SetUserExceptionHandler(void (*)(UserExceptionInfo*), void*, ulong, UserExceptionInfo*);
 
 // OTHER
@@ -225,6 +228,7 @@ void SetMemoryHeapSize(u64 size);
 struct TlsSlot {
     u32 slot;
 };
+
 Result AllocateTlsSlot(TlsSlot* slot_out, void (*)(u64));
 void FreeTlsSlot(TlsSlot slot);
 u64 GetTlsValue(TlsSlot slot);
@@ -234,6 +238,6 @@ u32 GetCurrentCoreNumber();
 namespace detail {
 extern s32 g_CommandLineParameter;
 extern char** g_CommandLineParameterArgv;
-}  // namespace detail
-}  // namespace os
-}  // namespace nn
+} // namespace detail
+} // namespace os
+} // namespace nn

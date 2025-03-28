@@ -1,28 +1,28 @@
 #include "SettingsHooks.h"
 
-#include "InputHelper.h"
-#include "al/Library/Bgm/BgmLineFunction.h"
-#include "al/Library/LiveActor/ActorPoseKeeper.h"
-#include "al/Library/LiveActor/ActorPoseUtil.h"
-#include "al/Library/LiveActor/LiveActor.h"
-#include "al/Library/Math/MathUtil.h"
-#include "al/Library/Nerve/NerveUtil.h"
-#include "game/System/GameDataFile.h"
-#include "game/System/GameDataFunction.h"
-#include "game/System/GameDataHolderWriter.h"
-#include "game/System/PlayerHitPointData.h"
-#include "getHelper.h"
-#include "hk/diag/diag.h"
 #include "hk/hook/InstrUtil.h"
 #include "hk/hook/Trampoline.h"
 #include "hk/ro/RoUtil.h"
 #include "hk/sail/detail.h"
+
+#include <al/Library/Bgm/BgmLineFunction.h>
+#include <al/Library/Camera/CameraUtil.h>
+#include <al/Library/LiveActor/ActorFlagFunction.h>
+#include <al/Library/LiveActor/ActorMovementFunction.h>
+#include <al/Library/LiveActor/ActorPoseUtil.h>
+#include <al/Library/LiveActor/LiveActor.h>
+#include <al/Library/Math/MathUtil.h>
+#include <al/Library/Nerve/NerveUtil.h>
+
+#include <game/System/GameDataFile.h>
+#include <game/System/GameDataFunction.h>
+#include <game/System/GameDataHolderWriter.h>
+#include <game/System/PlayerHitPointData.h>
+
+#include "InputHelper.h"
 #include "Menu.h"
 #include "settings/DemoHooks.hpp"
 #include "SettingsMgr.h"
-#include "al/Library/LiveActor/ActorFlagFunction.h"
-#include "al/Library/Camera/CameraUtil.h"
-#include "al/Library/LiveActor/ActorMovementFunction.h"
 
 using namespace hk;
 using namespace btt;
@@ -179,11 +179,10 @@ HkTrampoline<bool, GameDataHolderAccessor, int> allCheckpointsHook = hk::hook::t
 HkTrampoline<void, PlayerActorHakoniwa*> noclipHook = hk::hook::trampoline([](PlayerActorHakoniwa* player) -> void {
     static bool wasNoclipOn = false;
     bool isNoclip = Menu::instance()->mIsEnableNoclip;
-    if (!isNoclip && wasNoclipOn)
-        player->endDemoPuppetable();
+    if (!isNoclip && wasNoclipOn) player->endDemoPuppetable();
     wasNoclipOn = isNoclip;
 
-    if(!isNoclip) {
+    if (!isNoclip) {
         noclipHook.orig(player);
         return;
     }
@@ -194,13 +193,13 @@ HkTrampoline<void, PlayerActorHakoniwa*> noclipHook = hk::hook::trampoline([](Pl
         static float vspeed = 10.0f;
         static float speedGain = 0.0f;
 
-        sead::Vector3f *playerPos = al::getTransPtr(player);
+        sead::Vector3f* playerPos = al::getTransPtr(player);
         sead::Vector3f cameraPos = al::getCameraPos(player, 0);
-        sead::Vector2f leftStick = {InputHelper::getLeftStickX(), InputHelper::getLeftStickY()};
+        sead::Vector2f leftStick = { InputHelper::getLeftStickX(), InputHelper::getLeftStickY() };
 
         player->startDemoPuppetable();
 
-        float d = sqrt((playerPos->x - cameraPos.x) * (playerPos->x - cameraPos.x) + ((playerPos->z - cameraPos.z)*(playerPos->z - cameraPos.z)));
+        float d = sqrt((playerPos->x - cameraPos.x) * (playerPos->x - cameraPos.x) + ((playerPos->z - cameraPos.z) * (playerPos->z - cameraPos.z)));
         float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos.x);
         float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos.z);
 
@@ -221,7 +220,6 @@ HkTrampoline<void, PlayerActorHakoniwa*> noclipHook = hk::hook::trampoline([](Pl
 
     noclipHook.orig(player);
 });
-
 
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();

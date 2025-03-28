@@ -20,58 +20,61 @@
 
 namespace nn::os {
 
-    class Tick;
+class Tick;
 
-    /* Tick API. */
-    Tick GetSystemTick();
-    Tick GetSystemTickOrdered();
-    Tick GetSystemTickFrequency();
-    TimeSpan ConvertToTimeSpan(Tick tick);
-    Tick ConvertToTick(TimeSpan ts);
+/* Tick API. */
+Tick GetSystemTick();
+Tick GetSystemTickOrdered();
+Tick GetSystemTickFrequency();
+TimeSpan ConvertToTimeSpan(Tick tick);
+Tick ConvertToTick(TimeSpan ts);
 
-    class Tick {
-      private:
-        s64 m_tick;
+class Tick {
+private:
+    s64 m_tick;
 
-      public:
-        constexpr explicit Tick(s64 t = 0) : m_tick(t) { /* ... */
-        }
-        Tick(TimeSpan ts) : m_tick(ConvertToTick(ts).GetInt64Value()) { /* ... */
-        }
+public:
+    constexpr explicit Tick(s64 t = 0) : m_tick(t) { /* ... */ }
 
-      public:
-        constexpr s64 GetInt64Value() const { return m_tick; }
-        TimeSpan ToTimeSpan() const { return ConvertToTimeSpan(*this); }
+    Tick(TimeSpan ts) : m_tick(ConvertToTick(ts).GetInt64Value()) { /* ... */ }
 
-        /* Tick arithmetic. */
-        constexpr Tick& operator+=(Tick rhs) {
-            m_tick += rhs.m_tick;
-            return *this;
-        }
-        constexpr Tick& operator-=(Tick rhs) {
-            m_tick -= rhs.m_tick;
-            return *this;
-        }
-        constexpr Tick operator+(Tick rhs) const {
-            Tick r(*this);
-            return r += rhs;
-        }
-        constexpr Tick operator-(Tick rhs) const {
-            Tick r(*this);
-            return r -= rhs;
-        }
+public:
+    constexpr s64 GetInt64Value() const { return m_tick; }
 
-        constexpr bool operator==(const Tick& rhs) const { return m_tick == rhs.m_tick; }
+    TimeSpan ToTimeSpan() const { return ConvertToTimeSpan(*this); }
 
-        constexpr bool operator!=(const Tick& rhs) const { return !(*this == rhs); }
+    /* Tick arithmetic. */
+    constexpr Tick& operator+=(Tick rhs) {
+        m_tick += rhs.m_tick;
+        return *this;
+    }
 
-        constexpr bool operator<(const Tick& rhs) const { return m_tick < rhs.m_tick; }
+    constexpr Tick& operator-=(Tick rhs) {
+        m_tick -= rhs.m_tick;
+        return *this;
+    }
 
-        constexpr bool operator>=(const Tick& rhs) const { return !(*this < rhs); }
+    constexpr Tick operator+(Tick rhs) const {
+        Tick r(*this);
+        return r += rhs;
+    }
 
-        constexpr bool operator>(const Tick& rhs) const { return m_tick > rhs.m_tick; }
+    constexpr Tick operator-(Tick rhs) const {
+        Tick r(*this);
+        return r -= rhs;
+    }
 
-        constexpr bool operator<=(const Tick& rhs) const { return !(*this > rhs); }
-    };
+    constexpr bool operator==(const Tick& rhs) const { return m_tick == rhs.m_tick; }
+
+    constexpr bool operator!=(const Tick& rhs) const { return !(*this == rhs); }
+
+    constexpr bool operator<(const Tick& rhs) const { return m_tick < rhs.m_tick; }
+
+    constexpr bool operator>=(const Tick& rhs) const { return !(*this < rhs); }
+
+    constexpr bool operator>(const Tick& rhs) const { return m_tick > rhs.m_tick; }
+
+    constexpr bool operator<=(const Tick& rhs) const { return !(*this > rhs); }
+};
 
 } // namespace nn::os

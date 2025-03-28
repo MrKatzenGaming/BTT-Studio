@@ -12,7 +12,6 @@
 #include "game/System/GameDataHolderWriter.h"
 #include "game/System/PlayerHitPointData.h"
 #include "getHelper.h"
-#include "helpers.h"
 #include "hk/diag/diag.h"
 #include "hk/hook/InstrUtil.h"
 #include "hk/hook/Trampoline.h"

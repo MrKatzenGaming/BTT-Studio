@@ -1,7 +1,5 @@
 @sdk
 
-//_ZN2nn4init12GetAllocatorEv
-
 _ZN2nn2oe16GetOperationModeEv
 
 _ZN2nn2os13GetSystemTickEv

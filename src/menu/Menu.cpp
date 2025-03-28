@@ -30,8 +30,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-#include "al/Library/Nerve/NerveKeeper.h"
-#include "al/Library/Nerve/NerveStateCtrl.h"
+#include "al/Library/Memory/HeapUtil.h"
 
 namespace btt {
 
@@ -73,7 +72,7 @@ void Menu::draw() {
         ImGui::Checkbox("Disable Music", &set->getSettings()->mIsEnableDisableMusic);
         ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
         ImGui::Checkbox("Disable Teleport Puppet", &set->getSettings()->mIsEnableDisableTpPuppet);
-        if (GImGui->NavId == ImGui::GetID("Disable Teleport Puppet")) ImGui::SetTooltip("Only in Moon Get Animation");
+        // if (GImGui->NavId == ImGui::GetID("Disable Teleport Puppet")) ImGui::SetTooltip("Only in Moon Get Animation");
         ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
         ImGui::Checkbox("No Checkpoint Touch", &set->getSettings()->mIsEnableNoCheckpointTouch);
         ImGui::Checkbox("Skip Cloud", &set->getSettings()->mIsEnableSkipCloud);
@@ -143,17 +142,17 @@ void Menu::draw() {
 
 void Menu::handleAlways() {
     set = SettingsMgr::instance();
-    gameSeq = (HakoniwaSequence*)GameSystemFunction::getGameSystem()->mSequence;
+    gameSeq = helpers::tryGetHakoniwaSequence();
     stageScene = helpers::tryGetStageScene(gameSeq);
     // BAAAADD
     if (stageScene) {
         if (strcmp(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene)), "ClashWorldHomeStage") == 0) noGetPlayer = false;
     }
     if (!noGetPlayer) {
-        player = helpers::tryGetPlayerActor();
-        playerHak = helpers::tryGetPlayerActorHakoniwa();
+        player = helpers::tryGetPlayerActor(gameSeq);
+        playerHak = helpers::tryGetPlayerActorHakoniwa(gameSeq);
     }
-    holder = helpers::tryGetGameDataHolder();
+    
 
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
         prevNavId = GImGui->NavId;
@@ -184,7 +183,7 @@ void Menu::handleAlways() {
         if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
     }
     if (isHotkey(set->getSettings()->mPrevSceneKey)) {
-        if (holder) holder->returnPrevStage();
+        if (stageScene) GameDataHolderAccessor(stageScene)->returnPrevStage();
     }
     if (isHotkey(set->getSettings()->mIncTpIndexKey)) {
         tpIndex++;
@@ -220,33 +219,6 @@ void Menu::handleAlways() {
 
     drawInputDisplay();
     drawInfoWindow();
-}
-
-void Menu::setupStyle() {
-    ImGuiStyle& style = ImGui::GetStyle();
-    ImVec4* colors = style.Colors;
-
-    style.IndentSpacing = 10;
-
-    // Change the color of the title bar
-    colors[ImGuiCol_TitleBg] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-    colors[ImGuiCol_TitleBgActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-
-    // Change the color of the frame background
-    colors[ImGuiCol_FrameBg] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-    colors[ImGuiCol_FrameBgHovered] = ImVec4(0.83f, 0.44f, 0.5f, 1.f);
-    colors[ImGuiCol_FrameBgActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-
-    // Change the color of the button
-    colors[ImGuiCol_Button] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-    colors[ImGuiCol_ButtonHovered] = ImVec4(0.83f, 0.44f, 0.5f, 1.f);
-    colors[ImGuiCol_ButtonActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-
-    colors[ImGuiCol_Header] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-    colors[ImGuiCol_HeaderHovered] = ImVec4(0.83f, 0.44f, 0.5f, 1.f);
-    colors[ImGuiCol_HeaderActive] = ImVec4(0.73f, 0.34f, 0.4f, 1.f);
-
-    colors[ImGuiCol_NavHighlight] = ImVec4(1, 1, 1, 1);
 }
 
 void Menu::drawInputDisabled() {
@@ -290,7 +262,7 @@ void Menu::drawTeleportCat() {
 
         ImGui::SameLine();
         if (ImGui::Button("Load From File")) {
-            SaveFileHelper::instance()->loadTeleport(tpStates, hk::util::arraySize(tpStates));
+            SaveFileHelper::instance()->loadTeleport(tpStates, hk::util::arraySize(tpStates), al::getStationedHeap());
         }
         ImGui::Unindent();
     }
@@ -393,8 +365,8 @@ void Menu::drawHotkeysCat() {
         ImGui::Combo("Decrement Tp Index##Key", &set->mSettings.mDecTpIndexKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Add 1000 Coins##Key", &set->mSettings.mAddCoinsKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Remove 1000 Coins##Key", &set->mSettings.mDecCoinsKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Next Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Prev Wiggler Pattern##Key", &set->mSettings.mWigglerPattern, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Next Wiggler Pattern##Key", &set->mSettings.mIncPatternKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Prev Wiggler Pattern##Key", &set->mSettings.mDecPatternKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }
@@ -493,15 +465,15 @@ void Menu::drawInfoWindow() {
 
     GameDataHolderAccessor* accessor = helpers::tryGetGameDataHolderAccess();
 
-    if (!holder || !accessor) {
+    if (!accessor) {
         ImGui::Text("No Game Data Holder");
         return;
     }
-    s32 jumpCount = rs::getPlayerJumpCount(holder);
-    s32 throwCapCount = rs::getPlayerThrowCapCount(holder);
+    s32 jumpCount = rs::getPlayerJumpCount(accessor->mData);
+    s32 throwCapCount = rs::getPlayerThrowCapCount(accessor->mData);
     u64 playTimeTotal = GameDataFunction::getPlayTimeTotal(*accessor);
     u64 playTimeAcrossFile = GameDataFunction::getPlayTimeAcrossFile(*accessor);
-    s32 totalCoinNum = rs::getTotalCoinNum(holder);
+    s32 totalCoinNum = rs::getTotalCoinNum(accessor->mData);
     ImGui::Text("Jumps: %d", jumpCount);
     ImGui::Text("Cap Throws: %d", throwCapCount);
     ImGui::Text("Total Coins: %d", totalCoinNum);

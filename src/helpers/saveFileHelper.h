@@ -14,7 +14,7 @@ public:
     SaveFileHelper() = default;
 
     void saveSettings();
-    void loadSettings();
+    void loadSettings(sead::Heap* heap);
     void saveTeleport(btt::Menu::TpState* states, size_t count);
-    void loadTeleport(btt::Menu::TpState* states, size_t count);
+    void loadTeleport(btt::Menu::TpState* states, size_t count, sead::Heap* heap);
 };

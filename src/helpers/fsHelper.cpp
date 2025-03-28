@@ -1,7 +1,6 @@
 #include "fsHelper.h"
 // #include "logger/Logger.hpp"
 #include "hk/diag/diag.h"
-#include "nn/init.h"
 #include "al/Library/Memory/HeapUtil.h"
 
 namespace FsHelper {
@@ -38,7 +37,7 @@ namespace FsHelper {
     }
 
     // make sure to free buffer after usage is done
-    void loadFileFromPath(LoadData &loadData) {
+    void loadFileFromPath(LoadData &loadData, sead::Heap *heap) {
 
         nn::fs::FileHandle handle;
 
@@ -48,8 +47,8 @@ namespace FsHelper {
 
         long size = 0;
         nn::fs::GetFileSize(&size, handle);
-        // loadData.buffer = nn::init::GetAllocator()->Allocate(size);
-        loadData.buffer = al::getStationedHeap()->alloc(size);
+        loadData.buffer = heap->alloc(size);
+        // loadData.buffer = malloc(size);
         loadData.bufSize = size;
 
         HK_ASSERT(loadData.buffer);//, "Failed to Allocate Buffer! File Size: %ld", size

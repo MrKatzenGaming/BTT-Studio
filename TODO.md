@@ -1,7 +1,7 @@
 # TODO
 
 
-- [ ] fix wiggler hotkeys
+- [ ] fix disable tp puppet 1.3  
 
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
@@ -33,7 +33,6 @@
 - [ ] all persisting states should have the ability to be reset  
 - [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
 - [ ] also shop text thingys  
-- [ ] 1.3 (someday)
 - [ ] reset sand wall and wooded gate
 - [ ] warp to last cp
 
@@ -78,3 +77,5 @@
 - [x] fix wiggler patter  
 - [x] tp cam with player  
 - [x] noclip  
+- [x] fix wiggler hotkeys  
+- [x] 1.3 (someday)  

@@ -13,7 +13,7 @@ void SaveFileHelper::saveSettings() {
     FsHelper::writeFileToPath(reinterpret_cast<void*>(&btt::SettingsMgr::instance()->mSettings), sizeof(btt::SettingsMgr::Settings), mSettingsPath);
 }
 
-void SaveFileHelper::loadSettings() {
+void SaveFileHelper::loadSettings(sead::Heap* heap) {
     if (!FsHelper::isFileExist(mSettingsPath)) {
         saveSettings();
         return;
@@ -21,7 +21,7 @@ void SaveFileHelper::loadSettings() {
 
     FsHelper::LoadData data;
     data.path = mSettingsPath;
-    FsHelper::loadFileFromPath(data);
+    FsHelper::loadFileFromPath(data, heap);
 
     if (data.buffer != nullptr && data.bufSize == sizeof(btt::SettingsMgr::Settings)) {
         btt::SettingsMgr::Settings* configData = reinterpret_cast<btt::SettingsMgr::Settings*>(data.buffer);
@@ -37,7 +37,7 @@ void SaveFileHelper::saveTeleport(btt::Menu::TpState* states, size_t count) {
     FsHelper::writeFileToPath(reinterpret_cast<void*>(states), sizeof(btt::Menu::TpState) * count, mtpPath);
 }
 
-void SaveFileHelper::loadTeleport(btt::Menu::TpState* states, size_t count) {
+void SaveFileHelper::loadTeleport(btt::Menu::TpState* states, size_t count, sead::Heap* heap) {
     if (!FsHelper::isFileExist(mtpPath)) {
         saveTeleport(states, count);
         return;
@@ -45,7 +45,7 @@ void SaveFileHelper::loadTeleport(btt::Menu::TpState* states, size_t count) {
 
     FsHelper::LoadData data;
     data.path = mtpPath;
-    FsHelper::loadFileFromPath(data);
+    FsHelper::loadFileFromPath(data, heap);
 
     if (data.buffer != nullptr && data.bufSize == sizeof(btt::Menu::TpState) * count) {
         btt::Menu::TpState* loadedStates = reinterpret_cast<btt::Menu::TpState*>(data.buffer);

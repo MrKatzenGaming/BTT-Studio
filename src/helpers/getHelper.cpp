@@ -225,6 +225,7 @@ bool tryReloadStage() {
     return true;
 }
 
+//FIXME: Fix this
 bool isGetShineState(StageScene* stageScene) {
     // if (!stageScene) return false;
 
@@ -240,7 +241,9 @@ bool isGetShineState(StageScene* stageScene) {
 
     // return strcmp(stateName, "GetShine") == 0;
 
-    return false;
+    // return false;
+
+    return true;
 }
 
 char* demangle(const char* mangled_name) {

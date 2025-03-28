@@ -1,7 +1,8 @@
 #pragma once
-
 #include "nn/fs.h"
 #include <vapours/results.hpp>
+#include "sead/heap/seadHeap.h"
+
 namespace FsHelper {
 
     struct LoadData {
@@ -12,7 +13,7 @@ namespace FsHelper {
 
     nn::Result writeFileToPath(void *buf, size_t size, const char *path);
 
-    void loadFileFromPath(LoadData &loadData);
+    void loadFileFromPath(LoadData &loadData, sead::Heap *heap);
 
     long getFileSize(const char *path);
 

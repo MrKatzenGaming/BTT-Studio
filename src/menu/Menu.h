@@ -48,7 +48,6 @@ private:
     PlayerActorBase* player;
     StageScene* stageScene;
     PlayerActorHakoniwa* playerHak;
-    GameDataHolder* holder;
     SettingsMgr* set;
 
     ImGuiID prevNavId = 0;

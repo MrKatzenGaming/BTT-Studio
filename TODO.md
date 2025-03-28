@@ -2,6 +2,7 @@
 
 
 - [ ] fix disable tp puppet 1.3  
+- [ ] popup for changed wiggler pattern + change tp index  
 
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  

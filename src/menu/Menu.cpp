@@ -164,9 +164,11 @@ void Menu::handleAlways() {
         if (playerHak) al::requestCancelCameraInterpole(playerHak, 0);
     }
 
-    if (InputHelper::isPressPadLeft() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {
+    bool isAllowTP = set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu);
+
+    if (InputHelper::isPressPadLeft() && isAllowTP) {
         saveTeleport(tpStates[tpIndex]);
-    } else if (InputHelper::isPressPadRight() && set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu)) {
+    } else if (InputHelper::isPressPadRight() && isAllowTP) {
         loadTeleport(tpStates[tpIndex]);
     }
 
@@ -367,22 +369,23 @@ void Menu::drawHotkeysCat() {
 }
 
 bool Menu::isHotkey(int key) {
+    bool isAllowInput = !InputHelper::isInputToggled() || !mIsEnabledMenu;
     bool Up = InputHelper::isPressPadUp();
     bool L = InputHelper::isHoldL();
     bool R = InputHelper::isHoldR();
     bool ZL = InputHelper::isHoldZL();
     bool ZR = InputHelper::isHoldZR();
     switch (key) {
-    case 1: return Up && !L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
-    case 2: return Up && L && !R && !ZL && !ZR && !InputHelper::isInputToggled();
-    case 3: return Up && R && !L && !ZL && !ZR && !InputHelper::isInputToggled();
-    case 4: return Up && ZL && !L && !R && !ZR && !InputHelper::isInputToggled();
-    case 5: return Up && ZR && !L && !R && !ZL && !InputHelper::isInputToggled();
-    case 6: return Up && L && R && !ZL && !ZR && !InputHelper::isInputToggled();
-    case 7: return Up && L && ZL && !R && !ZR && !InputHelper::isInputToggled();
-    case 8: return Up && L && ZR && !R && !ZL && !InputHelper::isInputToggled();
-    case 9: return Up && R && ZL && !L && !ZR && !InputHelper::isInputToggled();
-    case 10: return Up && R && ZR && !L && !ZL && !InputHelper::isInputToggled();
+    case 1: return Up && !L && !R && !ZL && !ZR && isAllowInput;
+    case 2: return Up && L && !R && !ZL && !ZR && isAllowInput;
+    case 3: return Up && R && !L && !ZL && !ZR && isAllowInput;
+    case 4: return Up && ZL && !L && !R && !ZR && isAllowInput;
+    case 5: return Up && ZR && !L && !R && !ZL && isAllowInput;
+    case 6: return Up && L && R && !ZL && !ZR && isAllowInput;
+    case 7: return Up && L && ZL && !R && !ZR && isAllowInput;
+    case 8: return Up && L && ZR && !R && !ZL && isAllowInput;
+    case 9: return Up && R && ZL && !L && !ZR && isAllowInput;
+    case 10: return Up && R && ZR && !L && !ZL && isAllowInput;
     default: return 0;
     }
 }

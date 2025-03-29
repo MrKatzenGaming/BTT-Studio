@@ -305,7 +305,7 @@ void Menu::loadTeleport(TpState& state) {
 }
 
 void Menu::drawMiscCat() {
-    if (ImGui::CollapsingHeader("Wiggle")) {
+    if (ImGui::CollapsingHeader("Wiggler")) {
         ImGui::Indent();
         ImGui::PushItemWidth(200);
         ImGui::Combo("Wiggler Pattern", &set->getSettings()->mWigglerPattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns));

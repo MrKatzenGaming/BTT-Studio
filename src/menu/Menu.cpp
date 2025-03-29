@@ -148,10 +148,13 @@ void Menu::handleAlways() {
         playerHak = helpers::tryGetPlayerActorHakoniwa(gameSeq);
     }
 
+    static bool wasMenuEnabled = false;
+
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
         prevNavId = GImGui->NavId;
         mIsEnabledMenu = false;
         prevMouseDis = InputHelper::isDisableMouse();
+        wasMenuEnabled = true;
         InputHelper::setDisableMouse(true);
     } else if (InputHelper::isPressStickL() && !mIsEnabledMenu) {
         mIsEnabledMenu = true;
@@ -159,9 +162,12 @@ void Menu::handleAlways() {
         InputHelper::setDisableMouse(prevMouseDis);
     }
     if (globalTimer - prevTime < 5) {
-        if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
-        GImGui->NavDisableHighlight = false;
-        if (playerHak) al::requestCancelCameraInterpole(playerHak, 0);
+        if (wasMenuEnabled && mIsEnabledMenu) {
+            if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
+            GImGui->NavDisableHighlight = false;
+        } else {
+            if (playerHak) al::requestCancelCameraInterpole(playerHak, 0);
+        }
     }
 
     bool isAllowTP = set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu);

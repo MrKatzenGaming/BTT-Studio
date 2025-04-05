@@ -1,9 +1,5 @@
 #include "getHelper.h"
 
-#include <cstring>
-#include <cxxabi.h>
-#include <typeinfo>
-
 #include <al/Library/Base/StringUtil.h>
 #include <al/Library/LiveActor/LiveActorKit.h>
 #include <al/Library/Memory/HeapUtil.h>
@@ -17,6 +13,10 @@
 #include <game/Sequence/ChangeStageInfo.h>
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameSystem.h>
+
+#include <cstring>
+#include <cxxabi.h>
+#include <typeinfo>
 
 namespace helpers {
 

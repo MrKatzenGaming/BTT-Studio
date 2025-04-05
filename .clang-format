@@ -28,11 +28,33 @@ ContinuationIndentWidth: 4
 Cpp11BracedListStyle: false
 EmptyLineBeforeAccessModifier: LogicalBlock
 FixNamespaceComments: true
+IncludeBlocks:   Regroup
 IncludeCategories:
-  - Regex:    '^<'
-    Priority: 1
-  - Regex:    '^"'
-    Priority: 2
+
+  - Regex:           ^"hk/
+    Priority:        2
+  - Regex:           ^<hk/
+    Priority:        2
+  - Regex:           ^"al/
+    Priority:        3
+  - Regex:           ^<al/
+    Priority:        3
+  - Regex:           ^"agl/
+    Priority:        4
+  - Regex:           ^<agl/
+    Priority:        4
+  - Regex:           ^"sead/
+    Priority:        5
+  - Regex:           ^<sead/
+    Priority:        5
+  - Regex:           ^"game/
+    Priority:        6
+  - Regex:           ^<game/
+    Priority:        6
+  - Regex:           ^<
+    Priority:        7
+  - Regex:           ^"
+    Priority:        8
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false

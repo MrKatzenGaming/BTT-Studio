@@ -1,16 +1,15 @@
 #include "stage_warp.h"
 
-#include <cstddef>
-#include <cstdio>
-
 #include <al/Library/Base/StringUtil.h>
 
 #include <game/Sequence/ChangeStageInfo.h>
 #include <game/Sequence/HakoniwaSequence.h>
 #include <game/System/GameDataHolder.h>
 
-#include "getHelper.h"
+#include <cstddef>
+#include <cstdio>
 
+#include "getHelper.h"
 #include "imgui.h"
 #include "imgui_internal.h"
 

@@ -7,10 +7,9 @@
 #include <nn/oe.h>
 
 #include "helpers/InputHelper.h"
+#include "imgui.h"
 #include "imgui_hid_mappings.h"
 #include "menu/Menu.h"
-
-#include "imgui.h"
 
 namespace btt::imgui {
 
@@ -21,8 +20,9 @@ void init(sead::Heap* heap) {
 
     static sead::Heap* sImHeap = heap;
 
-    imgui->setAllocator({ [](size allocSize, size alignment) -> void* { return sImHeap->tryAlloc(allocSize, alignment); },
-                          [](void* ptr) -> void { sImHeap->free(ptr); } });
+    imgui->setAllocator(
+        { [](size allocSize, size alignment) -> void* { return sImHeap->tryAlloc(allocSize, alignment); }, [](void* ptr) -> void { sImHeap->free(ptr); } }
+    );
     imgui->tryInitialize();
 
     InputHelper::initKBM();

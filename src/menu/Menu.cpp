@@ -1,11 +1,6 @@
 #include "Menu.h"
 
-#include <cstdio>
-#include <cstring>
-
 #include "hk/util/Math.h"
-
-#include <nn/oe.h>
 
 #include "al/Library/Camera/CameraUtil.h"
 #include "al/Library/LiveActor/ActorMovementFunction.h"
@@ -17,15 +12,18 @@
 #include "game/System/GameDataFunction.h"
 #include "game/Util/AchievementUtil.h"
 
+#include <cstdio>
+#include <cstring>
+#include <nn/oe.h>
+
 #include "helpers/getHelper.h"
+#include "imgui.h"
+#include "imgui_internal.h"
 #include "InputDisplay.h"
 #include "InputHelper.h"
 #include "saveFileHelper.h"
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
-
-#include "imgui.h"
-#include "imgui_internal.h"
 
 namespace btt {
 

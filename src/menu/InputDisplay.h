@@ -2,9 +2,8 @@
 
 #include <sead/basis/seadTypes.h>
 
-#include "settings/SettingsMgr.h"
-
 #include "imgui.h"
+#include "settings/SettingsMgr.h"
 
 namespace btt {
 

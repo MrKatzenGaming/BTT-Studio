@@ -22,6 +22,7 @@
 - [ ] outfit changer  
 - [ ] Add build instructions to main readme  
 - [ ] spawn all hint art moons(HintPhoto)
+- [ ] move tourist to different kingdoms
 
 ## Hard
 

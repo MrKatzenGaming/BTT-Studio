@@ -31,7 +31,7 @@ SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
 void Menu::draw() {
     if (InputHelper::isInputToggled()) {
-        drawInputDisabled();
+        drawPopup();
     }
 
     ImGui::Begin("BTT Studio", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavFocus);
@@ -146,26 +146,35 @@ void Menu::handleAlways() {
         playerHak = helpers::tryGetPlayerActorHakoniwa(gameSeq);
     }
 
-    static bool wasMenuEnabled = false;
+    static bool wasMenuDisabled = false;
 
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
         prevNavId = GImGui->NavId;
         mIsEnabledMenu = false;
         prevMouseDis = InputHelper::isDisableMouse();
-        wasMenuEnabled = true;
         InputHelper::setDisableMouse(true);
     } else if (InputHelper::isPressStickL() && !mIsEnabledMenu) {
         mIsEnabledMenu = true;
-        prevTime = globalTimer;
+        wasMenuDisabled = true;
+        menuTimer = 0;
         InputHelper::setDisableMouse(prevMouseDis);
     }
-    if (globalTimer - prevTime < 5) {
-        if (wasMenuEnabled && mIsEnabledMenu) {
+    if (menuTimer < 5) {
+        if (wasMenuDisabled && mIsEnabledMenu) {
             if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
             GImGui->NavDisableHighlight = false;
-        } else {
+            wasMenuDisabled = false;
+        } else if (!mIsPopup) {
             if (playerHak) al::requestCancelCameraInterpole(playerHak, 0);
         }
+    }
+    if (mIsPopup) {
+        if (menuTimer > 2 * 60) {
+            mIsPopup = false;
+            strcpy(popupText, "Input Disabled");
+        }
+        if (!mIsEnabledMenu) drawPopup();
+        if (mIsEnabledMenu && !InputHelper::isInputToggled()) drawPopup();
     }
 
     bool isAllowTP = set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu);
@@ -188,10 +197,16 @@ void Menu::handleAlways() {
     if (isHotkey(set->getSettings()->mIncTpIndexKey)) {
         tpIndex++;
         if (tpIndex >= hk::util::arraySize(tpStates)) tpIndex = 0;
+        mIsPopup = true;
+        sprintf(popupText, "Tp Index: %d", tpIndex);
+        menuTimer = 0;
     }
     if (isHotkey(set->getSettings()->mDecTpIndexKey)) {
         tpIndex--;
         if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
+        mIsPopup = true;
+        sprintf(popupText, "Tp Index: %d", tpIndex);
+        menuTimer = 0;
     }
     if (isHotkey(set->getSettings()->mAddCoinsKey)) {
         if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
@@ -211,26 +226,32 @@ void Menu::handleAlways() {
     if (isHotkey(set->getSettings()->mIncPatternKey)) {
         set->getSettings()->mWigglerPattern++;
         if (set->getSettings()->mWigglerPattern >= hk::util::arraySize(WigglerPatterns)) set->getSettings()->mWigglerPattern = 0;
+        mIsPopup = true;
+        sprintf(popupText, "Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
+        menuTimer = 0;
     }
     if (isHotkey(set->getSettings()->mDecPatternKey)) {
         set->getSettings()->mWigglerPattern--;
         if (set->getSettings()->mWigglerPattern < 0) set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
+        mIsPopup = true;
+        sprintf(popupText, "Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
+        menuTimer = 0;
     }
 
     drawInputDisplay();
     drawInfoWindow();
 }
 
-void Menu::drawInputDisabled() {
+void Menu::drawPopup() {
     ImGui::Begin(
-        "Input Disabled", nullptr,
+        "Popup", nullptr,
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
             ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
     );
-    ImGui::SetWindowSize(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-    ImGui::SetWindowPos(ImVec2(mWindowSize.x + 10, 0), ImGuiCond_FirstUseEver);
-    ImGui::SetWindowFontScale(2);
-    ImGui::Text("Input Disabled");
+    ImGui::SetWindowSize(ImVec2(0, 0));
+    ImGui::SetWindowPos(ImVec2(mWindowSize.x + 10, 0));
+    ImGui::SetWindowFontScale(2.0f);
+    ImGui::Text("%s", popupText);
     ImGui::End();
 }
 
@@ -285,20 +306,20 @@ void Menu::loadTeleport(TpState& state) {
         al::setTrans(hack, state.pos);
         al::updatePoseQuat(hack, state.quat);
         al::setVelocityZero(hack);
-        prevTime = globalTimer;
+        menuTimer = 0;
         return;
     }
 
     if (set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) {
         al::setTrans(playerHak, state.pos);
         al::updatePoseQuat(playerHak, state.quat);
-        prevTime = globalTimer;
+        menuTimer = 0;
     } else {
         playerHak->startDemoPuppetable();
         al::setTrans(playerHak, state.pos);
         al::updatePoseQuat(playerHak, state.quat);
         playerHak->endDemoPuppetable();
-        prevTime = globalTimer;
+        menuTimer = 0;
     }
 }
 

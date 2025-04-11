@@ -35,7 +35,7 @@ public:
     const char* getMoonRefreshText();
 
     bool noGetPlayer = false;
-    u64 globalTimer = 0;
+    u64 menuTimer = 0;
 
     bool isPatternReverse();
     int getPatternTarget(int a);
@@ -52,7 +52,10 @@ private:
     SettingsMgr* set;
 
     ImGuiID prevNavId = 0;
-    u64 prevTime = 0;
+
+    bool mIsPopup = false;
+    void drawPopup();
+    char popupText[0x40] = "Input Disabled";
 
     void drawInputDisabled();
     void drawMiscCat();

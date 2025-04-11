@@ -70,12 +70,14 @@ HkTrampoline<void, HakoniwaSequence*> hakoniwaSequenceUpdate = hk::hook::trampol
     hakoniwaSequenceUpdate.orig(hakoniwaSequence);
 
     Menu* menu = Menu::instance();
-
-    if (menu->globalTimer % 3600 == 0) {
+    static int timer = 0;
+    if (timer % 3600 == 0) {
         SaveFileHelper::instance()->saveSettings();
         // SaveFileHelper::instance()->saveTeleport(Menu::instance()->tpStates, hk::util::arraySize(Menu::instance()->tpStates));
+        timer = 0;
     }
-    menu->globalTimer++;
+    timer++;
+    menu->menuTimer++;
 });
 
 void disableButtons(nn::hid::NpadBaseState* state) {

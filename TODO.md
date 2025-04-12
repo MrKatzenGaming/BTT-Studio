@@ -2,7 +2,6 @@
 
 
 - [ ] fix disable tp puppet 1.3  
-- [ ] popup for changed wiggler pattern + change tp index  
 
 
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
@@ -81,3 +80,6 @@
 - [x] noclip  
 - [x] fix wiggler hotkeys  
 - [x] 1.3 (someday)  
+- [x] popup for changed wiggler pattern + change tp index  
+- [x] fix cursor on menu open  
+- [x] fix cap crash after beating game

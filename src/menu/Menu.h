@@ -7,6 +7,7 @@
 #include <game/Player/PlayerActorHakoniwa.h>
 #include <game/Scene/StageScene.h>
 #include <game/Sequence/HakoniwaSequence.h>
+#include <cstdio>
 
 #include "imgui.h"
 #include "settings/SettingsMgr.h"
@@ -56,6 +57,14 @@ private:
     bool mIsPopup = false;
     void drawPopup();
     char popupText[0x40] = "Input Disabled";
+    void setPopupText(const char* fmt, ...) {
+        va_list args;
+        va_start(args, fmt);
+        vsnprintf(popupText, sizeof(popupText), fmt, args);
+        va_end(args);
+        mIsPopup = true;
+        menuTimer = 0;
+    }
 
     void drawInputDisabled();
     void drawMiscCat();

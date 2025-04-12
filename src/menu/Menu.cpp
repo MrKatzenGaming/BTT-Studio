@@ -163,13 +163,14 @@ void Menu::handleAlways() {
         if (wasMenuDisabled && mIsEnabledMenu) {
             if (prevNavId) ImGui::SetFocusID(prevNavId, ImGui::FindWindowByName("BTT Studio"));
             GImGui->NavDisableHighlight = false;
-            wasMenuDisabled = false;
         } else if (!mIsPopup) {
             if (playerHak) al::requestCancelCameraInterpole(playerHak, 0);
         }
+    } else if (menuTimer == 5 && wasMenuDisabled) {
+        wasMenuDisabled = false;
     }
     if (mIsPopup) {
-        if (menuTimer > 2 * 60) {
+        if (menuTimer > 2 * 60 && menuTimer < 2 * 60 + 5) {
             mIsPopup = false;
             strcpy(popupText, "Input Disabled");
         }
@@ -197,16 +198,12 @@ void Menu::handleAlways() {
     if (isHotkey(set->getSettings()->mIncTpIndexKey)) {
         tpIndex++;
         if (tpIndex >= hk::util::arraySize(tpStates)) tpIndex = 0;
-        mIsPopup = true;
-        sprintf(popupText, "Tp Index: %d", tpIndex);
-        menuTimer = 0;
+        setPopupText("Tp Index: %d", tpIndex);
     }
     if (isHotkey(set->getSettings()->mDecTpIndexKey)) {
         tpIndex--;
         if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
-        mIsPopup = true;
-        sprintf(popupText, "Tp Index: %d", tpIndex);
-        menuTimer = 0;
+        setPopupText("Tp Index: %d", tpIndex);
     }
     if (isHotkey(set->getSettings()->mAddCoinsKey)) {
         if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
@@ -226,16 +223,12 @@ void Menu::handleAlways() {
     if (isHotkey(set->getSettings()->mIncPatternKey)) {
         set->getSettings()->mWigglerPattern++;
         if (set->getSettings()->mWigglerPattern >= hk::util::arraySize(WigglerPatterns)) set->getSettings()->mWigglerPattern = 0;
-        mIsPopup = true;
-        sprintf(popupText, "Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
-        menuTimer = 0;
+        setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
     if (isHotkey(set->getSettings()->mDecPatternKey)) {
         set->getSettings()->mWigglerPattern--;
         if (set->getSettings()->mWigglerPattern < 0) set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
-        mIsPopup = true;
-        sprintf(popupText, "Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
-        menuTimer = 0;
+        setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
 
     drawInputDisplay();

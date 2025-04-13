@@ -19,7 +19,6 @@
 - [ ] completely custom moon text (read bin file, make bin file with website)  
 - [ ] walk on lava/poison  
 - [ ] outfit changer  
-- [ ] Add build instructions to main readme  
 - [ ] spawn all hint art moons(HintPhoto)
 - [ ] move tourist to different kingdoms
 
@@ -35,7 +34,6 @@
 - [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
 - [ ] also shop text thingys  
 - [ ] reset sand wall and wooded gate
-- [ ] warp to last cp
 
 ## very Hard / Mby Impossible
 

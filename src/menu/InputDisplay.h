@@ -26,10 +26,10 @@ constexpr const char* sInputDisplayColorNames[] {
     "None", "White", "Gray", "Black", "Red", "Blue", "Yellow", "Green", "Orange", "Purple", "Pink", "Light Blue"
 };
 
+void drawInputDisplay();
+
 inline ImVec4 getInputDisplayColor(SettingsMgr::InputDisplayColor color) {
     return sInputDisplayColors[int(color)];
 }
-
-void drawInputDisplay();
 
 } // namespace btt

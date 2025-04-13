@@ -62,10 +62,7 @@ public:
 
     } mSettings;
 
-    // Settings* mSettings = nullptr;
     Settings* getSettings() { return &mSettings; }
-
-    char mPath[28] = "sd:/BTT-Studio/Settings.bin";
 };
 
 } // namespace btt

@@ -7,6 +7,7 @@
 #include <game/Player/PlayerActorHakoniwa.h>
 #include <game/Scene/StageScene.h>
 #include <game/Sequence/HakoniwaSequence.h>
+
 #include <cstdio>
 
 #include "imgui.h"
@@ -19,8 +20,15 @@ class Menu {
 
 public:
     Menu() = default;
-    bool mIsEnabledMenu = true;
+    void draw();
+    void handleAlways();
 
+    bool isPatternReverse();
+    int getPatternTarget(int a);
+
+    const char* getMoonRefreshText();
+
+public:
     struct TpState {
         bool saved;
         sead::Vector3f pos = { 0, 0, 0 };
@@ -30,33 +38,25 @@ public:
 
     TpState tpStates[0x8];
 
-    void draw();
-    void setupStyle();
-    void handleAlways();
-    const char* getMoonRefreshText();
-
-    bool noGetPlayer = false;
-    u64 menuTimer = 0;
-
-    bool isPatternReverse();
-    int getPatternTarget(int a);
-
     bool mIsEnableNoclip = false;
+    bool noGetPlayer = false;
+    bool mIsEnabledMenu = true;
 
 private:
-    ImVec2 mWindowSize = ImVec2(500, 400);
-
-    HakoniwaSequence* gameSeq;
-    PlayerActorBase* player;
-    StageScene* stageScene;
-    PlayerActorHakoniwa* playerHak;
-    SettingsMgr* set;
-
-    ImGuiID prevNavId = 0;
-
-    bool mIsPopup = false;
     void drawPopup();
-    char popupText[0x40] = "Input Disabled";
+    void drawPageOptions();
+    void drawPageInputDisplay();
+    void drawPageHotkeys();
+    void drawPageInfo();
+    void drawInfoWindow();
+    void drawPageMisc();
+    void drawTeleportCat();
+
+    void saveTeleport(TpState& state);
+    void loadTeleport(TpState& state);
+    void handleHotkeys();
+    void handlePopup();
+
     void setPopupText(const char* fmt, ...) {
         va_list args;
         va_start(args, fmt);
@@ -66,31 +66,37 @@ private:
         menuTimer = 0;
     }
 
-    void drawInputDisabled();
-    void drawMiscCat();
-    constexpr static const char* MoonRefreshTexts[] { "BTT Studio", "BTT", "Hi BTT", "I am Cool", "Super Mario Odyssey", "Entrance to Shiveria", "<blank>" };
-    constexpr static const char* WigglerPatterns[23] { "Random", "Ghost",   "Nose",    "C",        "W",     "J", "Medal",    "Plane",
-                                                       "5",      "Hangman", "Spanish", "Siblings", "Snake", "8", "Mushroom", "Z",
-                                                       "Tetris", "Ear",     "Bomb",    "Bird",     "L",     "O", "Star" };
-    constexpr static const char* Corners[4] { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
-    ImVec2 getCornerPos(int corner);
-    void drawTeleportCat();
-    void drawHotkeysCat();
     bool isHotkey(int key);
-    constexpr static const char* Keys[] {
-        "Disabled", "None", "L", "R", "ZL", "ZR", "L + R", "L + ZL", "L + ZR", "R + ZL", "R + ZR",
-    };
-    int killSceneKey = 0;
-    int healMarioKey = 0;
-    void drawInfoCat();
-    void drawInfoWindow();
+
+    ImVec2 getCornerPos(int corner);
+
+private:
+    ImVec2 mWindowSize = ImVec2(500, 400);
+    ImGuiID prevNavId = 0;
+    u64 menuTimer = 0;
+
+    HakoniwaSequence* gameSeq;
+    PlayerActorBase* player;
+    StageScene* stageScene;
+    PlayerActorHakoniwa* playerHak;
+    SettingsMgr* set;
+
+    bool mIsPopup = false;
     bool isEnableInfoWindow = false;
     bool isEnablePlayerInfo = false;
 
     int tpIndex = 0;
-    void saveTeleport(TpState& state);
-    void loadTeleport(TpState& state);
 
-    bool prevMouseDis = true;
+    char popupText[0x40] = "Input Disabled";
+
+    constexpr static const char* Corners[4] { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
+    constexpr static const char* MoonRefreshTexts[] { "BTT Studio", "BTT", "Hi BTT", "I am Cool", "Super Mario Odyssey", "Entrance to Shiveria", "<blank>" };
+    constexpr static const char* WigglerPatterns[23] { "Random", "Ghost",   "Nose",    "C",        "W",     "J", "Medal",    "Plane",
+                                                       "5",      "Hangman", "Spanish", "Siblings", "Snake", "8", "Mushroom", "Z",
+                                                       "Tetris", "Ear",     "Bomb",    "Bird",     "L",     "O", "Star" };
+
+    constexpr static const char* Keys[] {
+        "Disabled", "None", "L", "R", "ZL", "ZR", "L + R", "L + ZL", "L + ZR", "R + ZL", "R + ZR",
+    };
 };
 } // namespace btt

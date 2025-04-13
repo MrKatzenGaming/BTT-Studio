@@ -8,8 +8,8 @@ class SaveFileHelper {
     SEAD_SINGLETON_DISPOSER(SaveFileHelper)
 
 private:
-    char mSettingsPath[28] = "sd:/BTT-Studio/Settings.bin";
-    char mtpPath[35] = "sd:/BTT-Studio/Teleport-States.bin";
+    const char mSettingsPath[28] = "sd:/BTT-Studio/Settings.bin";
+    const char mtpPath[35] = "sd:/BTT-Studio/Teleport-States.bin";
 
 public:
     SaveFileHelper() = default;

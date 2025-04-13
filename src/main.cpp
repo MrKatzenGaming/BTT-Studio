@@ -28,12 +28,6 @@ using namespace btt;
 
 static sead::Heap* sBTTStudioHeap = nullptr;
 
-void drawMenu() {
-    Menu* menu = Menu::instance();
-    if (menu && menu->mIsEnabledMenu) menu->draw();
-    if (menu) menu->handleAlways();
-}
-
 HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
     sBTTStudioHeap = sead::ExpHeap::create(3_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
 
@@ -43,7 +37,10 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
 
     imgui::init(sBTTStudioHeap);
     imgui::setupStyle();
-    imgui::addDrawFunc(drawMenu);
+    imgui::addDrawFunc([] {
+        Menu* menu = Menu::instance();
+        if (menu && menu->mIsEnabledMenu) menu->draw();
+    });
 
     InputHelper::setDisableMouse(true);
 
@@ -65,6 +62,7 @@ HkTrampoline<void, sead::FileDeviceMgr*> fileDeviceMgrHook = hk::hook::trampolin
 
     fileDeviceMgr->mMountedSd = nn::fs::MountSdCardForDebug("sd") == 0;
 });
+
 int timer = 0;
 HkTrampoline<void, HakoniwaSequence*> hakoniwaSequenceUpdate = hk::hook::trampoline([](HakoniwaSequence* hakoniwaSequence) -> void {
     hakoniwaSequenceUpdate.orig(hakoniwaSequence);
@@ -73,11 +71,10 @@ HkTrampoline<void, HakoniwaSequence*> hakoniwaSequenceUpdate = hk::hook::trampol
     static int timer = 0;
     if (timer % 3600 == 0) {
         SaveFileHelper::instance()->saveSettings();
-        // SaveFileHelper::instance()->saveTeleport(Menu::instance()->tpStates, hk::util::arraySize(Menu::instance()->tpStates));
         timer = 0;
     }
     timer++;
-    menu->menuTimer++;
+    menu->handleAlways();
 });
 
 void disableButtons(nn::hid::NpadBaseState* state) {

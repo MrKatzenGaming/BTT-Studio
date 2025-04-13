@@ -15,6 +15,10 @@ bool isInStageScene();
 bool isInStageScene(al::Scene* scene);
 bool tryReloadStage();
 
+bool isGetShineState(StageScene* stageScene);
+
+char* demangle(const char* mangled_name);
+
 // Safe getters
 al::Sequence* tryGetSequence();
 HakoniwaSequence* tryGetHakoniwaSequence();
@@ -38,9 +42,4 @@ PlayerActorBase* tryGetPlayerActor(al::Scene* scene);
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa();
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(HakoniwaSequence* curSequence);
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(al::Scene* scene);
-
-bool isGetShineState(StageScene* stageScene);
-
-char* demangle(const char* mangled_name);
-
 } // namespace helpers

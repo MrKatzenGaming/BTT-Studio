@@ -12,6 +12,7 @@
 #include <al/Library/LiveActor/ActorPoseUtil.h>
 #include <al/Library/LiveActor/LiveActor.h>
 #include <al/Library/Math/MathUtil.h>
+#include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveUtil.h>
 
 #include <game/System/GameDataFile.h>
@@ -221,9 +222,25 @@ HkTrampoline<void, PlayerActorHakoniwa*> noclipHook = hk::hook::trampoline([](Pl
     noclipHook.orig(player);
 });
 
+static void setMapTargetUpdateNullNerve(al::IUseNerve* user, const al::Nerve* nerve) {
+    StageSceneStateStageMap* map;
+    __asm("mov %0, x19" : "=r"(map));
+    void* mapThingPtr;
+    __asm("mov %0, x23" : "=r"(mapThingPtr));
+
+    if (mapThingPtr != nullptr) Menu::instance()->setLatestMapTarget(mapThingPtr);
+
+    // al::setNerve(user, nerve);
+    user->getNerveKeeper()->setNerve(nerve);
+}
+
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();
     installWigglerHooks();
+
+    ptr addr = sail::lookupSymbolFromDb<>("UpdateMapTarget");
+    ptr offset = addr - ro::getMainModule()->range().start();
+    hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)setMapTargetUpdateNullNerve);
 
     GreyShineRefreshHook.installAtSym<"_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo">();
     ShineRefreshHook.installAtSym<"_ZN16GameDataFunction11setGotShineE20GameDataHolderWriterPK9ShineInfo">();

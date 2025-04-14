@@ -1,5 +1,6 @@
 #pragma once
 
+#include <al/Library/Nerve/NerveStateCtrl.h>
 #include <al/Library/Scene/Scene.h>
 
 #include <game/Player/PlayerActorBase.h>
@@ -8,6 +9,8 @@
 #include <game/Sequence/HakoniwaSequence.h>
 
 namespace helpers {
+
+void init(sead::Heap* heap);
 
 bool isInScene();
 bool isInScene(al::Scene* scene);
@@ -18,6 +21,11 @@ bool tryReloadStage();
 bool isGetShineState(StageScene* stageScene);
 
 char* demangle(const char* mangled_name);
+char* getSequenceName(al::Sequence* sequence);
+char* getSceneName(al::Scene* scene);
+char* getLiveActorName(al::LiveActor* actor);
+char* getNerveName(const al::Nerve* nerve);
+char* getStateName(al::NerveStateCtrl::State* state);
 
 // Safe getters
 al::Sequence* tryGetSequence();

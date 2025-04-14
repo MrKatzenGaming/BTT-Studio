@@ -1,26 +1,26 @@
 # TODO
 
+- [ ] fix input display rendering  
+- [ ] move saving to own thread  
+- [ ] only refresh scene in certain states  
 
-- [ ] fix disable tp puppet 1.3  
-
-
-- [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
-    - [x] text  
-    - [ ] fix cutscene skips  
-- [ ] Hotkeys  
+- [x] Hotkeys  
     - [x] wiggler pattern  
     - [x] previous scene  
     - [x] change tp index  
     - [x] Coins  
     - [ ] Timer  
     - [x] Life Up  
-    - [ ] warp to last checkpoint  
+    - [x] warp to last checkpoint  
 - [ ] Travel to current kingdom  
-- [ ] completely custom moon text (read bin file, make bin file with website)  
-- [ ] walk on lava/poison  
+- [ ] move tourist to different kingdoms  
+- [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
+    - [x] text  
+    - [ ] fix cutscene skips  
 - [ ] outfit changer  
 - [ ] spawn all hint art moons(HintPhoto)
-- [ ] move tourist to different kingdoms
+- [ ] completely custom moon text (read bin file, make bin file with website)  
+- [ ] walk on lava/poison  
 
 ## Hard
 
@@ -80,4 +80,5 @@
 - [x] 1.3 (someday)  
 - [x] popup for changed wiggler pattern + change tp index  
 - [x] fix cursor on menu open  
-- [x] fix cap crash after beating game
+- [x] fix cap crash after beating game  
+- [x] fix disable tp puppet 1.3  

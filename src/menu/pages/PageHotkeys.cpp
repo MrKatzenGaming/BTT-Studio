@@ -1,4 +1,7 @@
+#include "hk/sail/detail.h"
 #include "hk/util/Math.h"
+
+#include "al/Library/Nerve/NerveKeeper.h"
 
 #include "game/System/GameDataFunction.h"
 
@@ -21,6 +24,7 @@ void Menu::drawPageHotkeys() {
         ImGui::Combo("Remove 1000 Coins##Key", &set->mSettings.mDecCoinsKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Next Wiggler Pattern##Key", &set->mSettings.mIncPatternKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Prev Wiggler Pattern##Key", &set->mSettings.mDecPatternKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Warp to last Checkpoint##Key", &set->mSettings.mWarpLastCpKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }
@@ -100,5 +104,14 @@ void Menu::handleHotkeys() {
         set->getSettings()->mWigglerPattern--;
         if (set->getSettings()->mWigglerPattern < 0) set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
         setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
+    }
+    if (isHotkey(set->getSettings()->mWarpLastCpKey)) {
+        if (stageScene) {
+            if (mLastMapTarget) {
+                stageScene->mStateCollection->mStateStageMap->mMapThing = mLastMapTarget;
+                ptr addr = hk::sail::lookupSymbolFromDb<>("StageSceneNrvWarpToCheckpoint");
+                stageScene->getNerveKeeper()->setNerve((al::Nerve*)addr);
+            }
+        }
     }
 }

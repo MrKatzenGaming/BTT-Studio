@@ -37,12 +37,12 @@ void Menu::draw() {
     ImGui::Text("Toggle Input: R + ZR + L");
     ImGui::Separator();
 
-    // char fmt[17] = "Toggle Mouse OFF";
-    // snprintf(fmt, 17, "Toggle Mouse %s", InputHelper::isDisableMouse() ? "ON" : "OFF");
+    char fmt[17] = "Toggle Mouse OFF";
+    snprintf(fmt, 17, "Toggle Mouse %s", InputHelper::isDisableMouse() ? "ON" : "OFF");
 
-    // if (ImGui::Button(fmt)) {
-    //     InputHelper::setDisableMouse(!InputHelper::isDisableMouse());
-    // }
+    if (ImGui::Button(fmt)) {
+        InputHelper::setDisableMouse(!InputHelper::isDisableMouse());
+    }
 
     drawStageWarpWindow();
     drawPageOptions();
@@ -73,6 +73,11 @@ void Menu::handleAlways() {
     static bool wasMenuDisabled = false;
     static bool prevMouseDis = true;
 
+    handleHotkeys();
+
+    drawInputDisplay();
+    drawInfoWindow();
+
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
         prevNavId = GImGui->NavId;
         mIsEnabledMenu = false;
@@ -101,11 +106,6 @@ void Menu::handleAlways() {
         if (!mIsEnabledMenu) drawPopup();
         if (mIsEnabledMenu && !InputHelper::isInputToggled()) drawPopup();
     }
-
-    handleHotkeys();
-
-    drawInputDisplay();
-    drawInfoWindow();
 }
 
 void Menu::drawPopup() {

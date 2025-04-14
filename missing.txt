@@ -2,6 +2,3 @@
 _ZNK14DoorAreaChange6isOpenEv
 _ZNK9ShineChip5isGotEv
 
-/home/kassu/btt-mod/syms/al/Library/Nerve/NerveStateCtrl.sym
-//_ZN2al14NerveStateCtrl13findStateInfoEPKNS_5NerveE
-

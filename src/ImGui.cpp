@@ -20,8 +20,9 @@ void init(sead::Heap* heap) {
 
     static sead::Heap* sImHeap = heap;
 
-    imgui->setAllocator({ [](size allocSize, size alignment) -> void* { return sImHeap->tryAlloc(allocSize, alignment); },
-                          [](void* ptr) -> void { sImHeap->free(ptr); } });
+    imgui->setAllocator(
+        { [](size allocSize, size alignment) -> void* { return sImHeap->tryAlloc(allocSize, alignment); }, [](void* ptr) -> void { sImHeap->free(ptr); } }
+    );
     imgui->tryInitialize();
 
     InputHelper::initKBM();
@@ -133,7 +134,6 @@ void setupStyle() {
     io.MouseDrawCursor = InputHelper::isMouseConnected();
     io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    io.ConfigFlags |= ImGuiConfigFlags_NoKeyboard | ImGuiConfigFlags_NoMouse;
     io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
     io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
 }

@@ -16,6 +16,7 @@
 #include <cstddef>
 #include <nn/fs.h>
 
+#include "helpers/getHelper.h"
 #include "helpers/InputHelper.h"
 #include "ImGui.h"
 #include "Menu.h"
@@ -34,6 +35,7 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
     SettingsMgr* set = SettingsMgr::createInstance(sBTTStudioHeap);
     SaveFileHelper::createInstance(sBTTStudioHeap);
     Menu* menu = Menu::createInstance(sBTTStudioHeap);
+    helpers::init(sBTTStudioHeap);
 
     imgui::init(sBTTStudioHeap);
     imgui::setupStyle();

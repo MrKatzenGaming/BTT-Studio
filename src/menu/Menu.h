@@ -23,6 +23,8 @@ public:
     void draw();
     void handleAlways();
 
+    void setLatestMapTarget(void* target) { mLastMapTarget = target; }
+
     bool isPatternReverse();
     int getPatternTarget(int a);
 
@@ -80,6 +82,8 @@ private:
     StageScene* stageScene;
     PlayerActorHakoniwa* playerHak;
     SettingsMgr* set;
+
+    void* mLastMapTarget = nullptr;
 
     bool mIsPopup = false;
     bool isEnableInfoWindow = false;

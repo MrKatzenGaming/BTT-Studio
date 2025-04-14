@@ -1,8 +1,10 @@
+#include "hk/sail/detail.h"
 #include "hk/util/Math.h"
 
 #include "al/Library/LiveActor/ActorMovementFunction.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "al/Library/Memory/HeapUtil.h"
+#include "al/Library/Nerve/NerveKeeper.h"
 
 #include "game/Player/PlayerHackKeeper.h"
 #include "game/System/GameDataFunction.h"
@@ -90,7 +92,7 @@ void Menu::drawPageMisc() {
         ImGui::PushItemWidth(200);
         ImGui::Combo("Wiggler Pattern", &set->getSettings()->mWigglerPattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns));
         ImGui::PopItemWidth();
-    
+
         if (ImGui::Button("Kill Mario")) {
             if (playerHak) GameDataFunction::killPlayer(GameDataHolderWriter(playerHak));
         }
@@ -132,6 +134,15 @@ void Menu::drawPageMisc() {
         ImGui::SameLine();
         if (ImGui::Button("Previous Scene")) {
             if (stageScene) GameDataHolderAccessor(stageScene)->returnPrevStage();
+        }
+        if (ImGui::Button("Warp to Last Checkpoint")) {
+            if (stageScene) {
+                if (mLastMapTarget) {
+                    stageScene->mStateCollection->mStateStageMap->mMapThing = mLastMapTarget;
+                    ptr addr = hk::sail::lookupSymbolFromDb<>("StageSceneNrvWarpToCheckpoint");
+                    stageScene->getNerveKeeper()->setNerve((al::Nerve*)addr);
+                }
+            }
         }
         ImGui::Checkbox("Noclip", &mIsEnableNoclip);
         ImGui::PushItemWidth(200);

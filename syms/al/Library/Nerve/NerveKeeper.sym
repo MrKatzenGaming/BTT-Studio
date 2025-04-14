@@ -1,7 +1,9 @@
 @smo:100,101,110,120
 
 _ZNK2al11NerveKeeper15getCurrentNerveEv
+_ZN2al11NerveKeeper8setNerveEPKNS_5NerveE
 
 @smo:130
 
 _ZNK2al11NerveKeeper15getCurrentNerveEv = 0x006c77a0
+_ZN2al11NerveKeeper8setNerveEPKNS_5NerveE = 0x006c7750

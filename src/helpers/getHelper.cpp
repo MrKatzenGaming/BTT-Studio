@@ -5,7 +5,6 @@
 #include <al/Library/Memory/HeapUtil.h>
 #include <al/Library/Nerve/Nerve.h>
 #include <al/Library/Nerve/NerveKeeper.h>
-#include <al/Library/Nerve/NerveStateCtrl.h>
 #include <al/Library/Player/PlayerHolder.h>
 #include <al/Library/Player/PlayerUtil.h>
 #include <al/Library/Scene/SceneUtil.h>
@@ -14,11 +13,18 @@
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameSystem.h>
 
+#include <cstdio>
 #include <cstring>
 #include <cxxabi.h>
 #include <typeinfo>
 
+static sead::Heap* sDemangleHeap = nullptr;
+
 namespace helpers {
+
+void init(sead::Heap* heap) {
+    sDemangleHeap = heap;
+}
 
 bool isInScene() {
     al::Sequence* mSequence = GameSystemFunction::getGameSystem()->mSequence;
@@ -226,37 +232,69 @@ bool tryReloadStage() {
     return true;
 }
 
-// FIXME: Fix this
 bool isGetShineState(StageScene* stageScene) {
-    // if (!stageScene) return false;
+    if (!stageScene) return false;
 
-    // char* stateName = nullptr;
+    char* stateName = nullptr;
 
-    // const al::Nerve* stageNerve = stageScene->getNerveKeeper()->getCurrentNerve();
-    // if (!stageScene->getNerveKeeper()->mStateCtrl) return false;
+    if (!stageScene->getNerveKeeper()->mStateCtrl) return false;
 
-    // al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->findStateInfo(stageNerve);
-    // if (!state) return false;
+    al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
+    if (!state) return false;
 
-    // stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
+    stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
 
-    // return strcmp(stateName, "GetShine") == 0;
+    return strcmp(stateName, "GetShine") == 0;
 
-    // return false;
-
-    return true;
+    return false;
 }
 
 char* demangle(const char* mangled_name) {
     size_t demangledSize = 0xff;
     char* demangledName = nullptr;
-    char* demangledBuf = static_cast<char*>(al::getStationedHeap()->alloc(demangledSize));
+    char* demangledBuf = static_cast<char*>(sDemangleHeap->alloc(demangledSize));
     int status;
 
     demangledName = abi::__cxa_demangle(mangled_name, demangledBuf, &demangledSize, &status);
-    al::getStationedHeap()->free(demangledBuf);
+    sDemangleHeap->free(demangledBuf);
 
     return demangledName;
+}
+
+char* getSequenceName(al::Sequence* sequence) {
+    if (!sequence) return nullptr;
+
+    char* sequenceName = demangle(typeid(*sequence).name());
+    return sequenceName;
+}
+
+char* getSceneName(al::Scene* scene) {
+    if (!scene) return nullptr;
+
+    char* sceneName = demangle(typeid(*scene).name());
+    return sceneName;
+}
+
+char* getLiveActorName(al::LiveActor* actor) {
+    if (!actor) return nullptr;
+
+    char* actorName = demangle(typeid(*actor).name());
+    return actorName;
+}
+
+char* getNerveName(const al::Nerve* nerve) {
+    if (!nerve) return nullptr;
+
+    char* nerveName = demangle(typeid(*nerve).name());
+    auto prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+    return nerveName + prefixLen;
+}
+
+char* getStateName(al::NerveStateCtrl::State* state) {
+    if (!state) return nullptr;
+
+    char* stateName = demangle(typeid(*state->state).name());
+    return stateName;
 }
 
 } // namespace helpers

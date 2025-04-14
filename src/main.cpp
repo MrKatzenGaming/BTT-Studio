@@ -16,6 +16,7 @@
 #include <cstddef>
 #include <nn/fs.h>
 
+#include "InputDisplay.h"
 #include "helpers/getHelper.h"
 #include "helpers/InputHelper.h"
 #include "ImGui.h"
@@ -41,7 +42,11 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
     imgui::setupStyle();
     imgui::addDrawFunc([] {
         Menu* menu = Menu::instance();
-        if (menu && menu->mIsEnabledMenu) menu->draw();
+        if (menu) {
+            if (menu->mIsEnabledMenu) menu->draw();
+            menu->drawInfoWindow();
+            drawInputDisplay();
+        }
     });
 
     InputHelper::setDisableMouse(true);

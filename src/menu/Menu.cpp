@@ -75,9 +75,6 @@ void Menu::handleAlways() {
 
     handleHotkeys();
 
-    drawInputDisplay();
-    drawInfoWindow();
-
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
         prevNavId = GImGui->NavId;
         mIsEnabledMenu = false;

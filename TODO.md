@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] fix input display rendering  
 - [ ] move saving to own thread  
 - [ ] only refresh scene in certain states  
 
@@ -82,3 +81,4 @@
 - [x] fix cursor on menu open  
 - [x] fix cap crash after beating game  
 - [x] fix disable tp puppet 1.3  
+- [x] fix input display rendering  

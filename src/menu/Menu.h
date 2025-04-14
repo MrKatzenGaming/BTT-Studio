@@ -22,6 +22,7 @@ public:
     Menu() = default;
     void draw();
     void handleAlways();
+    void drawInfoWindow();
 
     void setLatestMapTarget(void* target) { mLastMapTarget = target; }
 
@@ -50,7 +51,6 @@ private:
     void drawPageInputDisplay();
     void drawPageHotkeys();
     void drawPageInfo();
-    void drawInfoWindow();
     void drawPageMisc();
     void drawTeleportCat();
 

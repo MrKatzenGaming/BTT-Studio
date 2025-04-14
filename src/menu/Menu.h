@@ -78,7 +78,6 @@ private:
     u64 menuTimer = 0;
 
     HakoniwaSequence* gameSeq;
-    PlayerActorBase* player;
     StageScene* stageScene;
     PlayerActorHakoniwa* playerHak;
     SettingsMgr* set;

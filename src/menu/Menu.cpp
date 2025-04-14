@@ -10,7 +10,6 @@
 #include "helpers/getHelper.h"
 #include "imgui.h"
 #include "imgui_internal.h"
-#include "InputDisplay.h"
 #include "InputHelper.h"
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
@@ -60,10 +59,11 @@ void Menu::handleAlways() {
     stageScene = helpers::tryGetStageScene(gameSeq);
     // BAAAADD
     if (stageScene) {
-        if (strcmp(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene)), "ClashWorldHomeStage") == 0) noGetPlayer = false;
+        if (strcmp(GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), "ClashWorldHomeStage") == 0) noGetPlayer = false;
     }
-    if (!noGetPlayer) {
-        player = helpers::tryGetPlayerActor(gameSeq);
+    if (noGetPlayer) {
+        playerHak = nullptr;
+    } else {
         playerHak = helpers::tryGetPlayerActorHakoniwa(gameSeq);
     }
     GImGui->NavDisableHighlight = false;

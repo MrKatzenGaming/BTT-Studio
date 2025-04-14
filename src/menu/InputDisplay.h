@@ -1,7 +1,5 @@
 #pragma once
 
-#include <sead/basis/seadTypes.h>
-
 #include "imgui.h"
 #include "settings/SettingsMgr.h"
 

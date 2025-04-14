@@ -1,10 +1,8 @@
 #include "getHelper.h"
 
 #include <al/Library/Base/StringUtil.h>
-#include <al/Library/LiveActor/LiveActorKit.h>
-#include <al/Library/Memory/HeapUtil.h>
-#include <al/Library/Nerve/Nerve.h>
 #include <al/Library/Nerve/NerveKeeper.h>
+#include <al/Library/Nerve/NerveStateCtrl.h>
 #include <al/Library/Player/PlayerHolder.h>
 #include <al/Library/Player/PlayerUtil.h>
 #include <al/Library/Scene/SceneUtil.h>
@@ -13,19 +11,13 @@
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameSystem.h>
 
-#include <cstdio>
 #include <cstring>
 #include <cxxabi.h>
 #include <typeinfo>
 
-static sead::Heap* sDemangleHeap = nullptr;
+static int status;
 
 namespace helpers {
-
-void init(sead::Heap* heap) {
-    sDemangleHeap = heap;
-}
-
 bool isInScene() {
     al::Sequence* mSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (mSequence && al::isEqualString(mSequence->mName.cstr(), "HakoniwaSequence")) {
@@ -220,13 +212,13 @@ PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(al::Scene* scene) {
 }
 
 bool tryReloadStage() {
-    GameDataHolder* holder = tryGetGameDataHolder();
-    if (!holder) return false;
+    GameDataHolderAccessor* accessor = tryGetGameDataHolderAccess();
+    if (!accessor) return false;
     StageScene* scene = tryGetStageScene();
     if (!scene) return false;
 
     ChangeStageInfo stageInfo(
-        holder, "start", GameDataFunction::getCurrentStageName(*scene->mHolder), false, -1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+        accessor->mData, "start", GameDataFunction::getCurrentStageName(*accessor), false, -1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
     );
     GameDataFunction::tryChangeNextStage(GameDataHolderWriter(scene), &stageInfo);
     return true;
@@ -242,59 +234,13 @@ bool isGetShineState(StageScene* stageScene) {
     al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
     if (!state) return false;
 
-    stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
+    // stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
+    stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status) + strlen("StageSceneState");
 
-    return strcmp(stateName, "GetShine") == 0;
+    bool cmp = strcmp(stateName, "GetShine") == 0;
+    free(stateName);
+    return cmp;
 
     return false;
 }
-
-char* demangle(const char* mangled_name) {
-    size_t demangledSize = 0xff;
-    char* demangledName = nullptr;
-    char* demangledBuf = static_cast<char*>(sDemangleHeap->alloc(demangledSize));
-    int status;
-
-    demangledName = abi::__cxa_demangle(mangled_name, demangledBuf, &demangledSize, &status);
-    sDemangleHeap->free(demangledBuf);
-
-    return demangledName;
-}
-
-char* getSequenceName(al::Sequence* sequence) {
-    if (!sequence) return nullptr;
-
-    char* sequenceName = demangle(typeid(*sequence).name());
-    return sequenceName;
-}
-
-char* getSceneName(al::Scene* scene) {
-    if (!scene) return nullptr;
-
-    char* sceneName = demangle(typeid(*scene).name());
-    return sceneName;
-}
-
-char* getLiveActorName(al::LiveActor* actor) {
-    if (!actor) return nullptr;
-
-    char* actorName = demangle(typeid(*actor).name());
-    return actorName;
-}
-
-char* getNerveName(const al::Nerve* nerve) {
-    if (!nerve) return nullptr;
-
-    char* nerveName = demangle(typeid(*nerve).name());
-    auto prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
-    return nerveName + prefixLen;
-}
-
-char* getStateName(al::NerveStateCtrl::State* state) {
-    if (!state) return nullptr;
-
-    char* stateName = demangle(typeid(*state->state).name());
-    return stateName;
-}
-
 } // namespace helpers

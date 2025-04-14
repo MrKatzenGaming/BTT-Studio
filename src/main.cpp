@@ -4,64 +4,63 @@
 #include <al/Library/Memory/HeapUtil.h>
 #include <al/Library/System/GameSystemInfo.h>
 
-#include <sead/filedevice/nin/seadNinSDFileDeviceNin.h>
 #include <sead/filedevice/seadFileDeviceMgr.h>
 #include <sead/heap/seadExpHeap.h>
 
 #include <game/Sequence/HakoniwaSequence.h>
 #include <game/System/Application.h>
-#include <game/System/GameFrameworkNx.h>
 #include <game/System/GameSystem.h>
 
-#include <cstddef>
 #include <nn/fs.h>
 
-#include "InputDisplay.h"
-#include "helpers/getHelper.h"
 #include "helpers/InputHelper.h"
 #include "ImGui.h"
+#include "InputDisplay.h"
 #include "Menu.h"
 #include "saveFileHelper.h"
 #include "settings/SettingsHooks.h"
 #include "settings/SettingsMgr.h"
 
 using namespace hk;
-using namespace btt;
 
-static sead::Heap* sBTTStudioHeap = nullptr;
+namespace btt {
+sead::Heap* initializeHeap() {
+    return sead::ExpHeap::create(3_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
+}
+} // namespace btt
 
 HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
-    sBTTStudioHeap = sead::ExpHeap::create(3_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
+    sead::Heap* heap = btt::initializeHeap();
 
-    SettingsMgr* set = SettingsMgr::createInstance(sBTTStudioHeap);
-    SaveFileHelper::createInstance(sBTTStudioHeap);
-    Menu* menu = Menu::createInstance(sBTTStudioHeap);
-    helpers::init(sBTTStudioHeap);
+    btt::SettingsMgr::createInstance(heap);
+    btt::Menu* menu = btt::Menu::createInstance(heap);
+    SaveFileHelper* save = SaveFileHelper::createInstance(heap);
+    save->init(heap);
+    save->loadSettings(heap);
+    save->loadTeleport(menu->tpStates, hk::util::arraySize(menu->tpStates), heap);
+    save->mSaveThread->start();
 
-    imgui::init(sBTTStudioHeap);
-    imgui::setupStyle();
-    imgui::addDrawFunc([] {
-        Menu* menu = Menu::instance();
+    btt::imgui::init(heap);
+    btt::imgui::setupStyle();
+    btt::imgui::addDrawFunc([] {
+        btt::Menu* menu = btt::Menu::instance();
         if (menu) {
             if (menu->mIsEnabledMenu) menu->draw();
             menu->drawInfoWindow();
-            drawInputDisplay();
+            btt::drawInputDisplay();
         }
     });
 
     InputHelper::setDisableMouse(true);
 
     gameSystemInit.orig(gameSystem);
-
-    SaveFileHelper::instance()->loadSettings(sBTTStudioHeap);
-    SaveFileHelper::instance()->loadTeleport(menu->tpStates, hk::util::arraySize(menu->tpStates), sBTTStudioHeap);
 });
 
 HkTrampoline<void, GameSystem*> drawMainHook = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
     drawMainHook.orig(gameSystem);
 
     auto drawContext = Application::instance()->mDrawSystemInfo->drawContext;
-    imgui::draw(drawContext);
+    btt::imgui::draw(drawContext);
 });
 
 HkTrampoline<void, sead::FileDeviceMgr*> fileDeviceMgrHook = hk::hook::trampoline([](sead::FileDeviceMgr* fileDeviceMgr) -> void {
@@ -74,14 +73,7 @@ int timer = 0;
 HkTrampoline<void, HakoniwaSequence*> hakoniwaSequenceUpdate = hk::hook::trampoline([](HakoniwaSequence* hakoniwaSequence) -> void {
     hakoniwaSequenceUpdate.orig(hakoniwaSequence);
 
-    Menu* menu = Menu::instance();
-    static int timer = 0;
-    if (timer % 3600 == 0) {
-        SaveFileHelper::instance()->saveSettings();
-        timer = 0;
-    }
-    timer++;
-    menu->handleAlways();
+    btt::Menu::instance()->handleAlways();
 });
 
 void disableButtons(nn::hid::NpadBaseState* state) {
@@ -134,7 +126,7 @@ extern "C" void hkMain() {
     fileDeviceMgrHook.installAtSym<"_ZN4sead13FileDeviceMgrC1Ev">();
     hakoniwaSequenceUpdate.installAtSym<"_ZN16HakoniwaSequence6updateEv">();
 
-    SettingsHooks::installSettingsHooks();
+    btt::SettingsHooks::installSettingsHooks();
 
     // nvnImGui::InstallHooks();
     hk::gfx::ImGuiBackendNvn::instance()->installHooks(false);

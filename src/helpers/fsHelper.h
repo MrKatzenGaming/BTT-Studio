@@ -2,8 +2,6 @@
 
 #include <sead/heap/seadHeap.h>
 
-#include <vapours/results.hpp>
-
 namespace FsHelper {
 
 struct LoadData {

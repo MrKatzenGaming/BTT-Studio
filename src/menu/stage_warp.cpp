@@ -4,7 +4,6 @@
 
 #include <game/Sequence/ChangeStageInfo.h>
 #include <game/Sequence/HakoniwaSequence.h>
-#include <game/System/GameDataHolder.h>
 
 #include <cstddef>
 #include <cstdio>

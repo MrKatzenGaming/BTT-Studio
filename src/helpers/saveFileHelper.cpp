@@ -1,12 +1,30 @@
 #include "saveFileHelper.h"
 
+#include <sead/heap/seadHeapMgr.h>
+
 #include <cstddef>
 #include <nn/fs.h>
 
 #include "fsHelper.h"
+#include "os.h"
 #include "settings/SettingsMgr.h"
 
 SEAD_SINGLETON_DISPOSER_IMPL(SaveFileHelper);
+
+void SaveFileHelper::ThreadSave() {
+    while (true) {
+        SaveFileHelper::instance()->saveSettings();
+        nn::os::SleepThread(nn::TimeSpan::FromSeconds(60));
+    }
+}
+
+void SaveFileHelper::init(sead::Heap* heap) {
+    mHeap = heap;
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
+
+    al::FunctorV0M functor(this, &SaveFileHelper::ThreadSave);
+    mSaveThread = new al::AsyncFunctorThread("Save Thread", functor, 0, 0x20000, {});
+}
 
 void SaveFileHelper::saveSettings() {
     if (!FsHelper::isDirExist("sd:/BTT-Studio")) {

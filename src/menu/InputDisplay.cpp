@@ -3,8 +3,6 @@
 #include <sead/math/seadVector.h>
 
 #include "helpers/InputHelper.h"
-#include "imgui.h"
-#include "settings/SettingsMgr.h"
 
 namespace btt {
 

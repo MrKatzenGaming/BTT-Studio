@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] move saving to own thread  
 - [ ] only refresh scene in certain states  
 
 - [x] Hotkeys  
@@ -13,6 +12,7 @@
     - [x] warp to last checkpoint  
 - [ ] Travel to current kingdom  
 - [ ] move tourist to different kingdoms  
+- [ ] kingdom enter cutscene with stage reload
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
@@ -82,3 +82,4 @@
 - [x] fix cap crash after beating game  
 - [x] fix disable tp puppet 1.3  
 - [x] fix input display rendering  
+- [x] move saving to own thread  

@@ -7,16 +7,14 @@
 
 #include <al/Library/Bgm/BgmLineFunction.h>
 #include <al/Library/Camera/CameraUtil.h>
-#include <al/Library/LiveActor/ActorFlagFunction.h>
-#include <al/Library/LiveActor/ActorMovementFunction.h>
 #include <al/Library/LiveActor/ActorPoseUtil.h>
 #include <al/Library/LiveActor/LiveActor.h>
 #include <al/Library/Math/MathUtil.h>
 #include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveUtil.h>
 
-#include <game/System/GameDataFile.h>
 #include <game/System/GameDataFunction.h>
+#include <game/System/GameDataHolder.h>
 #include <game/System/GameDataHolderWriter.h>
 #include <game/System/PlayerHitPointData.h>
 

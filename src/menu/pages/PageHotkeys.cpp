@@ -1,9 +1,14 @@
 #include "hk/sail/detail.h"
 #include "hk/util/Math.h"
 
+#include "al/Library/Nerve/Nerve.h"
 #include "al/Library/Nerve/NerveKeeper.h"
+#include "al/Library/Nerve/NerveStateCtrl.h"
 
 #include "game/System/GameDataFunction.h"
+
+#include <cxxabi.h>
+#include <typeinfo>
 
 #include "helpers/InputHelper.h"
 #include "Menu.h"
@@ -62,7 +67,41 @@ void Menu::handleHotkeys() {
     }
 
     if (isHotkey(set->getSettings()->mKillSceneKey)) {
-        if (stageScene) stageScene->kill();
+        if (stageScene) {
+            al::NerveKeeper* sceneNerveKeeper = stageScene->getNerveKeeper();
+            char* stateName = nullptr;
+            char* stateNrvName = nullptr;
+            char* stateNrvNameShort = nullptr;
+            char* stateNameShort = nullptr;
+            bool cmpNrv = false;
+            bool cmpState = false;
+
+            if (sceneNerveKeeper->mStateCtrl) {
+                al::NerveStateCtrl::State* state = sceneNerveKeeper->mStateCtrl->mCurrentState;
+
+                if (state) {
+                    const al::Nerve* stateNerve = state->state->getNerveKeeper()->getCurrentNerve();
+                    int status;
+                    stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                    stateNameShort = stateName + strlen("StageSceneState");
+
+                    if (stateName) {
+                        stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
+
+                        if (stateNrvName) {
+                            auto prefixLen2 = stateNrvName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                            stateNrvNameShort = stateNrvName + prefixLen2 + strlen(stateName) + strlen("nrv");
+
+                            cmpNrv = strcmp(stateNrvNameShort, "SkipDemo") == 0 || strcmp(stateNrvNameShort, "Skip") == 0;
+                            cmpState = strcmp(stateNameShort, "PauseMenu") == 0 || strcmp(stateNameShort, "SnapShot") == 0;
+                        }
+                    }
+                }
+                if (stateNrvName) free(stateNrvName);
+                if (stateName) free(stateName);
+                if (!(cmpNrv || cmpState)) stageScene->kill();
+            }
+        }
     }
     if (isHotkey(set->getSettings()->mHealMarioKey)) {
         if (playerHak) GameDataFunction::recoveryPlayer(playerHak);

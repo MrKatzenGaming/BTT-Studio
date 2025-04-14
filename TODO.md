@@ -1,7 +1,5 @@
 # TODO
 
-- [ ] only refresh scene in certain states  
-
 - [x] Hotkeys  
     - [x] wiggler pattern  
     - [x] previous scene  
@@ -83,3 +81,4 @@
 - [x] fix disable tp puppet 1.3  
 - [x] fix input display rendering  
 - [x] move saving to own thread  
+- [x] don't refresh scene in certain states  

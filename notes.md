@@ -117,3 +117,10 @@ if (playerHak) {
     if (stateName) free(stateName);
 }
 ```
+## Infinite load on scene kill
+StateNrvs
+- SkipDemo
+- Skip
+States
+- PauseMenu
+- SnapShot

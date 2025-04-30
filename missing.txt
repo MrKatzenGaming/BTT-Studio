@@ -1,4 +1,4 @@
-/home/kassu/btt-mod/syms/test.sym
+/home/kassu/SMO-Projects/btt-mod/syms/test.sym
 _ZNK14DoorAreaChange6isOpenEv
 _ZNK9ShineChip5isGotEv
 

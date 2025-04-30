@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nn/hid_custom.h"
+#include "nn/hid.h"
 
 class InputHelper {
 public:

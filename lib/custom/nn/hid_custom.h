@@ -16,21 +16,6 @@ namespace nn {
 namespace hid {
 
 template <size_t T>
-struct TouchScreenState {
-    u64 samplingNumber = 0;
-    s32 count = T;
-    char reserved[4] = {};
-    TouchState touches[T] = {};
-};
-
-enum KeyboardLayout {
-
-};
-
-template <size_t T>
 void GetTouchScreenState(nn::hid::TouchScreenState<T>*);
-
-void GetKeyCode(unsigned short*, int, nn::util::BitFlagSet<32, nn::hid::KeyboardModifier>, nn::util::BitPack<unsigned int, nn::hid::KeyboardLayout>);
-
 } // namespace hid
 } // namespace nn

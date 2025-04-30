@@ -16,6 +16,7 @@
 #include "helpers/InputHelper.h"
 #include "ImGui.h"
 #include "InputDisplay.h"
+#include "logger.h"
 #include "Menu.h"
 #include "saveFileHelper.h"
 #include "settings/SettingsHooks.h"
@@ -52,6 +53,12 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
     });
 
     InputHelper::setDisableMouse(true);
+
+#ifdef DEBUG
+    Logger* logger = Logger::createInstance(heap);
+    logger->init(heap);
+    logger->connect("192.168.178.41", 8171);
+#endif
 
     gameSystemInit.orig(gameSystem);
 });
@@ -128,7 +135,6 @@ extern "C" void hkMain() {
 
     btt::SettingsHooks::installSettingsHooks();
 
-    // nvnImGui::InstallHooks();
     hk::gfx::ImGuiBackendNvn::instance()->installHooks(false);
 
     DisableFullKeyState.installAtSym<"_ZN2nn3hid6detail13GetNpadStatesEPiPNS0_16NpadFullKeyStateEiRKj">();

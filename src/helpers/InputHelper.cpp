@@ -1,5 +1,6 @@
 #include "InputHelper.h"
 
+#include "hid_custom.h"
 #include "menu/Menu.h"
 
 static const char* styleNames[] = {
@@ -53,27 +54,6 @@ const char* getStyleName(nn::hid::NpadStyleSet style) {
     }
     if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleJoyRight)) {
         index = 4;
-    }
-    if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleGc)) {
-        index = 5;
-    }
-    if (style.Test((int)nn::hid::NpadStyleTag::NpadStylePalma)) {
-        index = 6;
-    }
-    if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleLark)) {
-        index = 7;
-    }
-    if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleHandheldLark)) {
-        index = 8;
-    }
-    if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleLucia)) {
-        index = 9;
-    }
-    if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleLagon)) {
-        index = 10;
-    }
-    if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleLager)) {
-        index = 11;
     }
     if (style.Test((int)nn::hid::NpadStyleTag::NpadStyleSystemExt)) {
         index = 12;
@@ -165,51 +145,51 @@ bool InputHelper::isModifierActive(nn::hid::KeyboardModifier modifier) {
 }
 
 bool InputHelper::isMouseHold(nn::hid::MouseButton button) {
-    return curMouseState.buttons.Test((int)button);
+    return curMouseState.mButtons.Test((int)button);
 }
 
 bool InputHelper::isMousePress(nn::hid::MouseButton button) {
-    return curMouseState.buttons.Test((int)button) && !prevMouseState.buttons.Test((int)button);
+    return curMouseState.mButtons.Test((int)button) && !prevMouseState.mButtons.Test((int)button);
 }
 
 bool InputHelper::isMouseRelease(nn::hid::MouseButton button) {
-    return !curMouseState.buttons.Test((int)button) && prevMouseState.buttons.Test((int)button);
+    return !curMouseState.mButtons.Test((int)button) && prevMouseState.mButtons.Test((int)button);
 }
 
 bool InputHelper::isMouseConnected() {
     if (!disableMouse)
-        return curMouseState.attributes.Test((int)nn::hid::MouseAttribute::IsConnected);
+        return curMouseState.mAttributes.Test((int)nn::hid::MouseAttribute::IsConnected);
     else
         return false;
 }
 
 void InputHelper::getMouseCoords(float* x, float* y) {
-    *x = curMouseState.x;
-    *y = curMouseState.y;
+    *x = curMouseState.mX;
+    *y = curMouseState.mY;
 }
 
 void InputHelper::getScrollDelta(float* x, float* y) {
-    *x = curMouseState.wheelDeltaX;
-    *y = curMouseState.wheelDeltaY;
+    *x = curMouseState.mWheelDeltaX;
+    *y = curMouseState.mWheelDeltaY;
 }
 
 bool InputHelper::getTouchCoords(s32* x, s32* y) {
-    if (curTouchState.count > 0) {
-        *x = curTouchState.touches[0].mX;
-        *y = curTouchState.touches[0].mY;
+    if (curTouchState.mCount > 0) {
+        *x = curTouchState.mTouches[0].mX;
+        *y = curTouchState.mTouches[0].mY;
         return true;
     }
     return false;
 }
 
 bool InputHelper::isHoldTouch() {
-    return curTouchState.count > 0;
+    return curTouchState.mCount > 0;
 }
 
 bool InputHelper::isPressTouch() {
-    return curTouchState.count > 0 && prevTouchState.count == 0;
+    return curTouchState.mCount > 0 && prevTouchState.mCount == 0;
 }
 
 bool InputHelper::isReleaseTouch() {
-    return curTouchState.count == 0 && prevTouchState.count > 0;
+    return curTouchState.mCount == 0 && prevTouchState.mCount > 0;
 }

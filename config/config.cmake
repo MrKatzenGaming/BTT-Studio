@@ -3,11 +3,11 @@ set(LLDFLAGS --no-demangle --gc-sections)
 
 set(OPTIMIZE_OPTIONS_DEBUG -O2 -gdwarf-4)
 set(OPTIMIZE_OPTIONS_RELEASE -O3 -ffast-math -flto)
-set(WARN_OPTIONS -Werror=return-type)
+set(WARN_OPTIONS -Werror=return-type -Wno-invalid-offsetof)
 
-set(DEFINITIONS "-DSEAD_RTTI_SOURCE_DYNAMIC")
 set(INCLUDES include include/agl)
-set(EXCEPTION_FLAGS "-fno-exceptions")
+set(DEFINITIONS IMGUI_DISABLE_TTY_FUNCTIONS IMGUI_DISABLE_FILE_FUNCTIONS)
+set(EXCEPTION_FLAGS -fno-exceptions)
 
 set(ASM_OPTIONS "")
 set(C_OPTIONS -ffunction-sections -fdata-sections)
@@ -15,6 +15,7 @@ set(CXX_OPTIONS "")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
+set(IS_32_BIT FALSE)
 set(TARGET_IS_STATIC FALSE)
 set(MODULE_NAME BTT-Studio)
 set(TITLE_ID 0x0100000000010000)

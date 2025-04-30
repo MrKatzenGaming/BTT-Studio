@@ -66,7 +66,8 @@ void Menu::handleAlways() {
     } else {
         playerHak = helpers::tryGetPlayerActorHakoniwa(gameSeq);
     }
-    GImGui->NavDisableHighlight = false;
+    ImGui::NavHighlightActivated(GImGui->NavId);
+    ImGui::SetNavCursorVisibleAfterMove();
 
     menuTimer++;
 

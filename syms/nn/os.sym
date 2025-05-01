@@ -1,2 +1,7 @@
 @sdk
 _ZN2nn2os11SleepThreadENS_8TimeSpanE
+_ZN2nn2os5MutexD2Ev
+_ZN2nn2os5MutexD1Ev
+_ZN2nn2os15InitializeMutexEPNS0_9MutexTypeEbi
+_ZN2nn2os9LockMutexEPNS0_9MutexTypeE
+_ZN2nn2os11UnlockMutexEPNS0_9MutexTypeE

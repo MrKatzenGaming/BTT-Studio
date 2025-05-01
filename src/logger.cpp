@@ -10,6 +10,7 @@
 #include <sead/math/seadMathCalcCommon.h>
 #include <sead/prim/seadEndian.h>
 
+#include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -18,6 +19,7 @@
 #include <nn/fs.h>
 #include <nn/fs/fs_files.h>
 #include <nn/fs/fs_types.h>
+#include <nn/nifm.h>
 #include <nn/socket.h>
 
 HkTrampoline<void> disableSocketInit = hk::hook::trampoline([]() -> void {});
@@ -35,9 +37,9 @@ void Logger::init(sead::Heap* heap) {
     al::FunctorV0M functor(this, &Logger::threadRecv);
     mRecvThread = new al::AsyncFunctorThread("Recv Thread", functor, 0, 0x20000, {});
 
-    nn::socket::Initialize(socketPool, socketPoolSize, socketAllocPoolSize, 0xE);
+    nn::nifm::Initialize();
 
-    mCurPacket = new Packet;
+    nn::socket::Initialize(socketPool, socketPoolSize, socketAllocPoolSize, 0xE);
 
     disableSocketInit.installAtSym<"_ZN2nn6socket10InitializeEPvmmi">();
 }
@@ -68,10 +70,30 @@ void Logger::handlePacket() {
     RecPacketType packetType = RecPacketType(header[0]);
 
     switch (packetType) {
-    case RecPacketType::Script: {
+    case RecPacketType::None: {
+        log(LogType::LogInfo, "received packet None");
         break;
     }
-    case RecPacketType::None:
+    case RecPacketType::Log: {
+        u8 logType = header[1];
+        u32 packetLen = header[4];
+
+        log(LogType::LogInfo, "received packet Log: LogType = %d, len = %d (%d)", logType, packetLen);
+
+        u8 chunkBuf[0x400];
+        memset(chunkBuf, 0, sizeof(chunkBuf));
+        s32 totalWritten = 0;
+        while (totalWritten < packetLen) {
+            s32 remaining = packetLen - totalWritten;
+            s32 chunkLen = recvAll(chunkBuf, sead::Mathf::min(remaining, sizeof(chunkBuf)));
+            totalWritten += chunkLen;
+        }
+        switch (logType) {
+        case (int)LogType::LogInfo: log(LogType::LogInfo, "%s", chunkBuf); break;
+        case (int)LogType::LogErr: log(LogType::LogErr, "%s", chunkBuf); break;
+        case (int)LogType::LogWarn: log(LogType::LogWarn, "%s", chunkBuf); break;
+        }
+    }
     default: break;
     }
 }
@@ -81,6 +103,15 @@ s32 Logger::connect(const char* serverIP, u16 port) {
 
     in_addr hostAddress = { 0 };
     sockaddr_in serverAddr = { 0 };
+
+    nn::nifm::SubmitNetworkRequest();
+
+    while (nn::nifm::IsNetworkRequestOnHold()) {}
+
+    if (!nn::nifm::IsNetworkAvailable()) {
+        mState = State::UNAVAILABLE;
+        return -1;
+    }
 
     // create socket
     if ((mSockFd = nn::socket::Socket(AF_INET, SOCK_STREAM, 0)) < 0) return nn::socket::GetLastErrno();
@@ -99,47 +130,63 @@ s32 Logger::connect(const char* serverIP, u16 port) {
 
     hk::diag::debugLog("Connected to server %s:%d\n", serverIP, port);
 
-    log(SendPacketType::LogInfo, "connected!");
+    log(LogType::LogInfo, "connected!");
+    log(LogType::LogWarn, "Logger warning test!");
+    log(LogType::LogErr, "Logger error test!");
 
     mRecvThread->start();
 
     return 0;
 }
 
-void Logger::log(Logger::SendPacketType type, const char* fmt, ...) {
+void Logger::log(Logger::LogType type, const char* fmt, ...) {
     if (mState != Logger::State::CONNECTED) return;
 
-    memset(mCurPacket, 0, sizeof(Packet));
-
-    mCurPacket->type = type;
+    Packet packet;
+    packet.type = PacketType::Log;
 
     va_list args;
     va_start(args, fmt);
 
-    // Format the message into the packet's data field
-    int formattedLength = vsnprintf((char*)mCurPacket->data, sizeof(mCurPacket->data), fmt, args);
+    char buffer[0x400];
+
+    switch (type) {
+    case LogType::LogInfo: snprintf(buffer, sizeof(buffer), "[INFO] "); break;
+    case LogType::LogErr: snprintf(buffer, sizeof(buffer), "[ERROR] "); break;
+    case LogType::LogWarn: snprintf(buffer, sizeof(buffer), "[WARN] "); break;
+    }
+
+    vsnprintf(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), fmt, args);
     va_end(args);
 
-    // Calculate the actual size of the packet to send
-    size_t packetSize = sizeof(mCurPacket->type) + (formattedLength < 0 ? 0 : std::min((size_t)formattedLength, sizeof(mCurPacket->data)));
+    snprintf((char*)packet.data, strlen(buffer) + 2, "%s\n", buffer);
 
-    // Send the packet
-    s32 r = nn::socket::Send(mSockFd, mCurPacket, packetSize, 0);
+    mMutex.lock();
+    size_t packetSize = sizeof(packet.type) + std::min(strlen((char*)packet.data), sizeof(packet.data));
+    nn::socket::Send(mSockFd, &packet, packetSize, 0);
+    mMutex.unlock();
 }
 
-void Logger::log(Logger::SendPacketType type, const char* fmt, va_list args) {
+void Logger::log(Logger::LogType type, const char* fmt, va_list args) {
     if (mState != Logger::State::CONNECTED) return;
 
-    memset(mCurPacket, 0, sizeof(Packet));
+    Packet packet;
+    packet.type = PacketType::Log;
 
-    mCurPacket->type = type;
+    char buffer[0x400];
 
-    // Format the message into the packet's data field
-    int formattedLength = vsnprintf((char*)mCurPacket->data, sizeof(mCurPacket->data), fmt, args);
+    switch (type) {
+    case LogType::LogInfo: snprintf(buffer, sizeof(buffer), "[INFO] "); break;
+    case LogType::LogErr: snprintf(buffer, sizeof(buffer), "[ERROR] "); break;
+    case LogType::LogWarn: snprintf(buffer, sizeof(buffer), "[WARN] "); break;
+    }
 
-    // Calculate the actual size of the packet to send
-    size_t packetSize = sizeof(mCurPacket->type) + (formattedLength < 0 ? 0 : std::min((size_t)formattedLength, sizeof(mCurPacket->data)));
+    vsnprintf(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer), fmt, args);
 
-    // Send the packet
-    s32 r = nn::socket::Send(mSockFd, mCurPacket, packetSize + 1, 0);
+    snprintf((char*)packet.data, strlen(buffer) + 2, "%s\n", buffer);
+
+    mMutex.lock();
+    size_t packetSize = sizeof(packet.type) + std::min(strlen((char*)packet.data), sizeof(packet.data));
+    nn::socket::Send(mSockFd, &packet, packetSize, 0);
+    mMutex.unlock();
 }

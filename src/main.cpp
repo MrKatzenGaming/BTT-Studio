@@ -33,15 +33,28 @@ sead::Heap* initializeHeap() {
 HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
     sead::Heap* heap = btt::initializeHeap();
 
+    Logger* logger = Logger::createInstance(heap);
+
+#ifdef DEBUG
+    logger->init(heap);
+    logger->connect("192.168.178.41", 8171);
+#endif
+
     btt::SettingsMgr::createInstance(heap);
+    logger->log(Logger::LogType::LogInfo, "SettingsMgr instance created");
     btt::Menu* menu = btt::Menu::createInstance(heap);
+    logger->log(Logger::LogType::LogInfo, "Menu instance created");
     SaveFileHelper* save = SaveFileHelper::createInstance(heap);
+    logger->log(Logger::LogType::LogInfo, "SaveFileHelper instance created");
     save->init(heap);
+    logger->log(Logger::LogType::LogInfo, "SaveFileHelper initialized");
     save->loadSettings(heap);
     save->loadTeleport(menu->tpStates, hk::util::arraySize(menu->tpStates), heap);
     save->mSaveThread->start();
+    logger->log(Logger::LogType::LogInfo, "SaveFileHelper setup done");
 
     btt::imgui::init(heap);
+    logger->log(Logger::LogType::LogInfo, "ImGui initialized");
     btt::imgui::setupStyle();
     btt::imgui::addDrawFunc([] {
         btt::Menu* menu = btt::Menu::instance();
@@ -51,16 +64,13 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
             btt::drawInputDisplay();
         }
     });
+    logger->log(Logger::LogType::LogInfo, "ImGui setup done");
 
     InputHelper::setDisableMouse(true);
 
-#ifdef DEBUG
-    Logger* logger = Logger::createInstance(heap);
-    logger->init(heap);
-    logger->connect("192.168.178.41", 8171);
-#endif
-
     gameSystemInit.orig(gameSystem);
+
+    logger->log(Logger::LogType::LogInfo, "GameSystem initialized");
 });
 
 HkTrampoline<void, GameSystem*> drawMainHook = hk::hook::trampoline([](GameSystem* gameSystem) -> void {

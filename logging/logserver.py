@@ -20,9 +20,9 @@ msg_queue:queue.Queue = queue.Queue()
 # _print = print
 # print = None
 
-def log(user: str, message: str, color: str = "white") -> None:
+def log(message: str, color: str = "white") -> None:
     timestamp = datetime.now().strftime("%H:%M:%S")
-    print(f"{colored(f'[{timestamp} - {user}]', color)} {message}")
+    print(colored(f"[{timestamp}] {message}", color))
 
 
 # ========== PACKETS ==========
@@ -31,36 +31,54 @@ PACKET_HEADER_SIZE:int = 0x10
 PACKET_SIZE:int = 0x401
 
 class PacketType(enum.IntEnum):
-    Script = 0x01
+    NONE = 0x00
+    LOG = 0x01
 
 class RecPacketType(enum.IntEnum):
-    LogInfo = 0x01
-    LogError = 0x02
-    LogWarning = 0x03
-
-class PacketScript:
-    TYPENAME = "script"
-    OPCODE = PacketType.Script.value
-
-    def __init__(self, name: str, data: bytes):
-        self.name = name
-        self.data = data
+    LOG = 0x01
     
+class LogType(enum.IntEnum):
+    Info = 1
+    Error = 2
+    Warning = 3
+
+class Packet:
+    TYPENAME = "none"
+    OPCODE = PacketType.NONE.value
+
+    def __init__(self):
+        pass
+
     def construct_header(self) -> bytearray:
         out = bytearray(PACKET_HEADER_SIZE)
         out[0] = self.OPCODE
-        out[1] = min(len(self.name), 0xff)
-        out[4:8] = struct.pack("!I", len(self.data))
         return out
 
     def construct(self) -> bytearray:
         out = bytearray()
         out.extend(self.construct_header())
-        out.extend(struct.pack("255s", bytes(self.name, "utf-8")))
-        out.extend(self.data)
         return out
 
+class PacketLog:
+    TYPENAME = "log"
+    OPCODE = PacketType.LOG.value
 
+    def __init__(self, data: bytes, log_type: LogType = LogType.Info.value):
+        self.data = data
+        self.log_type = log_type
+
+    def construct_header(self) -> bytearray:
+        out = bytearray(PACKET_HEADER_SIZE)
+        out[0] = self.OPCODE
+        out[1] = self.log_type
+        out[4:8] = struct.pack("<I", min(len(self.data), 0x400))
+        return out
+
+    def construct(self) -> bytearray:
+        out = bytearray()
+        out.extend(self.construct_header())
+        out.extend(self.data if len(self.data) < 0x400 else self.data[:0x400])
+        return out
 
 
 # ========== SWITCH SERVER ==========
@@ -72,12 +90,43 @@ def switch_send_func(client_sock: socket.socket, stop) -> None:
         except queue.Empty:
             continue
 
-        log("Info", f"sending packet type `{packet.TYPENAME}`", "white")
+        log(f"sending packet type `{packet.TYPENAME}`", "green")
         client_sock.send(packet.construct())
 
 
 # ========== SWITCH SERVER ==========
 
+def console_input_func() -> None:
+    """Thread function to handle console input."""
+    strwarn = "warn "
+    strinfo = "info "
+    strerr = "err "
+    while True:
+        try:
+            user_input = input("")
+            if user_input.strip().lower() == "exit":
+                log("shutting down server...", "green")
+                os._exit(0)  # Forcefully exit the server
+            elif user_input.strip().startswith(strerr):
+                # Example: Send error message as a packet to the client
+                packet = PacketLog(log_type=LogType.Error.value, data=user_input[len(strerr):].encode("utf-8"))
+                msg_queue.put(packet)
+            elif user_input.strip().startswith(strwarn):
+                # Example: Send warning message as a packet to the client
+                packet = PacketLog(log_type=LogType.Warning.value, data=user_input[len(strwarn):].encode("utf-8"))
+                msg_queue.put(packet)
+            elif user_input.strip().startswith(strinfo):
+                # Example: Send info message as a packet to the client
+                packet = PacketLog(log_type=LogType.Info.value, data=user_input[len(strinfo):].encode("utf-8"))
+                msg_queue.put(packet)
+            else:
+                # Example: Send user input as a packet to the client
+                packet = Packet()
+                msg_queue.put(packet)
+        except EOFError:
+            log("console input closed", "green")
+            break
+    
 def serve_switch() -> None:
     # create socket
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -89,17 +138,19 @@ def serve_switch() -> None:
 
     # start listening on socket
     server_sock.listen(2)
-    log("Info", f"listening on port {SWITCH_PORT}", "white")
+    log(f"listening on port {SWITCH_PORT}", "green")
 
     while True:
-        log("Info", "waiting for connection...", "white")
+        log("waiting for connection...", "green")
         client_sock, client_addr = server_sock.accept()
-        log("Info", f"connection from {client_addr[0]}", "white")
+        log(f"connection from {client_addr[0]}", "green")
 
         # create thread
         stop_switch_send_thread = False
         switch_send_thread = threading.Thread(target=switch_send_func, args=(client_sock, lambda: stop_switch_send_thread))
         switch_send_thread.start()
+        console_thread = threading.Thread(target=console_input_func, daemon=True)
+        console_thread.start()
 
         try:
             while True:
@@ -108,19 +159,16 @@ def serve_switch() -> None:
                     type:int = data[0]
                     try:
                         match type:
-                            case RecPacketType.LogInfo.value:
-                                log('Info-SW', f"{data[1:].decode('utf-8')}", "green")
-                            case RecPacketType.LogError.value:
-                                log('Error-SW', f"{data[1:].decode('utf-8')}", 'red')
-                            case RecPacketType.LogWarning.value:
-                                log('Warn-SW', f"{data[1:].decode('utf-8')}", 'yellow')
+                            case RecPacketType.LOG.value:
+                                # log('Switch', f"{data[1:].decode('utf-8')}", "green")
+                                print(f"{data[1:].decode('utf-8')}",end='')
                             case _:
-                                log("Warn-SW", f"unknown packet type: {type} and length {len(data)}", "yellow")
+                                log(f"unknown packet type: {type} and length {len(data)}", "yellow")
                                 # log("Info-SW", f"received unknown packet: {data[1:]}", "green")
                     except UnicodeDecodeError:
-                        log("Error", f"failed to decode packet: {data[1:]}", "light_red")
+                        log(f"failed to decode packet: {data[1:]}", "red")
                 else:
-                    log("Info", f"received 0 bytes", "white")
+                    log(f"received 0 bytes", "green")
                     break
 
                 # log("switch", f"{client_addr} -> {data}")
@@ -128,14 +176,14 @@ def serve_switch() -> None:
                 #     client_sock.send(msg_queue.get())
 
         except ConnectionResetError:
-            log("Info", "connection reset", "white")
+            log("connection reset", "green")
             break
 
         finally:
-            log("Info", "client disconnected", "white")
+            log("client disconnected", "green")
             stop_switch_send_thread = True
             switch_send_thread.join()
-            log("Info", "send thread terminated", "white")
+            log("send thread terminated", "green")
             client_sock.close()
 
 
@@ -144,7 +192,7 @@ def main() -> None:
     try:
         serve_switch()
     except KeyboardInterrupt:
-        log("Info", "closing server...", "white")
+        log("closing server...", "green")
 
 
 if __name__ == "__main__":

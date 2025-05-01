@@ -8,6 +8,7 @@
 #include "fsHelper.h"
 #include "os.h"
 #include "settings/SettingsMgr.h"
+#include "logger.h"
 
 SEAD_SINGLETON_DISPOSER_IMPL(SaveFileHelper);
 
@@ -32,6 +33,7 @@ void SaveFileHelper::saveSettings() {
     }
 
     FsHelper::writeFileToPath(reinterpret_cast<void*>(&btt::SettingsMgr::instance()->mSettings), sizeof(btt::SettingsMgr::Settings), mSettingsPath);
+    Logger::instance()->log(Logger::LogType::LogInfo, "Settings saved to %s", mSettingsPath);
 }
 
 void SaveFileHelper::loadSettings(sead::Heap* heap) {

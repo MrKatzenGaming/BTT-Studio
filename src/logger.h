@@ -37,6 +37,7 @@ private:
     enum class RecPacketType : u8 {
         None = 0x00,
         Log = 0x01,
+        Warp = 0x02,
     };
 
     enum class PacketType : u8 {

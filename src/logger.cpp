@@ -10,6 +10,9 @@
 #include <sead/math/seadMathCalcCommon.h>
 #include <sead/prim/seadEndian.h>
 
+#include "game/Sequence/HakoniwaSequence.h"
+#include <game/Sequence/ChangeStageInfo.h>
+
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -21,6 +24,8 @@
 #include <nn/fs/fs_types.h>
 #include <nn/nifm.h>
 #include <nn/socket.h>
+
+#include "getHelper.h"
 
 HkTrampoline<void> disableSocketInit = hk::hook::trampoline([]() -> void {});
 
@@ -93,7 +98,41 @@ void Logger::handlePacket() {
         case (int)LogType::LogErr: log(LogType::LogErr, "%s", chunkBuf); break;
         case (int)LogType::LogWarn: log(LogType::LogWarn, "%s", chunkBuf); break;
         }
+        break;
     }
+    case RecPacketType::Warp: {
+        u32 size = header[4];
+        log(LogType::LogInfo, "received packet Warp: size = %d", size);
+
+        u8 chunkBuf[0x400];
+        memset(chunkBuf, 0, sizeof(chunkBuf));
+        s32 totalWritten = 0;
+        while (totalWritten < size) {
+            s32 remaining = size - totalWritten;
+            s32 chunkLen = recvAll(chunkBuf, sead::Mathf::min(remaining, sizeof(chunkBuf)));
+            totalWritten += chunkLen;
+        }
+        HakoniwaSequence* gameSeq = helpers::tryGetHakoniwaSequence();
+        if (!gameSeq) {
+            log(LogType::LogErr, "not in HakoniwaSequence");
+            break;
+        };
+        if (!gameSeq->mCurrentScene) {
+            log(LogType::LogErr, "no scene");
+            break;
+        }
+
+        if (chunkBuf[0] != '\0') {
+            ChangeStageInfo stageInfo(
+                gameSeq->mGameDataHolderAccessor.mData, "start", (char*)chunkBuf, false, -1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+            );
+            gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&stageInfo, 0);
+        } else {
+            log(LogType::LogErr, "Invalid Stage");
+        }
+        break;
+    }
+
     default: break;
     }
 }

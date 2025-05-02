@@ -14,6 +14,11 @@
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
 
+#ifdef DEBUG
+# include "al/Library/LiveActor/ActorPoseKeeper.h"
+# include "logger.h"
+#endif
+
 namespace btt {
 
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
@@ -49,6 +54,19 @@ void Menu::draw() {
     drawPageInputDisplay();
     drawPageHotkeys();
     drawPageInfo();
+
+#ifdef DEBUG
+    ImGui::Separator();
+    if (ImGui::CollapsingHeader("Debug")) {
+        if (ImGui::Button("Reconnect logger")) {
+            Logger::instance()->connect("192.168.178.41", 8171);
+        }
+        ImGui::Text("Menu Timer: %lu", menuTimer);
+        ImGui::Text("NavId: %u", GImGui->NavId);
+        ImGui::Text("Stage: %s", gameSeq ? GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor) : NULL);
+        ImGui::Text("Scenario: %u", playerHak ? GameDataFunction::getScenarioNo(playerHak) : -1);
+    }
+#endif
 
     ImGui::End();
 }

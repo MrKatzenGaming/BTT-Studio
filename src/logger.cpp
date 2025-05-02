@@ -138,7 +138,12 @@ void Logger::handlePacket() {
 }
 
 s32 Logger::connect(const char* serverIP, u16 port) {
-    if (mState == State::CONNECTED) return 0;
+    if (mState == State::CONNECTED) {
+        log(LogType::LogErr, "Already connected, restarting connection");
+        mState = State::DISCONNECTED;
+        nn::socket::Close(mSockFd);
+        return connect(serverIP, port);
+    };
 
     in_addr hostAddress = { 0 };
     sockaddr_in serverAddr = { 0 };

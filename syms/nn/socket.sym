@@ -8,3 +8,4 @@ _ZN2nn6socket12GetLastErrnoEv
 _ZN2nn6socket8InetAtonEPKcP7in_addr
 _ZN2nn6socket9InetHtonsEt
 _ZN2nn6socket6SocketEiii
+_ZN2nn6socket5CloseEi

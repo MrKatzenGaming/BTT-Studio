@@ -91,19 +91,20 @@ HkTrampoline<bool, GameDataHolderAccessor, al::ActorInitInfo*> refreshPurpsHook 
 HkTrampoline<void, DoorAreaChange*, al::ActorInitInfo> doorRefreshHook =
     hk::hook::trampoline([](DoorAreaChange* doorAreaChange, al::ActorInitInfo info) -> void {
         doorRefreshHook.orig(doorAreaChange, info);
-        
-        if (SettingsMgr::instance()->getSettings()->mIsEnableDoorRefresh) 
-            doorAreaChange->switchCloseAgain();
-        
+
+        if (SettingsMgr::instance()->getSettings()->mIsEnableDoorRefresh) doorAreaChange->switchCloseAgain();
     });
 
-HkTrampoline<bool, ShineChip*> shardRefreshHook = hk::hook::trampoline([](ShineChip* shineChip) -> bool {
-    al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf8));
-    return SettingsMgr::instance()->getSettings()->mIsEnableShardRefresh ? false : shardRefreshHook.orig(shineChip);
+HkTrampoline<void, ShineChip*, al::ActorInitInfo> shardRefreshHook = hk::hook::trampoline([](ShineChip* shineChip, al::ActorInitInfo info) -> void {
+    shardRefreshHook.orig(shineChip, info);
+    if (SettingsMgr::instance()->getSettings()->mIsEnableShardRefresh) {
+        // al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf8));
+        al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf0));
+    }
 });
 
-HkTrampoline<bool, GrowFlowerPot*> flowerPotRefreshHook = hk::hook::trampoline([](GrowFlowerPot* flowerPot) -> bool {
-    return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : flowerPotRefreshHook.orig(flowerPot);
+HkTrampoline<bool, GrowFlowerPot*> flowerPotRefreshHook = hk::hook::trampoline([](GrowFlowerPot* thisPtr) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : flowerPotRefreshHook.orig(thisPtr);
 });
 
 HkTrampoline<void, CheckpointFlag*> checkpointFlagHook = hk::hook::trampoline([](CheckpointFlag* checkpointFlag) -> void {
@@ -260,9 +261,10 @@ void SettingsHooks::installSettingsHooks() {
     warpTextHook.installAtSym<"_ZN16GameDataFunction34isAlreadyShowExplainCheckpointFlagE22GameDataHolderAccessor">();
     refreshPurpsHook.installAtSym<"_ZN16GameDataFunction16isGotCoinCollectE22GameDataHolderAccessorRKN2al13ActorInitInfoE">();
     doorRefreshHook.installAtSym<"_ZN14DoorAreaChange4initERKN2al13ActorInitInfoE">();
-    // shardRefreshHook.installAtSym<"_ZNK9ShineChip5isGotEv">();
     // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
-    // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot12isEnableGrowEv">();
+    // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot13isGrowAlreadyEv">();
+    // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
+
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
     cloudSkipHook.installAtSym<"_ZNK10StageScene16isDefeatKoopaLv1Ev">();
     allCheckpointsHook.installAtSym<"_ZN16GameDataFunction22isGotCheckpointInWorldE22GameDataHolderAccessori">();

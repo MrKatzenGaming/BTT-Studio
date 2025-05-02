@@ -1,3 +1,4 @@
+#include "imgui.h"
 #include "InputDisplay.h"
 #include "Menu.h"
 
@@ -12,9 +13,12 @@ void Menu::drawPageInputDisplay() {
         static int buttonColor = u8(set->getSettings()->mInputDisplayButtonColor);
         static int posX = set->getSettings()->mInputDisplayPos.x;
         static int posY = set->getSettings()->mInputDisplayPos.y;
+        static int posXP2 = set->getSettings()->mInputDisplayPosP2.x;
+        static int posYP2 = set->getSettings()->mInputDisplayPosP2.y;
 
         ImGui::Indent();
         ImGui::Checkbox("Toggle", &set->getSettings()->mIsEnableInputDisplay);
+        ImGui::Checkbox("2P Mode", &set->getSettings()->mIsEnableInput2P);
 
         ImGui::PushItemWidth(200);
 
@@ -41,6 +45,19 @@ void Menu::drawPageInputDisplay() {
             posX = set->getSettings()->mInputDisplayPos.x;
             posY = set->getSettings()->mInputDisplayPos.y;
         }
+
+        ImGui::SeparatorText("Player 2");
+        ImGui::PushItemWidth(200);
+
+        if (ImGui::InputInt("Position X P2", &posXP2, 5)) set->getSettings()->mInputDisplayPosP2.x = posXP2;
+        if (ImGui::InputInt("Position Y P2", &posYP2, 5)) set->getSettings()->mInputDisplayPosP2.y = posYP2;
+        ImGui::PopItemWidth();
+        if (ImGui::Button("Reset Position P2")) {
+            set->getSettings()->mInputDisplayPosP2 = ImVec2(1600.f / 2, 900.f / 2);
+            posXP2 = set->getSettings()->mInputDisplayPosP2.x;
+            posYP2 = set->getSettings()->mInputDisplayPosP2.y;
+        }
+
         ImGui::Unindent();
     }
 }

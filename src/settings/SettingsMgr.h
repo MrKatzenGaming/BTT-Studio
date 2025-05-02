@@ -7,6 +7,7 @@
 namespace btt {
 
 #define SETTING(NAME) bool mIsEnable##NAME;
+#define VERSION "1.2.1"
 
 class SettingsMgr {
     SEAD_SINGLETON_DISPOSER(SettingsMgr)
@@ -20,6 +21,7 @@ public:
     enum class InputDisplayColor : u8 { None, White, Gray, Black, Red, Blue, Yellow, Green, Orange, Purple, Pink, LightBlue };
 
     struct Settings {
+        char Version[16] = VERSION;
         SETTING(MoonRefresh);
         SETTING(NoDamage);
         SETTING(DisableMoonLock);
@@ -60,6 +62,8 @@ public:
         int mMenuCorner = 0;
         ImVec2 mInfoPos = ImVec2(0, 0);
         int mWarpLastCpKey = 0;
+        SETTING(Input2P);
+        ImVec2 mInputDisplayPosP2 = ImVec2(1600.f / 2, 900.f / 2);
 
     } mSettings;
 

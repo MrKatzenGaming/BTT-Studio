@@ -4,6 +4,7 @@
 
 #include "game/System/GameDataFunction.h"
 
+#include <cstdio>
 #include <cstring>
 #include <nn/oe.h>
 
@@ -15,7 +16,6 @@
 #include "stage_warp.h"
 
 #ifdef DEBUG
-# include "al/Library/LiveActor/ActorPoseKeeper.h"
 # include "logger.h"
 #endif
 
@@ -23,7 +23,7 @@ namespace btt {
 
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
-static constexpr char windowName[] = "BTT Studio v1.2.1";
+static const char* windowName = strcat("BTT Studio v", VERSION);
 
 void Menu::draw() {
     if (InputHelper::isInputToggled()) {

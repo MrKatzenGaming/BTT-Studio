@@ -1,8 +1,15 @@
 #include "InputDisplay.h"
 
+#include "al/Library/Controller/InputFunction.h"
+#include "al/Library/Pad/NpadController.h"
+
+#include "sead/controller/seadControllerMgr.h"
 #include <sead/math/seadVector.h>
 
-#include "helpers/InputHelper.h"
+#include "game/Player/PlayerInputFunction.h"
+
+#include "getHelper.h"
+#include "imgui_internal.h"
 
 namespace btt {
 
@@ -35,12 +42,21 @@ void drawInputDisplay() {
     SettingsMgr* set = SettingsMgr::instance();
     if (!set->getSettings()->mIsEnableInputDisplay) return;
 
-    const sead::Vector2f leftStick = { InputHelper::getLeftStickX(), InputHelper::getLeftStickY() };
-    const sead::Vector2f rightStick = { InputHelper::getRightStickX(), InputHelper::getRightStickY() };
+    sead::ControllerMgr* controllerMgr = sead::ControllerMgr::instance();
+    al::NpadController* controller = (al::NpadController*)controllerMgr->getController(al::getPlayerControllerPort(0));
+
+    const sead::Vector2f leftStick = { controller->mLeftStick.x, controller->mLeftStick.y };
+    const sead::Vector2f rightStick = { controller->mRightStick.x, controller->mRightStick.y };
 
     ImVec2 pos = set->getSettings()->mInputDisplayPos;
     pos.x -= 200;
     pos.y -= 100;
+
+    if (set->getSettings()->mIsEnableInput2P) {
+        ImGui::GetForegroundDrawList()->AddText(
+            ImGui::GetDefaultFont(), 27.f, { pos.x + 20, pos.y - 100 }, makeColor(getInputDisplayColor(SettingsMgr::InputDisplayColor::White)), "Player 1"
+        );
+    }
 
     if (set->getSettings()->mInputDisplayBackColor != SettingsMgr::InputDisplayColor::None) {
         ImVec4 color = getInputDisplayColor(set->getSettings()->mInputDisplayBackColor);
@@ -50,51 +66,136 @@ void drawInputDisplay() {
 
     ImGui::GetForegroundDrawList()->AddCircle(pos, 25, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayRingColor)), 0, 2);
     ImVec2 leftPos = { pos.x + leftStick.x * 30, pos.y - leftStick.y * 30 };
-    drawButton(leftPos, InputHelper::isHoldStickL(), 16, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor)));
+    drawButton(
+        leftPos, controller->mPadHold.isOnBit(controller->cPadIdx_1) /*StickL*/, 16,
+        makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor))
+    );
 
     pos.x += 40;
     pos.y += 30;
-    drawButton(pos, InputHelper::isHoldPadUp());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Up)); // up
     pos.y += 30;
-    drawButton(pos, InputHelper::isHoldPadDown());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Down)); // down
     pos.x -= 15;
     pos.y -= 15;
-    drawButton(pos, InputHelper::isHoldPadLeft());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Left)); // left
     pos.x += 30;
-    drawButton(pos, InputHelper::isHoldPadRight());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Right)); // right
 
     pos.x += 60;
     ImGui::GetForegroundDrawList()->AddCircle(pos, 25, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayRingColor)), 0, 2);
     ImVec2 rightPos = { pos.x + rightStick.x * 30, pos.y - rightStick.y * 30 };
-    drawButton(rightPos, InputHelper::isHoldStickR(), 16, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor)));
+    drawButton(
+        rightPos, controller->mPadHold.isOnBit(controller->cPadIdx_2) /*StickR*/, 16,
+        makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor))
+    );
 
     pos.x += 40;
     pos.y -= 60;
-    drawButton(pos, InputHelper::isHoldX());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_X)); // x
     pos.y += 30;
-    drawButton(pos, InputHelper::isHoldB());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_B)); // b
     pos.x -= 15;
     pos.y -= 15;
-    drawButton(pos, InputHelper::isHoldY());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Y)); // y
     pos.x += 30;
-    drawButton(pos, InputHelper::isHoldA());
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_A)); // a
 
     pos.y -= 10;
     pos.x -= 75;
-    drawButton(pos, InputHelper::isHoldPlus(), 5);
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Plus), 5); // plus
     pos.x -= 40;
-    drawButton(pos, InputHelper::isHoldMinus(), 5);
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Minus), 5); // minus
 
     pos = set->getSettings()->mInputDisplayPos;
     pos.x -= 200;
     pos.y -= 160;
-    drawButtonRect(pos, InputHelper::isHoldL());
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_L)); // l
     pos.y -= 16;
-    drawButtonRect(pos, InputHelper::isHoldZL());
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_ZL)); // zl
     pos.x += 155;
-    drawButtonRect(pos, InputHelper::isHoldZR());
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_ZR)); // zr
     pos.y += 16;
-    drawButtonRect(pos, InputHelper::isHoldR());
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_R)); // r
+}
+
+void drawInputDisplayP2() {
+    SettingsMgr* set = SettingsMgr::instance();
+    if (!set->getSettings()->mIsEnableInputDisplay || !set->getSettings()->mIsEnableInput2P) return;
+
+    sead::ControllerMgr* controllerMgr = sead::ControllerMgr::instance();
+    al::NpadController* controller = (al::NpadController*)controllerMgr->getController(al::getPlayerControllerPort(1));
+
+    const sead::Vector2f leftStick = { controller->mLeftStick.x, controller->mLeftStick.y };
+    const sead::Vector2f rightStick = { controller->mRightStick.x, controller->mRightStick.y };
+
+    ImVec2 pos = set->getSettings()->mInputDisplayPosP2;
+    pos.x -= 200;
+    pos.y -= 100;
+
+    ImGui::GetForegroundDrawList()->AddText(
+        ImGui::GetDefaultFont(), 27.f, { pos.x + 20, pos.y - 100 }, makeColor(getInputDisplayColor(SettingsMgr::InputDisplayColor::White)), "Player 2"
+    );
+
+    if (set->getSettings()->mInputDisplayBackColor != SettingsMgr::InputDisplayColor::None) {
+        ImVec4 color = getInputDisplayColor(set->getSettings()->mInputDisplayBackColor);
+        color.w = 128;
+        ImGui::GetForegroundDrawList()->AddRectFilled({ pos.x - 50, pos.y - 100 }, { pos.x + 200, pos.y + 100 }, makeColor(color), 20.0f);
+    }
+
+    ImGui::GetForegroundDrawList()->AddCircle(pos, 25, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayRingColor)), 0, 2);
+    ImVec2 leftPos = { pos.x + leftStick.x * 30, pos.y - leftStick.y * 30 };
+    drawButton(
+        leftPos, controller->mPadHold.isOnBit(controller->cPadIdx_1) /*StickL*/, 16,
+        makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor))
+    );
+
+    pos.x += 40;
+    pos.y += 30;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Up)); // up
+    pos.y += 30;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Down)); // down
+    pos.x -= 15;
+    pos.y -= 15;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Left)); // left
+    pos.x += 30;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Right)); // right
+
+    pos.x += 60;
+    ImGui::GetForegroundDrawList()->AddCircle(pos, 25, makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayRingColor)), 0, 2);
+    ImVec2 rightPos = { pos.x + rightStick.x * 30, pos.y - rightStick.y * 30 };
+    drawButton(
+        rightPos, controller->mPadHold.isOnBit(controller->cPadIdx_2) /*StickR*/, 16,
+        makeColor(getInputDisplayColor(set->getSettings()->mInputDisplayStickColor))
+    );
+
+    pos.x += 40;
+    pos.y -= 60;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_X)); // x
+    pos.y += 30;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_B)); // b
+    pos.x -= 15;
+    pos.y -= 15;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Y)); // y
+    pos.x += 30;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_A)); // a
+
+    pos.y -= 10;
+    pos.x -= 75;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Plus), 5); // plus
+    pos.x -= 40;
+    drawButton(pos, controller->mPadHold.isOnBit(controller->cPadIdx_Minus), 5); // minus
+
+    pos = set->getSettings()->mInputDisplayPosP2;
+    pos.x -= 200;
+    pos.y -= 160;
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_L)); // l
+    pos.y -= 16;
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_ZL)); // zl
+    pos.x += 155;
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_ZR)); // zr
+    pos.y += 16;
+    drawButtonRect(pos, controller->mPadHold.isOnBit(controller->cPadIdx_R)); // r
 }
 
 } // namespace btt

@@ -61,7 +61,10 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
         if (menu) {
             if (menu->mIsEnabledMenu) menu->draw();
             menu->drawInfoWindow();
-            btt::drawInputDisplay();
+            if (btt::SettingsMgr::instance()->getSettings()->mIsEnableInputDisplay) {
+                btt::drawInputDisplay();
+                if (btt::SettingsMgr::instance()->getSettings()->mIsEnableInput2P) btt::drawInputDisplayP2();
+            }
         }
     });
     logger->log(Logger::LogType::LogInfo, "ImGui setup done");

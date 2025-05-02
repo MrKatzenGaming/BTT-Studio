@@ -25,6 +25,7 @@ constexpr const char* sInputDisplayColorNames[] {
 };
 
 void drawInputDisplay();
+void drawInputDisplayP2();
 
 inline ImVec4 getInputDisplayColor(SettingsMgr::InputDisplayColor color) {
     return sInputDisplayColors[int(color)];

@@ -240,6 +240,10 @@ void SettingsHooks::installSettingsHooks() {
     ptr offset = addr - ro::getMainModule()->range().start();
     hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)setMapTargetUpdateNullNerve);
 
+    addr = sail::lookupSymbolFromDb<>("MoonRefreshText");
+    offset = addr - ro::getMainModule()->range().start();
+    ro::getMainModule()->writeRo(offset, "BTT Studio", strlen("BTT Studio") + 1);
+
     GreyShineRefreshHook.installAtSym<"_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo">();
     ShineRefreshHook.installAtSym<"_ZN16GameDataFunction11setGotShineE20GameDataHolderWriterPK9ShineInfo">();
     marioControl.installAtSym<"_ZN19PlayerActorHakoniwa7controlEv">();

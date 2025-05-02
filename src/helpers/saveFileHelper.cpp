@@ -46,10 +46,22 @@ void SaveFileHelper::loadSettings(sead::Heap* heap) {
     data.path = mSettingsPath;
     FsHelper::loadFileFromPath(data, heap);
 
-    if (data.buffer != nullptr && data.bufSize == sizeof(btt::SettingsMgr::Settings)) {
-        btt::SettingsMgr::Settings* configData = reinterpret_cast<btt::SettingsMgr::Settings*>(data.buffer);
-        btt::SettingsMgr::instance()->mSettings = *configData;
+    if (!data.buffer) {
+        Logger::instance()->log(Logger::LogType::LogErr, "Failed to load settings from %s", mSettingsPath);
+        return;
     }
+    if (data.bufSize != sizeof(btt::SettingsMgr::Settings)) {
+        Logger::instance()->log(Logger::LogType::LogErr, "Invalid settings size: %zu, expected: %zu", data.bufSize, sizeof(btt::SettingsMgr::Settings));
+        return;
+    }
+    btt::SettingsMgr::Settings* configData = reinterpret_cast<btt::SettingsMgr::Settings*>(data.buffer);
+
+    if (strcmp(configData->Version, btt::SettingsMgr::instance()->mSettings.Version) != 0) {
+        Logger::instance()->log(Logger::LogType::LogErr, "Version mismatch: %s != %s", configData->Version, btt::SettingsMgr::instance()->mSettings.Version);
+        return;
+    }
+
+    btt::SettingsMgr::instance()->mSettings = *configData;
 }
 
 void SaveFileHelper::saveTeleport(btt::Menu::TpState* states, size_t count) {

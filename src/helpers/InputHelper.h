@@ -8,6 +8,8 @@ public:
 
     static void setPort(ulong port) { selectedPort = port; }
 
+    static ulong getPort() { return selectedPort; }
+
     static void initKBM();
 
     // controller inputs

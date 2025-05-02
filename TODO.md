@@ -10,7 +10,7 @@
     - [x] warp to last checkpoint  
 - [ ] Travel to current kingdom  
 - [ ] move tourist to different kingdoms  
-- [ ] kingdom enter cutscene with stage reload
+
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
@@ -23,9 +23,9 @@
 
 - [ ] refresh seed & deep woods nut  
 - [ ] refresh shards  
-- [ ] refresh doors  
 - [ ] timer for every splice  
 - [ ] having the multimoon spawn at the start of every kingdom, or a way to reload stage like you got the multimoon  
+- [ ] kingdom enter cutscene with stage reload
 - [ ] Could you shorten story moon cutscenes and make the story moons not as messy too  
 - [ ] all persisting states should have the ability to be reset  
 - [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
@@ -82,3 +82,4 @@
 - [x] fix input display rendering  
 - [x] move saving to own thread  
 - [x] don't refresh scene in certain states  
+- [x] refresh doors  

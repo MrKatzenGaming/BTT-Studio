@@ -1,0 +1,9 @@
+@smo:100,101,110,120
+
+_ZN14DoorAreaChange4initERKN2al13ActorInitInfoE
+_ZN14DoorAreaChange16switchCloseAgainEv
+
+@smo:130
+
+_ZN14DoorAreaChange4initERKN2al13ActorInitInfoE = 0x0022ff40
+_ZN14DoorAreaChange16switchCloseAgainEv = 0x00230170

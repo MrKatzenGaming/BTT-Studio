@@ -10,6 +10,7 @@ find ./src -name "*.*" | xargs clang-format -i
 #include <cxxabi.h>
 #include "hk/ro/RoUtil.h"
 #include "al/Library/Nerve/NerveKeeper.h"
+#include "al/Library/Nerve/NerveStateCtrl.h"
 
 if (gameSeq) {
     int status;

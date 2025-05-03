@@ -21,12 +21,13 @@ void Menu::drawPageOptions() {
         ImGui::Checkbox("Skip Cloud", &set->getSettings()->mIsEnableSkipCloud);
         ImGui::Checkbox("Enable All Checkpoints", &set->getSettings()->mIsEnableAllCheckpoints);
         ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);
+        ImGui::Checkbox("Refresh Seeds", &set->getSettings()->mIsEnableFlowerPotRefresh);
 
         ImGui::BeginDisabled();
 
         ImGui::Checkbox("Refresh Moon Shards", &set->getSettings()->mIsEnableShardRefresh);
         ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
-        ImGui::Checkbox("Refresh Seeds", &set->getSettings()->mIsEnableFlowerPotRefresh);
+
         ImGui::EndDisabled();
 
         ImGui::Unindent();

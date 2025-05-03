@@ -7,7 +7,12 @@
 namespace btt {
 
 #define SETTING(NAME) bool mIsEnable##NAME;
-#define VERSION "1.2.1"
+#define VERSION "1.2.2"
+#ifdef DEBUG
+# define SUBVER "-dev"
+#else
+# define SUBVER ""
+#endif
 
 class SettingsMgr {
     SEAD_SINGLETON_DISPOSER(SettingsMgr)

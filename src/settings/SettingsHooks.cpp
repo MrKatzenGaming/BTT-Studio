@@ -103,10 +103,6 @@ HkTrampoline<void, ShineChip*, al::ActorInitInfo> shardRefreshHook = hk::hook::t
     }
 });
 
-HkTrampoline<bool, GrowFlowerPot*> flowerPotRefreshHook = hk::hook::trampoline([](GrowFlowerPot* thisPtr) -> bool {
-    return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : flowerPotRefreshHook.orig(thisPtr);
-});
-
 HkTrampoline<void, CheckpointFlag*> checkpointFlagHook = hk::hook::trampoline([](CheckpointFlag* checkpointFlag) -> void {
     if (!SettingsMgr::instance()->getSettings()->mIsEnableNoCheckpointTouch) checkpointFlagHook.orig(checkpointFlag);
 });
@@ -238,6 +234,14 @@ static void setMapTargetUpdateNullNerve(al::IUseNerve* user, const al::Nerve* ne
     user->getNerveKeeper()->setNerve(nerve);
 }
 
+HkTrampoline<int, al::LiveActor*, al::PlacementId*> seedRefreshHook = hk::hook::trampoline([](al::LiveActor* actor, al::PlacementId* id) -> int {
+    return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? 0 : seedRefreshHook.orig(actor, id);
+});
+
+HkTrampoline<bool, al::LiveActor*, al::PlacementId*> seedRefreshHook2 = hk::hook::trampoline([](al::LiveActor* actor, al::PlacementId* id) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : seedRefreshHook2.orig(actor, id);
+});
+
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();
     installWigglerHooks();
@@ -261,8 +265,9 @@ void SettingsHooks::installSettingsHooks() {
     warpTextHook.installAtSym<"_ZN16GameDataFunction34isAlreadyShowExplainCheckpointFlagE22GameDataHolderAccessor">();
     refreshPurpsHook.installAtSym<"_ZN16GameDataFunction16isGotCoinCollectE22GameDataHolderAccessorRKN2al13ActorInitInfoE">();
     doorRefreshHook.installAtSym<"_ZN14DoorAreaChange4initERKN2al13ActorInitInfoE">();
+    seedRefreshHook.installAtSym<"_ZN2rs17getGrowFlowerTimeEPKN2al9LiveActorEPKNS0_11PlacementIdE">();
+    seedRefreshHook2.installAtSym<"_ZN2rs20isUsedGrowFlowerSeedEPKN2al9LiveActorEPKNS0_11PlacementIdE">();
     // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
-    // flowerPotRefreshHook.installAtSym<"_ZNK13GrowFlowerPot13isGrowAlreadyEv">();
     // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
 
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();

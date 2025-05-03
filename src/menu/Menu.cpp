@@ -32,8 +32,7 @@ namespace btt {
 
 SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 
-// static const char* windowName = strcat("BTT Studio v", VERSION);
-static const char* windowName = "BTT Studio v" VERSION;
+static const char* windowName = "BTT Studio v" VERSION SUBVER;
 
 void Menu::draw() {
     if (InputHelper::isInputToggled()) {

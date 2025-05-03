@@ -1,16 +1,11 @@
 # TODO
 
 - [x] Hotkeys  
-    - [x] wiggler pattern  
-    - [x] previous scene  
-    - [x] change tp index  
-    - [x] Coins  
     - [ ] Timer  
-    - [x] Life Up  
-    - [x] warp to last checkpoint  
 - [ ] Travel to current kingdom  
 - [ ] move tourist to different kingdoms  
-
+- [ ] reload pos
+- [ ] disable scene reload if dying state
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
@@ -21,20 +16,21 @@
 
 ## Hard
 
-- [ ] refresh seed & deep woods nut  
+- [ ] refresh deep woods nut  
 - [ ] refresh shards  
 - [ ] timer for every splice  
 - [ ] having the multimoon spawn at the start of every kingdom, or a way to reload stage like you got the multimoon  
 - [ ] kingdom enter cutscene with stage reload
-- [ ] Could you shorten story moon cutscenes and make the story moons not as messy too  
+- [ ] shorten story moon cutscenes, make the story moons not as messy  
 - [ ] all persisting states should have the ability to be reset  
-- [ ] is it possible to speed up the warp animation? if so you it would be great if you put that in  
-- [ ] also shop text thingys  
-- [ ] reset sand wall and wooded gate
+    - [ ] reset sand wall and wooded gate
+- [ ] speed up the warp animation?
+- [ ] shop text thingys  
+
 
 ## very Hard / Mby Impossible
 
-- [ ] this doesnt seem very feasible but some way to manip cycles  
+- [ ] some way to manip cycles  
 
 ## Done
 
@@ -83,3 +79,11 @@
 - [x] move saving to own thread  
 - [x] don't refresh scene in certain states  
 - [x] refresh doors  
+- [x] Hotkeys  
+    - [x] wiggler pattern  
+    - [x] previous scene  
+    - [x] change tp index  
+    - [x] Coins  
+    - [x] Life Up  
+    - [x] warp to last checkpoint  
+- [x] refresh seed 

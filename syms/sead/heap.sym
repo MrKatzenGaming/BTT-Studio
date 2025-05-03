@@ -8,6 +8,7 @@ _ZN4sead9IDisposerC2EPNS_4HeapENS0_14HeapNullOptionE
 _ZnamPN4sead4HeapEi
 _ZN4sead9IDisposerD2Ev
 _ZTIN4sead9IDisposerE
+_ZN4sead7HeapMgr10sRootHeapsE
 
 @smo:130
 
@@ -19,3 +20,4 @@ _ZnamPN4sead4HeapEi = 0x0093ea70
 _ZN4sead9IDisposerD2Ev = 0x00950f80
 _ZTIN4sead9IDisposerE = 0x01352928
 _ZNK4sead7HeapMgr14getCurrentHeapEv = 0x009564a0
+_ZN4sead7HeapMgr10sRootHeapsE = 0x014ae0c0

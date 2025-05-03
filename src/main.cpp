@@ -36,7 +36,7 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
     Logger* logger = Logger::createInstance(heap);
     logger->init(heap);
 
-#ifdef DEBUG
+#ifdef BTTDEBUG
     logger->connect("192.168.178.41", 8171);
 #endif
 

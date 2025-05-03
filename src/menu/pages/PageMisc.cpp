@@ -11,6 +11,7 @@
 #include "game/Player/PlayerFunction.h"
 #include "game/Player/PlayerHackKeeper.h"
 #include "game/System/GameDataFunction.h"
+#include <game/Sequence/ChangeStageInfo.h>
 
 #include <cxxabi.h>
 #include <typeinfo>
@@ -18,6 +19,7 @@
 #include "helpers/getHelper.h"
 #include "helpers/saveFileHelper.h"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "Menu.h"
 #include "stage_warp.h"
 
@@ -135,7 +137,7 @@ void Menu::drawPageMisc() {
         //     if (playerHak) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
         // }
         if (ImGui::Button("Kill Scene")) {
-            if (stageScene) {
+            if (stageScene && playerHak) {
                 al::NerveKeeper* sceneNerveKeeper = stageScene->getNerveKeeper();
                 char* stateName = nullptr;
                 char* stateNrvName = nullptr;
@@ -167,7 +169,20 @@ void Menu::drawPageMisc() {
                     }
                     if (stateNrvName) free(stateNrvName);
                     if (stateName) free(stateName);
-                    if (!(cmpNrv || cmpState || PlayerFunction::isPlayerDeadStatus(playerHak))) stageScene->kill();
+                    if (!(cmpNrv || cmpState || PlayerFunction::isPlayerDeadStatus(playerHak))) {
+                        if (mIsReloadPos) {
+                            reloadPosTimer = 0;
+                            reloadStagePos = al::getTrans(playerHak);
+                            reloadStageQuat = al::getQuat(playerHak);
+                            ChangeStageInfo info = ChangeStageInfo(
+                                gameSeq->mGameDataHolderAccessor, "start", GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), false, -1,
+                                ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                            );
+                            gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&info, 0);
+                        } else {
+                            stageScene->kill();
+                        }
+                    }
                 }
             }
         }
@@ -185,6 +200,11 @@ void Menu::drawPageMisc() {
             }
         }
         ImGui::Checkbox("Noclip", &mIsEnableNoclip);
+        ImGui::SameLine();
+        ImGui::Checkbox("Reload Scene at Pos", &mIsReloadPos);
+        if (GImGui->NavId == ImGui::GetID("Reload Scene at Pos")) {
+            ImGui::SetTooltip("Doesn't save!!! \nWill break normal reload \n(To fix: re enter stage)");
+        }
         ImGui::PushItemWidth(200);
         ImGui::Combo("Moon Refresh Text", &set->getSettings()->mMoonRefreshText, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts));
         ImGui::Combo("Menu Corner", &set->getSettings()->mMenuCorner, Corners, IM_ARRAYSIZE(Corners));

@@ -72,6 +72,8 @@ private:
 
     ImVec2 getCornerPos(int corner);
 
+    void drawComplexHeapTreeItem(sead::Heap* heap);
+
 private:
     ImVec2 mWindowSize = ImVec2(500, 400);
     ImGuiID prevNavId = 0;
@@ -87,6 +89,10 @@ private:
     bool mIsPopup = false;
     bool isEnableInfoWindow = false;
     bool isEnablePlayerInfo = false;
+    bool mIsReloadPos = false;
+    int reloadPosTimer = -1;
+    sead::Vector3f reloadStagePos = { 0, 0, 0 };
+    sead::Quatf reloadStageQuat = { 0, 0, 0, 0 };
 
     int tpIndex = 0;
 

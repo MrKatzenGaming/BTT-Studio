@@ -1,12 +1,14 @@
 #include "hk/sail/detail.h"
 #include "hk/util/Math.h"
 
+#include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "al/Library/Nerve/Nerve.h"
 #include "al/Library/Nerve/NerveKeeper.h"
 #include "al/Library/Nerve/NerveStateCtrl.h"
 
 #include "game/Player/PlayerFunction.h"
 #include "game/System/GameDataFunction.h"
+#include <game/Sequence/ChangeStageInfo.h>
 
 #include <cxxabi.h>
 #include <typeinfo>
@@ -68,7 +70,7 @@ void Menu::handleHotkeys() {
     }
 
     if (isHotkey(set->getSettings()->mKillSceneKey)) {
-        if (stageScene) {
+        if (stageScene && playerHak) {
             al::NerveKeeper* sceneNerveKeeper = stageScene->getNerveKeeper();
             char* stateName = nullptr;
             char* stateNrvName = nullptr;
@@ -100,7 +102,20 @@ void Menu::handleHotkeys() {
                 }
                 if (stateNrvName) free(stateNrvName);
                 if (stateName) free(stateName);
-                if (!(cmpNrv || cmpState || PlayerFunction::isPlayerDeadStatus(playerHak))) stageScene->kill();
+                if (!(cmpNrv || cmpState || PlayerFunction::isPlayerDeadStatus(playerHak))) {
+                    if (mIsReloadPos) {
+                        reloadPosTimer = 0;
+                        reloadStagePos = al::getTrans(playerHak);
+                        reloadStageQuat = al::getQuat(playerHak);
+                        ChangeStageInfo info = ChangeStageInfo(
+                            gameSeq->mGameDataHolderAccessor, "start", GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), false, -1,
+                            ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                        );
+                        gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&info, 0);
+                    } else {
+                        stageScene->kill();
+                    }
+                }
             }
         }
     }

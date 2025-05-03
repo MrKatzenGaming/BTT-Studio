@@ -4,7 +4,6 @@
     - [ ] Timer  
 - [ ] Travel to current kingdom  
 - [ ] move tourist to different kingdoms  
-- [ ] reload pos
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
@@ -87,3 +86,4 @@
     - [x] warp to last checkpoint  
 - [x] refresh seed 
 - [x] disable scene reload if dying state
+- [x] reload pos

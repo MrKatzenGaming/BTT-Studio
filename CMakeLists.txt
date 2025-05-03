@@ -31,5 +31,5 @@ include(sys/cmake/sail.cmake)
 usesail(${PROJECT_NAME})
 
 if (DEBUG)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DEBUG)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE BTTDEBUG)
 endif()

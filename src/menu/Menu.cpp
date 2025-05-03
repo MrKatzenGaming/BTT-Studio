@@ -1,6 +1,8 @@
 #include "Menu.h"
 
 #include "al/Library/Camera/CameraUtil.h"
+#include "al/Library/LiveActor/ActorMovementFunction.h"
+#include "al/Library/LiveActor/ActorPoseUtil.h"
 
 #include "game/Scene/StageScene.h"
 #include "game/System/GameDataFunction.h"
@@ -16,11 +18,14 @@
 #include "settings/SettingsMgr.h"
 #include "stage_warp.h"
 
-#ifdef DEBUG
+#ifdef BTTDEBUG
 # include "hk/ro/RoUtil.h"
 
+# include "al/Library/Memory/HeapUtil.h"
 # include "al/Library/Nerve/NerveKeeper.h"
 # include "al/Library/Nerve/NerveStateCtrl.h"
+
+# include <sead/heap/seadHeapMgr.h>
 
 # include <cxxabi.h>
 # include <typeinfo>
@@ -64,7 +69,7 @@ void Menu::draw() {
     drawPageHotkeys();
     drawPageInfo();
 
-#ifdef DEBUG
+#ifdef BTTDEBUG
     ImGui::Separator();
     if (ImGui::CollapsingHeader("Debug")) {
         if (ImGui::Button("Reconnect logger")) {
@@ -74,6 +79,8 @@ void Menu::draw() {
         ImGui::Text("NavId: %u", GImGui->NavId);
         ImGui::Text("Stage: %s", gameSeq ? GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor) : NULL);
         ImGui::Text("Scenario: %u", playerHak ? GameDataFunction::getScenarioNo(playerHak) : -1);
+        drawComplexHeapTreeItem(sead::HeapMgr::instance()->getRootHeap(0));
+
         ImGui::Separator();
 
         if (gameSeq) {
@@ -210,6 +217,19 @@ void Menu::handleAlways() {
 
     handleHotkeys();
 
+    if (reloadPosTimer != -1 && playerHak) {
+        reloadPosTimer++;
+        if (reloadPosTimer == 11) {
+            playerHak->startDemoPuppetable();
+            al::setTrans(playerHak, reloadStagePos);
+            al::updatePoseQuat(playerHak, reloadStageQuat);
+            al::setVelocityZero(playerHak);
+            playerHak->endDemoPuppetable();
+            menuTimer = 0;
+            reloadPosTimer = -1;
+        }
+    }
+
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
         prevNavId = GImGui->NavId;
         mIsEnabledMenu = false;
@@ -280,6 +300,40 @@ ImVec2 Menu::getCornerPos(int corner) {
         }
     }
     return pos;
+}
+
+void Menu::drawComplexHeapTreeItem(sead::Heap* heap) {
+    ImGui::SetWindowFontScale(1.1f);
+
+    bool hasNoChildren = heap->mChildren.isEmpty();
+
+    ImGui::BeginGroup();
+
+    // Create a unindented tree node, replacing arrow with bullet if no children exist
+    bool expanded =
+        ImGui::TreeNodeEx(heap->getName().cstr(), ImGuiTreeNodeFlags_NoTreePushOnOpen | (hasNoChildren ? ImGuiTreeNodeFlags_Bullet : ImGuiTreeNodeFlags_None));
+
+    float used = (heap->getSize() - heap->getFreeSize());
+    float size = heap->getSize();
+    float mbUsed = used / 1000000.f;
+    float mbSize = size / 1000000.f;
+
+    float percentUsed = (heap->getSize() - heap->getFreeSize()) / (float(heap->getSize()) / 100);
+
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%.3f/%.3f MB", mbUsed, mbSize);
+    ImGui::SameLine();
+    ImGui::ProgressBar(percentUsed / 100, ImVec2(-FLT_MIN, 0), buf);
+    ImGui::EndGroup();
+
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%.0f/%.0f Bytes", used, size);
+
+    if (expanded) {
+        for (sead::Heap& childRef : heap->mChildren) {
+            sead::Heap* child = &childRef;
+            if (child) drawComplexHeapTreeItem(child);
+        }
+    }
 }
 
 } // namespace btt

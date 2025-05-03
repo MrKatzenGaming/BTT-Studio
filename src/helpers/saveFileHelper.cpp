@@ -33,7 +33,6 @@ void SaveFileHelper::saveSettings() {
     }
 
     FsHelper::writeFileToPath(reinterpret_cast<void*>(&btt::SettingsMgr::instance()->mSettings), sizeof(btt::SettingsMgr::Settings), mSettingsPath);
-    Logger::instance()->log(Logger::LogType::LogInfo, "Settings saved to %s", mSettingsPath);
 }
 
 void SaveFileHelper::loadSettings(sead::Heap* heap) {

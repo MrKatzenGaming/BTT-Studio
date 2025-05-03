@@ -5,6 +5,7 @@
 #include "al/Library/Nerve/NerveKeeper.h"
 #include "al/Library/Nerve/NerveStateCtrl.h"
 
+#include "game/Player/PlayerFunction.h"
 #include "game/System/GameDataFunction.h"
 
 #include <cxxabi.h>
@@ -99,7 +100,7 @@ void Menu::handleHotkeys() {
                 }
                 if (stateNrvName) free(stateNrvName);
                 if (stateName) free(stateName);
-                if (!(cmpNrv || cmpState)) stageScene->kill();
+                if (!(cmpNrv || cmpState || PlayerFunction::isPlayerDeadStatus(playerHak))) stageScene->kill();
             }
         }
     }

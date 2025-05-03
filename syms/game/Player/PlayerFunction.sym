@@ -1,0 +1,7 @@
+@smo:100,101,110,120
+
+_ZN14PlayerFunction18isPlayerDeadStatusEPKN2al9LiveActorE
+
+@smo:130
+
+_ZN14PlayerFunction18isPlayerDeadStatusEPKN2al9LiveActorE = 0x003ea360

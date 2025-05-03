@@ -301,7 +301,7 @@ ImVec2 Menu::getCornerPos(int corner) {
     }
     return pos;
 }
-
+#ifdef BTTDEBUG
 void Menu::drawComplexHeapTreeItem(sead::Heap* heap) {
     ImGui::SetWindowFontScale(1.1f);
 
@@ -335,5 +335,6 @@ void Menu::drawComplexHeapTreeItem(sead::Heap* heap) {
         }
     }
 }
+#endif
 
 } // namespace btt

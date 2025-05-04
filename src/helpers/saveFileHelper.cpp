@@ -56,7 +56,9 @@ void SaveFileHelper::loadSettings(sead::Heap* heap) {
     btt::SettingsMgr::Settings* configData = reinterpret_cast<btt::SettingsMgr::Settings*>(data.buffer);
 
     if (strcmp(configData->Version, btt::SettingsMgr::instance()->mSettings.Version) != 0) {
-        Logger::instance()->log(Logger::LogType::LogErr, "Version mismatch: %s != %s", configData->Version, btt::SettingsMgr::instance()->mSettings.Version);
+        Logger::instance()->log(
+            Logger::LogType::LogWarn, "Version mismatch: %s != %s, resetting Settings", configData->Version, btt::SettingsMgr::instance()->mSettings.Version
+        );
         return;
     }
 

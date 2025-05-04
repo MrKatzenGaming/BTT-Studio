@@ -105,10 +105,12 @@ void Menu::handleHotkeys() {
                 if (!(cmpNrv || cmpState || PlayerFunction::isPlayerDeadStatus(playerHak))) {
                     if (mIsReloadPos) {
                         reloadPosTimer = 0;
-                        reloadStagePos = al::getTrans(playerHak);
-                        reloadStageQuat = al::getQuat(playerHak);
+                        if (playerHak) {
+                            reloadStagePos = al::getTrans(playerHak);
+                            reloadStageQuat = al::getQuat(playerHak);
+                        }
                         ChangeStageInfo info = ChangeStageInfo(
-                            gameSeq->mGameDataHolderAccessor, "start", GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), false, -1,
+                            gameSeq->mGameDataHolderAccessor, "", GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), false, -1,
                             ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                         );
                         gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&info, 0);

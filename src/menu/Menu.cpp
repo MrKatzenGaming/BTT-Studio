@@ -27,6 +27,8 @@
 
 # include <sead/heap/seadHeapMgr.h>
 
+# include "game/System/GameDataFile.h"
+
 # include <cxxabi.h>
 # include <typeinfo>
 
@@ -79,6 +81,19 @@ void Menu::draw() {
         ImGui::Text("NavId: %u", GImGui->NavId);
         ImGui::Text("Stage: %s", gameSeq ? GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor) : NULL);
         ImGui::Text("Scenario: %u", playerHak ? GameDataFunction::getScenarioNo(playerHak) : -1);
+        sead::Quatf quat = sead::Quatf();
+        sead::Vector3f pos = sead::Vector3f();
+        if (playerHak) {
+            pos = al::getTrans(playerHak);
+            quat = al::getQuat(playerHak);
+        }
+        ImGui::Text("Entrance: %s", gameSeq ? gameSeq->mGameDataHolderAccessor.mData->mPlayingFile->mPlayerStartId.cstr() : NULL);
+        ImGui::Text("Pos: %.2f, %.2f, %.2f", pos.x, pos.y, pos.z);
+        ImGui::Text("Quat: %.2f, %.2f, %.2f, %.2f", quat.x, quat.y, quat.z, quat.w);
+        ImGui::Text("ReloadPosTimer: %d", reloadPosTimer);
+        ImGui::Text("ReloadPos: %.2f, %.2f, %.2f", reloadStagePos.x, reloadStagePos.y, reloadStagePos.z);
+        ImGui::Text("ReloadQuat: %.2f, %.2f, %.2f, %.2f", reloadStageQuat.x, reloadStageQuat.y, reloadStageQuat.z, reloadStageQuat.w);
+
         drawComplexHeapTreeItem(sead::HeapMgr::instance()->getRootHeap(0));
 
         ImGui::Separator();
@@ -219,7 +234,7 @@ void Menu::handleAlways() {
 
     if (reloadPosTimer != -1 && playerHak) {
         reloadPosTimer++;
-        if (reloadPosTimer == 11) {
+        if (reloadPosTimer >= 11) {
             playerHak->startDemoPuppetable();
             al::setTrans(playerHak, reloadStagePos);
             al::updatePoseQuat(playerHak, reloadStageQuat);

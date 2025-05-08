@@ -242,6 +242,13 @@ HkTrampoline<bool, al::LiveActor*, al::PlacementId*> seedRefreshHook2 = hk::hook
     return SettingsMgr::instance()->getSettings()->mIsEnableFlowerPotRefresh ? false : seedRefreshHook2.orig(actor, id);
 });
 
+HkTrampoline<bool, al::LiveActor*, char*> hintPhotoHook = hk::hook::trampoline([](al::LiveActor* actor, char* name) -> bool {
+    if (SettingsMgr::instance()->getSettings()->mIsEnableHintPhotoSpawn) {
+        return true;
+    }
+    return hintPhotoHook.orig(actor, name);
+});
+
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();
     installWigglerHooks();
@@ -267,11 +274,11 @@ void SettingsHooks::installSettingsHooks() {
     doorRefreshHook.installAtSym<"_ZN14DoorAreaChange4initERKN2al13ActorInitInfoE">();
     seedRefreshHook.installAtSym<"_ZN2rs17getGrowFlowerTimeEPKN2al9LiveActorEPKNS0_11PlacementIdE">();
     seedRefreshHook2.installAtSym<"_ZN2rs20isUsedGrowFlowerSeedEPKN2al9LiveActorEPKNS0_11PlacementIdE">();
-    // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
-    // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
-
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
     cloudSkipHook.installAtSym<"_ZNK10StageScene16isDefeatKoopaLv1Ev">();
     allCheckpointsHook.installAtSym<"_ZN16GameDataFunction22isGotCheckpointInWorldE22GameDataHolderAccessori">();
     noclipHook.installAtSym<"_ZN19PlayerActorHakoniwa8movementEv">();
+    hintPhotoHook.installAtSym<"_ZN2rs19checkSavedHintPhotoEPKN2al9LiveActorEPKc">();
+    // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
+    // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
 }

@@ -69,6 +69,7 @@ public:
         int mWarpLastCpKey = 0;
         SETTING(Input2P);
         ImVec2 mInputDisplayPosP2 = ImVec2(1600.f / 2, 900.f / 2);
+        SETTING(HintPhotoSpawn);
 
     } mSettings;
 

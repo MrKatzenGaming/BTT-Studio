@@ -2,9 +2,11 @@
 
 _ZN2rs17getGrowFlowerTimeEPKN2al9LiveActorEPKNS0_11PlacementIdE
 _ZN2rs20isUsedGrowFlowerSeedEPKN2al9LiveActorEPKNS0_11PlacementIdE
+_ZN2rs19checkSavedHintPhotoEPKN2al9LiveActorEPKc
 
 @smo:130
 
 
 _ZN2rs17getGrowFlowerTimeEPKN2al9LiveActorEPKNS0_11PlacementIdE = 0x004dd230
 _ZN2rs20isUsedGrowFlowerSeedEPKN2al9LiveActorEPKNS0_11PlacementIdE = 0x004dd260
+_ZN2rs19checkSavedHintPhotoEPKN2al9LiveActorEPKc = 0x004dfdd0

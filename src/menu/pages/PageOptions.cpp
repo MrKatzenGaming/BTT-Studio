@@ -1,3 +1,4 @@
+#include "imgui.h"
 #include "imgui_internal.h"
 #include "Menu.h"
 
@@ -22,6 +23,7 @@ void Menu::drawPageOptions() {
         ImGui::Checkbox("Enable All Checkpoints", &set->getSettings()->mIsEnableAllCheckpoints);
         ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);
         ImGui::Checkbox("Refresh Seeds", &set->getSettings()->mIsEnableFlowerPotRefresh);
+        ImGui::Checkbox("Spawn all Hint Art Moons", &set->getSettings()->mIsEnableHintPhotoSpawn);
 
         ImGui::BeginDisabled();
 

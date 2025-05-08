@@ -1,14 +1,15 @@
 # TODO
 
+- [ ] move tourist to different kingdoms  (_ZN16GameDataFunction23getWorldTravelingStatusEPK17WorldTravelingNpc)
+
+
 - [x] Hotkeys  
     - [ ] Timer  
 - [ ] Travel to current kingdom  
-- [ ] move tourist to different kingdoms  
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
     - [ ] fix cutscene skips  
 - [ ] outfit changer  
-- [ ] spawn all hint art moons(HintPhoto)
 - [ ] completely custom moon text (read bin file, make bin file with website)  
 - [ ] walk on lava/poison  
 
@@ -24,6 +25,7 @@
     - [ ] reset sand wall and wooded gate
 - [ ] speed up the warp animation?
 - [ ] shop text thingys  
+- [ ] refresh already collected npc moons
 
 
 ## very Hard / Mby Impossible
@@ -87,3 +89,4 @@
 - [x] refresh seed 
 - [x] disable scene reload if dying state
 - [x] reload pos
+- [x] spawn all hint art moons

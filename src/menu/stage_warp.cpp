@@ -207,7 +207,7 @@ KingdomEnglishNameSub subNamesDark[] = {
     { "LavaWorldUpDownYoshiExStage", "Yoshi's Magma Swamp" },
 };
 KingdomEnglishNameSub subNamesDarker[] = {
-    { "Special2WorldTowerStage", "Inside the Tower" },
+    { "Special2WorldLavaStage", "Inside the Level" },
     { "Special2WorldKoopaStage", "Culmina Crater: Bowser Escape" },
     { "Special2WorldCloudStage", "Culmina Crater: Pokio Section" },
     { "Special2WorldLavaStage", "Inside Culmina Crater" },

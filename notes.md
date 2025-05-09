@@ -125,3 +125,13 @@ StateNrvs
 States
 - PauseMenu
 - SnapShot
+
+## World Traveling Status
+- Init                      (Not via getWorldTravelingStatus)
+- CityWorld0
+- WaterfallWorld0
+- LavaWorld0
+- MoonWorld0
+- PeachCastleWorld0
+- Last
+- LastAfter

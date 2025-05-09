@@ -21,7 +21,6 @@
 #ifdef BTTDEBUG
 # include "hk/ro/RoUtil.h"
 
-# include "al/Library/Memory/HeapUtil.h"
 # include "al/Library/Nerve/NerveKeeper.h"
 # include "al/Library/Nerve/NerveStateCtrl.h"
 
@@ -74,6 +73,7 @@ void Menu::draw() {
 #ifdef BTTDEBUG
     ImGui::Separator();
     if (ImGui::CollapsingHeader("Debug")) {
+        ImGui::Indent();
         if (ImGui::Button("Reconnect logger")) {
             Logger::instance()->connect("192.168.178.41", 8171);
         }
@@ -81,128 +81,134 @@ void Menu::draw() {
         ImGui::Text("NavId: %u", GImGui->NavId);
         ImGui::Text("Stage: %s", gameSeq ? GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor) : NULL);
         ImGui::Text("Scenario: %u", playerHak ? GameDataFunction::getScenarioNo(playerHak) : -1);
-        sead::Quatf quat = sead::Quatf();
-        sead::Vector3f pos = sead::Vector3f();
-        if (playerHak) {
-            pos = al::getTrans(playerHak);
-            quat = al::getQuat(playerHak);
-        }
         ImGui::Text("Entrance: %s", gameSeq ? gameSeq->mGameDataHolderAccessor.mData->mPlayingFile->mPlayerStartId.cstr() : NULL);
-        ImGui::Text("Pos: %.2f, %.2f, %.2f", pos.x, pos.y, pos.z);
-        ImGui::Text("Quat: %.2f, %.2f, %.2f, %.2f", quat.x, quat.y, quat.z, quat.w);
-        ImGui::Text("ReloadPosTimer: %d", reloadPosTimer);
-        ImGui::Text("ReloadPos: %.2f, %.2f, %.2f", reloadStagePos.x, reloadStagePos.y, reloadStagePos.z);
-        ImGui::Text("ReloadQuat: %.2f, %.2f, %.2f, %.2f", reloadStageQuat.x, reloadStageQuat.y, reloadStageQuat.z, reloadStageQuat.w);
+        ImGui::Text("WorldTravelingStatus: %s", mWorldTravelingStatus);
+
+        if (ImGui::CollapsingHeader("Player Sutff")) {
+            sead::Quatf quat = sead::Quatf();
+            sead::Vector3f pos = sead::Vector3f();
+            if (playerHak) {
+                pos = al::getTrans(playerHak);
+                quat = al::getQuat(playerHak);
+            }
+            ImGui::Text("Pos: %.2f, %.2f, %.2f", pos.x, pos.y, pos.z);
+            ImGui::Text("Quat: %.2f, %.2f, %.2f, %.2f", quat.x, quat.y, quat.z, quat.w);
+            ImGui::Text("ReloadPosTimer: %d", reloadPosTimer);
+            ImGui::Text("ReloadPos: %.2f, %.2f, %.2f", reloadStagePos.x, reloadStagePos.y, reloadStagePos.z);
+            ImGui::Text("ReloadQuat: %.2f, %.2f, %.2f, %.2f", reloadStageQuat.x, reloadStageQuat.y, reloadStageQuat.z, reloadStageQuat.w);
+        }
 
         drawComplexHeapTreeItem(sead::HeapMgr::instance()->getRootHeap(0));
 
         ImGui::Separator();
+        if (ImGui::CollapsingHeader("Demagnle Stuff")) {
+            if (gameSeq) {
+                int status;
+                uintptr_t NrvAddr = 0;
+                al::NerveKeeper* nerveKeeper = gameSeq->getNerveKeeper();
+                char* sequenceName = nullptr;
+                char* nerveName = nullptr;
+                char* stateName = nullptr;
+                int prefixLen = 0;
 
-        if (gameSeq) {
-            int status;
-            uintptr_t NrvAddr = 0;
-            al::NerveKeeper* nerveKeeper = gameSeq->getNerveKeeper();
-            char* sequenceName = nullptr;
-            char* nerveName = nullptr;
-            char* stateName = nullptr;
-            int prefixLen = 0;
+                sequenceName = abi::__cxa_demangle(typeid(*gameSeq).name(), nullptr, nullptr, &status);
 
-            sequenceName = abi::__cxa_demangle(typeid(*gameSeq).name(), nullptr, nullptr, &status);
-
-            if (nerveKeeper) {
-                const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
-                if (currentNerve) {
-                    NrvAddr = (uintptr_t)currentNerve;
-                    nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
-                    prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                if (nerveKeeper) {
+                    const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
+                    if (currentNerve) {
+                        NrvAddr = (uintptr_t)currentNerve;
+                        nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
+                        prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                    }
+                    if (gameSeq->getNerveKeeper()->mStateCtrl) {
+                        al::NerveStateCtrl::State* state = gameSeq->getNerveKeeper()->mStateCtrl->mCurrentState;
+                        if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                    }
                 }
-                if (gameSeq->getNerveKeeper()->mStateCtrl) {
-                    al::NerveStateCtrl::State* state = gameSeq->getNerveKeeper()->mStateCtrl->mCurrentState;
-                    if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
-                }
+
+                ImGui::Text("Sequence: %s", sequenceName);
+                ImGui::Text("SequenceNrv: %s", nerveName + prefixLen);
+                ImGui::Text("SequenceState: %s", stateName);
+                ImGui::Text("SequenceNrvAddr: %lx", NrvAddr);
+                ImGui::Text("SequenceNrvOffset: %lx", NrvAddr - hk::ro::getMainModule()->range().start());
+                ImGui::Separator();
+
+                if (sequenceName) free(sequenceName);
+                if (nerveName) free(nerveName);
+                if (stateName) free(stateName);
             }
+            if (stageScene) {
+                int status;
+                uintptr_t NrvAddr = 0;
+                al::NerveKeeper* nerveKeeper = stageScene->getNerveKeeper();
+                char* sceneName = nullptr;
+                char* nerveName = nullptr;
+                char* stateName = nullptr;
+                int prefixLen = 0;
 
-            ImGui::Text("Sequence: %s", sequenceName);
-            ImGui::Text("SequenceNrv: %s", nerveName + prefixLen);
-            ImGui::Text("SequenceState: %s", stateName);
-            ImGui::Text("SequenceNrvAddr: %lx", NrvAddr);
-            ImGui::Text("SequenceNrvOffset: %lx", NrvAddr - hk::ro::getMainModule()->range().start());
-            ImGui::Separator();
+                sceneName = abi::__cxa_demangle(typeid(*stageScene).name(), nullptr, nullptr, &status);
 
-            if (sequenceName) free(sequenceName);
-            if (nerveName) free(nerveName);
-            if (stateName) free(stateName);
-        }
-        if (stageScene) {
-            int status;
-            uintptr_t NrvAddr = 0;
-            al::NerveKeeper* nerveKeeper = stageScene->getNerveKeeper();
-            char* sceneName = nullptr;
-            char* nerveName = nullptr;
-            char* stateName = nullptr;
-            int prefixLen = 0;
-
-            sceneName = abi::__cxa_demangle(typeid(*stageScene).name(), nullptr, nullptr, &status);
-
-            if (nerveKeeper) {
-                const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
-                if (currentNerve) {
-                    NrvAddr = (uintptr_t)currentNerve;
-                    nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
-                    prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                if (nerveKeeper) {
+                    const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
+                    if (currentNerve) {
+                        NrvAddr = (uintptr_t)currentNerve;
+                        nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
+                        prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                    }
+                    if (stageScene->getNerveKeeper()->mStateCtrl) {
+                        al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
+                        if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                    }
                 }
-                if (stageScene->getNerveKeeper()->mStateCtrl) {
-                    al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
-                    if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
-                }
+
+                ImGui::Text("StageScene: %s", sceneName);
+                ImGui::Text("StageSceneNrv: %s", nerveName + prefixLen);
+                ImGui::Text("StageSceneState: %s", stateName);
+                ImGui::Text("StageSceneNrvAddr: %lx", NrvAddr);
+                ImGui::Text("StageSceneNrvOffset: %lx", NrvAddr - hk::ro::getMainModule()->range().start());
+                ImGui::Separator();
+
+                if (sceneName) free(sceneName);
+                if (nerveName) free(nerveName);
+                if (stateName) free(stateName);
             }
+            if (playerHak) {
+                int status;
+                uintptr_t NrvAddr = 0;
+                al::NerveKeeper* nerveKeeper = playerHak->getNerveKeeper();
+                char* actorName = nullptr;
+                char* nerveName = nullptr;
+                char* stateName = nullptr;
+                int prefixLen = 0;
 
-            ImGui::Text("StageScene: %s", sceneName);
-            ImGui::Text("StageSceneNrv: %s", nerveName + prefixLen);
-            ImGui::Text("StageSceneState: %s", stateName);
-            ImGui::Text("StageSceneNrvAddr: %lx", NrvAddr);
-            ImGui::Text("StageSceneNrvOffset: %lx", NrvAddr - hk::ro::getMainModule()->range().start());
-            ImGui::Separator();
+                actorName = abi::__cxa_demangle(typeid(*playerHak).name(), nullptr, nullptr, &status);
 
-            if (sceneName) free(sceneName);
-            if (nerveName) free(nerveName);
-            if (stateName) free(stateName);
-        }
-        if (playerHak) {
-            int status;
-            uintptr_t NrvAddr = 0;
-            al::NerveKeeper* nerveKeeper = playerHak->getNerveKeeper();
-            char* actorName = nullptr;
-            char* nerveName = nullptr;
-            char* stateName = nullptr;
-            int prefixLen = 0;
-
-            actorName = abi::__cxa_demangle(typeid(*playerHak).name(), nullptr, nullptr, &status);
-
-            if (nerveKeeper) {
-                const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
-                if (currentNerve) {
-                    NrvAddr = (uintptr_t)currentNerve;
-                    nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
-                    prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                if (nerveKeeper) {
+                    const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
+                    if (currentNerve) {
+                        NrvAddr = (uintptr_t)currentNerve;
+                        nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
+                        prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                    }
+                    if (playerHak->getNerveKeeper()->mStateCtrl) {
+                        al::NerveStateCtrl::State* state = playerHak->getNerveKeeper()->mStateCtrl->mCurrentState;
+                        if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                    }
                 }
-                if (playerHak->getNerveKeeper()->mStateCtrl) {
-                    al::NerveStateCtrl::State* state = playerHak->getNerveKeeper()->mStateCtrl->mCurrentState;
-                    if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
-                }
+
+                ImGui::Text("Player: %s", actorName);
+                ImGui::Text("PlayerNrv: %s", nerveName + prefixLen);
+                ImGui::Text("PlayerState: %s", stateName);
+                ImGui::Text("PlayerNrvAddr: %lx", NrvAddr);
+                ImGui::Text("PlayerNrvOffset: %lx", NrvAddr - hk::ro::getMainModule()->range().start());
+                ImGui::Separator();
+
+                if (actorName) free(actorName);
+                if (nerveName) free(nerveName);
+                if (stateName) free(stateName);
             }
-
-            ImGui::Text("Player: %s", actorName);
-            ImGui::Text("PlayerNrv: %s", nerveName + prefixLen);
-            ImGui::Text("PlayerState: %s", stateName);
-            ImGui::Text("PlayerNrvAddr: %lx", NrvAddr);
-            ImGui::Text("PlayerNrvOffset: %lx", NrvAddr - hk::ro::getMainModule()->range().start());
-            ImGui::Separator();
-
-            if (actorName) free(actorName);
-            if (nerveName) free(nerveName);
-            if (stateName) free(stateName);
         }
+        ImGui::Unindent();
     }
 #endif
 

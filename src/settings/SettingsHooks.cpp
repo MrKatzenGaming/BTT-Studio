@@ -243,10 +243,25 @@ HkTrampoline<bool, al::LiveActor*, al::PlacementId*> seedRefreshHook2 = hk::hook
 });
 
 HkTrampoline<bool, al::LiveActor*, char*> hintPhotoHook = hk::hook::trampoline([](al::LiveActor* actor, char* name) -> bool {
-    if (SettingsMgr::instance()->getSettings()->mIsEnableHintPhotoSpawn) {
-        return true;
+    return SettingsMgr::instance()->getSettings()->mIsEnableHintPhotoSpawn ? true : hintPhotoHook.orig(actor, name);
+});
+
+constexpr static const char* worldTravelingStatus[] = { "Init", "CityWorld0", "WaterfallWorld0", "LavaWorld0", "MoonWorld0", "PeachCastleWorld0",
+                                                        "Last", "LastAfter" };
+
+HkTrampoline<const char*, WorldTravelingNpc*> worldTravelingHook = hk::hook::trampoline([](WorldTravelingNpc* actor) -> const char* {
+    // Menu::instance()->mWorldTravelingStatus = worldTravelingHook.orig(actor);
+    if (SettingsMgr::instance()->getSettings()->mWorldTravelingStatus != 0) {
+        return worldTravelingStatus[SettingsMgr::instance()->getSettings()->mWorldTravelingStatus - 1];
     }
-    return hintPhotoHook.orig(actor, name);
+    return worldTravelingHook.orig(actor);
+});
+HkTrampoline<bool, WorldTravelingNpc*> worldTravelingHook2 = hk::hook::trampoline([](WorldTravelingNpc* actor) -> bool {
+    // Menu::instance()->mWorldTravelingStatus = worldTravelingHook.orig(actor);
+    if (SettingsMgr::instance()->getSettings()->mWorldTravelingStatus != 0) {
+        return false;
+    }
+    return worldTravelingHook.orig(actor);
 });
 
 void SettingsHooks::installSettingsHooks() {
@@ -279,6 +294,8 @@ void SettingsHooks::installSettingsHooks() {
     allCheckpointsHook.installAtSym<"_ZN16GameDataFunction22isGotCheckpointInWorldE22GameDataHolderAccessori">();
     noclipHook.installAtSym<"_ZN19PlayerActorHakoniwa8movementEv">();
     hintPhotoHook.installAtSym<"_ZN2rs19checkSavedHintPhotoEPKN2al9LiveActorEPKc">();
+    worldTravelingHook.installAtSym<"_ZN16GameDataFunction23getWorldTravelingStatusEPK17WorldTravelingNpc">();
+    worldTravelingHook2.installAtSym<"_ZN16GameDataFunction27isFirstWorldTravelingStatusEPK17WorldTravelingNpc">();
     // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
     // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
 }

@@ -99,6 +99,7 @@ void Menu::drawPageMisc() {
         drawTeleportCat();
         ImGui::PushItemWidth(200);
         ImGui::Combo("Wiggler Pattern", &set->getSettings()->mWigglerPattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns));
+        ImGui::Combo("Tourist Status", &set->getSettings()->mWorldTravelingStatus, worldTravelingStatus, IM_ARRAYSIZE(worldTravelingStatus));
         ImGui::PopItemWidth();
 
         if (ImGui::Button("Kill Mario")) {

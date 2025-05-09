@@ -13,6 +13,8 @@
 #include "imgui.h"
 #include "settings/SettingsMgr.h"
 
+class WorldTravelingNpc;
+
 namespace btt {
 
 class Menu {
@@ -44,6 +46,8 @@ public:
     bool mIsEnableNoclip = false;
     bool noGetPlayer = false;
     bool mIsEnabledMenu = true;
+    WorldTravelingNpc* mWorldTravelingNpc = nullptr;
+    const char* mWorldTravelingStatus = nullptr;
 
 private:
     void drawPopup();
@@ -103,6 +107,8 @@ private:
     constexpr static const char* WigglerPatterns[23] { "Random", "Ghost",   "Nose",    "C",        "W",     "J", "Medal",    "Plane",
                                                        "5",      "Hangman", "Spanish", "Siblings", "Snake", "8", "Mushroom", "Z",
                                                        "Tetris", "Ear",     "Bomb",    "Bird",     "L",     "O", "Star" };
+    constexpr static const char* worldTravelingStatus[] = { "<Normal>", "First Talk", "Metro",     "Cascade",        "Luncheon",
+                                                            "Moon",     "Mushroom",   "Last Talk", "After Last Talk" };
 
     constexpr static const char* Keys[] {
         "Disabled", "None", "L", "R", "ZL", "ZR", "L + R", "L + ZL", "L + ZR", "R + ZL", "R + ZR",

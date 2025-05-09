@@ -70,6 +70,7 @@ public:
         SETTING(Input2P);
         ImVec2 mInputDisplayPosP2 = ImVec2(1600.f / 2, 900.f / 2);
         SETTING(HintPhotoSpawn);
+        int mWorldTravelingStatus = 0;
 
     } mSettings;
 

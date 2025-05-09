@@ -1,8 +1,5 @@
 # TODO
 
-- [ ] move tourist to different kingdoms  (_ZN16GameDataFunction23getWorldTravelingStatusEPK17WorldTravelingNpc)
-
-
 - [x] Hotkeys  
     - [ ] Timer  
 - [ ] Travel to current kingdom  
@@ -90,3 +87,4 @@
 - [x] disable scene reload if dying state
 - [x] reload pos
 - [x] spawn all hint art moons
+- [x] move tourist to different kingdoms

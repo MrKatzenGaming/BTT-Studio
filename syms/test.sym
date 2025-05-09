@@ -1,6 +1,3 @@
 @smo:100,101,110,120
 
-_ZN16GameDataFunction23getWorldTravelingStatusEPK17WorldTravelingNpc
-_ZN16GameDataFunction27isFirstWorldTravelingStatusEPK17WorldTravelingNpc
-
 @smo:130

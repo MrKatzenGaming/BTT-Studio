@@ -1,6 +1,7 @@
 #include "hk/sail/detail.h"
 #include "hk/util/Math.h"
 
+#include "al/Library/LiveActor/ActorFlagFunction.h"
 #include "al/Library/LiveActor/ActorMovementFunction.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 #include "al/Library/Memory/HeapUtil.h"
@@ -73,9 +74,11 @@ void Menu::loadTeleport(TpState& state) {
     al::LiveActor* hack = playerHak->mHackKeeper->mCurrentHackActor;
 
     if (hack) {
+        al::offCollide(hack);
         al::setTrans(hack, state.pos);
         al::updatePoseQuat(hack, state.quat);
         al::setVelocityZero(hack);
+        al::onCollide(hack);
         menuTimer = 0;
         return;
     }

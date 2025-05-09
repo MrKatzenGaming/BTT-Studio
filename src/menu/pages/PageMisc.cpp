@@ -11,6 +11,7 @@
 
 #include "game/Player/PlayerFunction.h"
 #include "game/Player/PlayerHackKeeper.h"
+#include "game/System/GameDataFile.h"
 #include "game/System/GameDataFunction.h"
 #include <game/Sequence/ChangeStageInfo.h>
 
@@ -100,6 +101,19 @@ void Menu::drawPageMisc() {
     if (ImGui::CollapsingHeader("Misc")) {
         ImGui::Indent();
         drawTeleportCat();
+        if (ImGui::CollapsingHeader("Outfit")) {
+            ImGui::Indent();
+            ImGui::Combo("Body", &mSelectedBody, bodyNames, IM_ARRAYSIZE(bodyNames));
+            ImGui::Combo("Cap", &mSelectedCap, capNames, IM_ARRAYSIZE(capNames));
+            if (ImGui::Button("Set Outfit")) {
+                if (gameSeq->mGameDataHolderAccessor.mData && stageScene) {
+                    GameDataFunction::wearCap(gameSeq->mGameDataHolderAccessor.mData, capNames[mSelectedCap]);
+                    GameDataFunction::wearCostume(gameSeq->mGameDataHolderAccessor.mData, bodyNames[mSelectedBody]);
+                    stageScene->kill();
+                }
+            }
+            ImGui::Unindent();
+        }
         ImGui::PushItemWidth(200);
         ImGui::Combo("Wiggler Pattern", &set->getSettings()->mWigglerPattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns));
         ImGui::Combo("Tourist Status", &set->getSettings()->mWorldTravelingStatus, worldTravelingStatus, IM_ARRAYSIZE(worldTravelingStatus));

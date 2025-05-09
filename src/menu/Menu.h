@@ -113,5 +113,25 @@ private:
     constexpr static const char* Keys[] {
         "Disabled", "None", "L", "R", "ZL", "ZR", "L + R", "L + ZL", "L + ZR", "R + ZL", "R + ZR",
     };
+
+    constexpr static const char* bodyNames[] = {
+        "Mario",          "Mario64",         "Mario64Metal",      "MarioAloha",      "MarioArmor",     "MarioBone",      "MarioClown",    "MarioColorClassic",
+        "MarioColorGold", "MarioColorLuigi", "MarioColorWaluigi", "MarioColorWario", "MarioCook",      "MarioDiddyKong", "MarioDoctor",   "MarioExplorer",
+        "MarioFootball",  "MarioGolf",       "MarioGunman",       "MarioHakama",     "MarioHappi",     "MarioKing",      "MarioKoopa",    "MarioMaker",
+        "MarioMechanic",  "MarioNew3DS",     "MarioPainter",      "MarioPeach",      "MarioPilot",     "MarioPirate",    "MarioPoncho",   "MarioPrimitiveMan",
+        "MarioSailor",    "MarioScientist",  "MarioShopman",      "MarioSnowSuit",   "MarioSpaceSuit", "MarioSuit",      "MarioSwimwear", "MarioTailCoat",
+        "MarioTuxedo",    "MarioUnderwear"
+    };
+
+    constexpr static const char* capNames[] = {
+        "Mario",          "Mario64",         "Mario64Metal",      "MarioAloha",      "MarioArmor",     "MarioBone",      "MarioClown",    "MarioColorClassic",
+        "MarioColorGold", "MarioColorLuigi", "MarioColorWaluigi", "MarioColorWario", "MarioCook",      "MarioDiddyKong", "MarioDoctor",   "MarioExplorer",
+        "MarioFootball",  "MarioGolf",       "MarioGunman",       "MarioHakama",     "MarioHappi",     "MarioKing",      "MarioKoopa",    "MarioMaker",
+        "MarioMechanic",  "MarioNew3DS",     "MarioPainter",      "MarioPeach",      "MarioPilot",     "MarioPirate",    "MarioPoncho",   "MarioPrimitiveMan",
+        "MarioSailor",    "MarioScientist",  "MarioShopman",      "MarioSnowSuit",   "MarioSpaceSuit", "MarioSuit",      "MarioSwimwear", "MarioTailCoat",
+        "MarioTuxedo",  "MarioInvisible"
+    };
+    int mSelectedBody = 0;
+    int mSelectedCap = 0;
 };
 } // namespace btt

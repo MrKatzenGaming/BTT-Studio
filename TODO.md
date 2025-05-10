@@ -1,7 +1,5 @@
 # TODO
 
-- [x] Hotkeys  
-    - [ ] Timer  
 - [ ] Travel to current kingdom  
 - [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts  
     - [x] text  
@@ -13,7 +11,16 @@
 
 - [ ] refresh deep woods nut  
 - [ ] refresh shards  
-- [ ] timer for every splice  
+- [-] timer for every splice  
+    - [x] Moon Tick
+    - [x] Moon Grab
+    - [ ] Start Game
+    - [ ] End Game
+    - [ ] Capture Glow
+    - [ ] Pylon Spark
+    - [ ] Fadeout
+    - [ ] Fadein
+
 - [ ] having the multimoon spawn at the start of every kingdom, or a way to reload stage like you got the multimoon  
 - [ ] kingdom enter cutscene with stage reload
 - [ ] shorten story moon cutscenes, make the story moons not as messy  
@@ -82,6 +89,7 @@
     - [x] Coins  
     - [x] Life Up  
     - [x] warp to last checkpoint  
+    - [x] Timer  
 - [x] refresh seed 
 - [x] disable scene reload if dying state
 - [x] reload pos

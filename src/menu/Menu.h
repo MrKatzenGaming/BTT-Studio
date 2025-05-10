@@ -25,6 +25,7 @@ public:
     void draw();
     void handleAlways();
     void drawInfoWindow();
+    void drawPopup();
 
     void setLatestMapTarget(void* target) { mLastMapTarget = target; }
 
@@ -50,7 +51,6 @@ public:
     const char* mWorldTravelingStatus = nullptr;
 
 private:
-    void drawPopup();
     void drawPageOptions();
     void drawPageInputDisplay();
     void drawPageHotkeys();
@@ -95,10 +95,11 @@ private:
     bool isEnablePlayerInfo = false;
     bool mIsReloadPos = false;
     int reloadPosTimer = -1;
+    int mSelectedBody = 0;
+    int mSelectedCap = 0;
+    int tpIndex = 0;
     sead::Vector3f reloadStagePos = { 0, 0, 0 };
     sead::Quatf reloadStageQuat = { 0, 0, 0, 0 };
-
-    int tpIndex = 0;
 
     char popupText[0x40] = "Input Disabled";
 
@@ -129,9 +130,11 @@ private:
         "MarioFootball",  "MarioGolf",       "MarioGunman",       "MarioHakama",     "MarioHappi",     "MarioKing",      "MarioKoopa",    "MarioMaker",
         "MarioMechanic",  "MarioNew3DS",     "MarioPainter",      "MarioPeach",      "MarioPilot",     "MarioPirate",    "MarioPoncho",   "MarioPrimitiveMan",
         "MarioSailor",    "MarioScientist",  "MarioShopman",      "MarioSnowSuit",   "MarioSpaceSuit", "MarioSuit",      "MarioSwimwear", "MarioTailCoat",
-        "MarioTuxedo",  "MarioInvisible"
+        "MarioTuxedo",    "MarioInvisible"
     };
-    int mSelectedBody = 0;
-    int mSelectedCap = 0;
+
+    constexpr static const char* TimerHookTypes[] = {
+        "None", "Shine Grab (Kinda Broken)", "Shine Tick", "Game Start (Not Implemented)", "Escape Wire (Not Implemented)", "Capture Glow (Not Implemented)",
+    };
 };
 } // namespace btt

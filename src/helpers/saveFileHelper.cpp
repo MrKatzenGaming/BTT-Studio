@@ -7,7 +7,7 @@
 
 #include "fsHelper.h"
 #include "logger.h"
-#include "os.h"
+#include "nn/os.h"
 #include "settings/SettingsMgr.h"
 
 SEAD_SINGLETON_DISPOSER_IMPL(SaveFileHelper);

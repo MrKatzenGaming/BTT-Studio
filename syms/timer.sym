@@ -1,0 +1,9 @@
+@smo:100,101,110,120
+
+_ZN12ShineCounter16exeShineCountAddEv
+_ZN10StageScene15exeDemoShineGetEv
+
+@smo:130
+
+_ZN12ShineCounter16exeShineCountAddEv = 0x001dfd80
+_ZN10StageScene15exeDemoShineGetEv = 0x00475990

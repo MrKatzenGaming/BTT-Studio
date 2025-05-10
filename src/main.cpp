@@ -21,12 +21,14 @@
 #include "saveFileHelper.h"
 #include "settings/SettingsHooks.h"
 #include "settings/SettingsMgr.h"
+#include "settings/TimerHooks.h"
+#include "Timer.h"
 
 using namespace hk;
 
 namespace btt {
 sead::Heap* initializeHeap() {
-    return sead::ExpHeap::create(3_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
+    return sead::ExpHeap::create(2_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
 }
 } // namespace btt
 
@@ -44,6 +46,8 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
     logger->log(Logger::LogType::LogInfo, "SettingsMgr instance created");
     btt::Menu* menu = btt::Menu::createInstance(heap);
     logger->log(Logger::LogType::LogInfo, "Menu instance created");
+    btt::Timer* timer = new btt::Timer();
+    logger->log(Logger::LogType::LogInfo, "Timer instance created");
     SaveFileHelper* save = SaveFileHelper::createInstance(heap);
     logger->log(Logger::LogType::LogInfo, "SaveFileHelper instance created");
     save->init(heap);
@@ -65,6 +69,13 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
                 btt::drawInputDisplay();
                 if (btt::SettingsMgr::instance()->getSettings()->mIsEnableInput2P) btt::drawInputDisplayP2();
             }
+            if (btt::SettingsMgr::instance()->getSettings()->mIsEnableSegmentTimer) {
+                btt::Timer* timer = btt::Timer::sInstance;
+                if (timer) {
+                    timer->draw();
+                }
+            }
+            menu->drawPopup();
         }
     });
     logger->log(Logger::LogType::LogInfo, "ImGui setup done");
@@ -147,6 +158,7 @@ extern "C" void hkMain() {
     hakoniwaSequenceUpdate.installAtSym<"_ZN16HakoniwaSequence6updateEv">();
 
     btt::SettingsHooks::installSettingsHooks();
+    btt::TimerHooks::installTimerHooks();
 
     hk::gfx::ImGuiBackendNvn::instance()->installHooks(false);
 

@@ -3,6 +3,7 @@
 #include <sead/heap/seadDisposer.h>
 
 #include "imgui.h"
+#include "menu/Timer.h"
 
 namespace btt {
 
@@ -71,6 +72,14 @@ public:
         ImVec2 mInputDisplayPosP2 = ImVec2(1600.f / 2, 900.f / 2);
         SETTING(HintPhotoSpawn);
         int mWorldTravelingStatus = 0;
+        SETTING(SegmentTimer);
+        ImVec2 mTimerPos = ImVec2(1600.f / 2, 900.f / 2);
+        SETTING(SegTimerSplit);
+        int mTimerStartType = TimerHookType::None;
+        int mTimerEndType = TimerHookType::None;
+        int mTimerStartKey = 0;
+        int mTimerEndKey = 0;
+        int mTimerResetKey = 0;
 
     } mSettings;
 

@@ -14,6 +14,7 @@
 #include <typeinfo>
 
 #include "helpers/InputHelper.h"
+#include "imgui.h"
 #include "Menu.h"
 
 using namespace btt;
@@ -33,6 +34,9 @@ void Menu::drawPageHotkeys() {
         ImGui::Combo("Next Wiggler Pattern##Key", &set->mSettings.mIncPatternKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Prev Wiggler Pattern##Key", &set->mSettings.mDecPatternKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Warp to last Checkpoint##Key", &set->mSettings.mWarpLastCpKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Start Timer##Key", &set->mSettings.mTimerStartKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("End Timer##Key", &set->mSettings.mTimerEndKey, Keys, IM_ARRAYSIZE(Keys));
+        ImGui::Combo("Reset Timer##Key", &set->mSettings.mTimerResetKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }
@@ -169,6 +173,24 @@ void Menu::handleHotkeys() {
                 ptr addr = hk::sail::lookupSymbolFromDb<>("StageSceneNrvWarpToCheckpoint");
                 stageScene->getNerveKeeper()->setNerve((al::Nerve*)addr);
             }
+        }
+    }
+    if (isHotkey(set->getSettings()->mTimerStartKey)) {
+        if (Timer::sInstance) {
+            Timer::sInstance->start();
+            setPopupText("Timer started");
+        }
+    }
+    if (isHotkey(set->getSettings()->mTimerEndKey)) {
+        if (Timer::sInstance) {
+            Timer::sInstance->stop();
+            setPopupText("Timer stopped");
+        }
+    }
+    if (isHotkey(set->getSettings()->mTimerResetKey)) {
+        if (Timer::sInstance) {
+            Timer::sInstance->reset();
+            setPopupText("Timer reset");
         }
     }
 }

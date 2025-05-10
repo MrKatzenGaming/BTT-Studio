@@ -41,8 +41,14 @@ SEAD_SINGLETON_DISPOSER_IMPL(Menu);
 static const char* windowName = "BTT Studio v" VERSION SUBVER;
 
 void Menu::draw() {
+    static bool wasInputToggled = false;
     if (InputHelper::isInputToggled()) {
-        drawPopup();
+        mIsPopup = true;
+        wasInputToggled = true;
+    }
+    if (wasInputToggled && !InputHelper::isInputToggled()) {
+        mIsPopup = false;
+        wasInputToggled = false;
     }
 
     ImGui::Begin(windowName, nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavFocus);
@@ -276,12 +282,11 @@ void Menu::handleAlways() {
             mIsPopup = false;
             strcpy(popupText, "Input Disabled");
         }
-        if (!mIsEnabledMenu) drawPopup();
-        if (mIsEnabledMenu && !InputHelper::isInputToggled()) drawPopup();
     }
 }
 
 void Menu::drawPopup() {
+    if (!mIsPopup) return;
     ImGui::Begin(
         "Popup", nullptr,
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |

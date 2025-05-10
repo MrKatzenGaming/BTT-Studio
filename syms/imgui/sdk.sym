@@ -2,9 +2,6 @@
 
 _ZN2nn2oe16GetOperationModeEv
 
-_ZN2nn2os13GetSystemTickEv
-_ZN2nn2os17ConvertToTimeSpanENS0_4TickE
-
 _ZN2nn3hid13GetNpadStatesEPNS0_16NpadFullKeyStateEiRKj
 _ZN2nn3hid13GetNpadStatesEPNS0_17NpadHandheldStateEiRKj
 _ZN2nn3hid13GetNpadStatesEPNS0_16NpadJoyDualStateEiRKj

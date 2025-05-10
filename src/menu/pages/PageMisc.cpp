@@ -24,6 +24,7 @@
 #include "imgui_internal.h"
 #include "Menu.h"
 #include "stage_warp.h"
+#include "Timer.h"
 
 using namespace btt;
 
@@ -112,6 +113,32 @@ void Menu::drawPageMisc() {
                     stageScene->kill();
                 }
             }
+            ImGui::Unindent();
+        }
+        if (ImGui::CollapsingHeader("Segment Timer")) {
+            ImGui::Indent();
+            ImGui::Checkbox("Enable", &set->getSettings()->mIsEnableSegmentTimer);
+            ImGui::SameLine();
+            if (ImGui::Button("Start")) {
+                btt::Timer::sInstance->start();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Stop")) {
+                btt::Timer::sInstance->stop();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Reset")) {
+                btt::Timer::sInstance->reset();
+            }
+            static int startType = 0;
+            ImGui::Combo("Start Type", &set->getSettings()->mTimerStartType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes));
+            ImGui::Combo("End Type", &set->getSettings()->mTimerEndType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes));
+            static int posX = set->getSettings()->mTimerPos.x;
+            static int posY = set->getSettings()->mTimerPos.y;
+            ImGui::PushItemWidth(200);
+            if (ImGui::InputInt("Timer X", &posX, 5)) set->getSettings()->mTimerPos.x = posX;
+            if (ImGui::InputInt("Timer Y", &posY, 5)) set->getSettings()->mTimerPos.y = posY;
+            ImGui::PopItemWidth();
             ImGui::Unindent();
         }
         ImGui::PushItemWidth(200);

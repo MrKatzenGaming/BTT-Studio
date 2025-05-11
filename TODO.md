@@ -11,7 +11,7 @@
 
 - [ ] refresh deep woods nut  
 - [ ] refresh shards  
-- [-] timer for every splice  
+- [ ] timer for every splice  
     - [x] Moon Tick
     - [x] Moon Grab
     - [ ] Start Game

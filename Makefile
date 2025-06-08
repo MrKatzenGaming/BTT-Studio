@@ -11,7 +11,7 @@ debug_sym: format check_symbols
 
 release: clean format
 	cmake -DCMAKE_BUILD_TYPE=Debug -DDEBUG=FALSE -S . -B build && $(MAKE) -C build
-	python ./make-Release/release.py
+	python ./make-release/release.py
 
 format:
 	find ./src -name "*.*" | xargs clang-format -i

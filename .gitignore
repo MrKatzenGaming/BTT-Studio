@@ -2,3 +2,7 @@ build/
 .cache/
 compile_commands.json
 lib/std
+make-release/BTT-Studio.nss
+make-release/BTT-Studio.zip
+make-release/BTT-Studio-SimpleModManager.zip
+

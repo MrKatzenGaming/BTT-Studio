@@ -263,6 +263,9 @@ HkTrampoline<bool, WorldTravelingNpc*> worldTravelingHook2 = hk::hook::trampolin
     }
     return worldTravelingHook.orig(actor);
 });
+HkTrampoline<bool, al::LiveActor*> toadRefreshHook = hk::hook::trampoline([](al::LiveActor* actor) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshNpc ? false : toadRefreshHook.orig(actor);
+});
 
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();
@@ -297,5 +300,6 @@ void SettingsHooks::installSettingsHooks() {
     worldTravelingHook.installAtSym<"_ZN16GameDataFunction23getWorldTravelingStatusEPK17WorldTravelingNpc">();
     worldTravelingHook2.installAtSym<"_ZN16GameDataFunction27isFirstWorldTravelingStatusEPK17WorldTravelingNpc">();
     // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
+    toadRefreshHook.installAtSym<"_ZN2rs34isOnFlagKinopioBrigadeNpcFirstTalkEPKN2al9LiveActorE">();
     // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
 }

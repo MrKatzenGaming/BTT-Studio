@@ -80,6 +80,7 @@ public:
         int mTimerStartKey = 0;
         int mTimerEndKey = 0;
         int mTimerResetKey = 0;
+        SETTING(RefreshNpc);
 
     } mSettings;
 

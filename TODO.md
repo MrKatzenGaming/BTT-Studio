@@ -29,6 +29,10 @@
 - [ ] speed up the warp animation?
 - [ ] shop text thingys
 - [ ] refresh already collected npc moons
+  - [x] Toad
+  - [ ] Peach
+  - [ ] Hat and Seek
+  - [ ] Bench
 
 ## very Hard / Mby Impossible
 

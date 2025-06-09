@@ -24,6 +24,7 @@ void Menu::drawPageOptions() {
         ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);
         ImGui::Checkbox("Refresh Seeds", &set->getSettings()->mIsEnableFlowerPotRefresh);
         ImGui::Checkbox("Spawn all Hint Art Moons", &set->getSettings()->mIsEnableHintPhotoSpawn);
+        ImGui::Checkbox("Refresh Toad", &set->getSettings()->mIsEnableRefreshNpc);
 
         ImGui::BeginDisabled();
 

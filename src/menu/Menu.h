@@ -69,7 +69,7 @@ private:
         vsnprintf(popupText, sizeof(popupText), fmt, args);
         va_end(args);
         mIsPopup = true;
-        menuTimer = 0;
+        popupTimer = 0;
     }
 
     bool isHotkey(int key);
@@ -82,6 +82,7 @@ private:
     ImVec2 mWindowSize = ImVec2(500, 400);
     ImGuiID prevNavId = 0;
     u64 menuTimer = 0;
+    u64 popupTimer = 0;
 
     HakoniwaSequence* gameSeq;
     StageScene* stageScene;

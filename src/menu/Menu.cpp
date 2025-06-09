@@ -262,6 +262,10 @@ void Menu::handleAlways() {
         mIsEnabledMenu = false;
         prevMouseDis = InputHelper::isDisableMouse();
         InputHelper::setDisableMouse(true);
+        if (mIsPopup) {
+            mIsPopup = false;
+            strcpy(popupText, "Input Disabled");
+        }
     } else if (InputHelper::isPressStickL() && !mIsEnabledMenu) {
         mIsEnabledMenu = true;
         wasMenuDisabled = true;
@@ -278,7 +282,8 @@ void Menu::handleAlways() {
         wasMenuDisabled = false;
     }
     if (mIsPopup) {
-        if (menuTimer > 2 * 60 && menuTimer < 2 * 60 + 5) {
+        popupTimer++;
+        if (popupTimer > 2 * 60 && popupTimer < 2 * 60 + 5) {
             mIsPopup = false;
             strcpy(popupText, "Input Disabled");
         }

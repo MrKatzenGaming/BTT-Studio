@@ -22,6 +22,7 @@ using namespace btt;
 void Menu::drawPageHotkeys() {
     if (ImGui::CollapsingHeader("Hotkeys")) {
         ImGui::Indent();
+        ImGui::Text("Usage: Hold Hotkey + Press DPad-Up");
         ImGui::PushItemWidth(200);
         ImGui::Combo("Kill Scene##Key", &set->mSettings.mKillSceneKey, Keys, IM_ARRAYSIZE(Keys));
         ImGui::Combo("Heal Mario##Key", &set->mSettings.mHealMarioKey, Keys, IM_ARRAYSIZE(Keys));

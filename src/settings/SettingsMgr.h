@@ -81,6 +81,7 @@ public:
         int mTimerEndKey = 0;
         int mTimerResetKey = 0;
         SETTING(RefreshNpc);
+        SETTING(DisableCoinStackSave);
 
     } mSettings;
 

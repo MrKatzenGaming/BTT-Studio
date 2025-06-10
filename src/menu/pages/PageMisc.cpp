@@ -99,7 +99,7 @@ void Menu::loadTeleport(TpState& state) {
 }
 
 void Menu::drawPageMisc() {
-    if (ImGui::CollapsingHeader("Misc")) {
+    if (ImGui::CollapsingHeader("Misc##page")) {
         ImGui::Indent();
         drawTeleportCat();
         if (ImGui::CollapsingHeader("Outfit")) {

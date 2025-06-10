@@ -13,10 +13,13 @@
 #include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveUtil.h>
 
+#include "game/System/GameDataFile.h"
+#include <game/Item/CoinStackGroup.h>
 #include <game/MapObj/DoorAreaChange.h>
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameDataHolder.h>
 #include <game/System/GameDataHolderWriter.h>
+#include <game/System/GameDataUtil.h>
 #include <game/System/PlayerHitPointData.h>
 
 #include "InputHelper.h"
@@ -267,6 +270,15 @@ HkTrampoline<bool, al::LiveActor*> toadRefreshHook = hk::hook::trampoline([](al:
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshNpc ? false : toadRefreshHook.orig(actor);
 });
 
+HkTrampoline<void, al::LiveActor*, al::PlacementId*, int*> coinStackRefreshHook =
+    hk::hook::trampoline([](al::LiveActor* actor, al::PlacementId* id, int* i) -> void {
+        if (SettingsMgr::instance()->getSettings()->mIsEnableDisableCoinStackSave) {
+            return;
+        } else {
+            coinStackRefreshHook.orig(actor, id, i);
+        }
+    });
+
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();
     installWigglerHooks();
@@ -302,4 +314,5 @@ void SettingsHooks::installSettingsHooks() {
     // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
     toadRefreshHook.installAtSym<"_ZN2rs34isOnFlagKinopioBrigadeNpcFirstTalkEPKN2al9LiveActorE">();
     // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
+    coinStackRefreshHook.installAtSym<"_ZN2rs13saveCoinStackEPKN2al9LiveActorEPKNS0_11PlacementIdEi">();
 }

@@ -1,0 +1,7 @@
+@smo:100,101,110,120
+
+_ZNK16GameProgressData16isAlreadyGoWorldEi
+
+@smo:130
+
+_ZNK16GameProgressData16isAlreadyGoWorldEi = 0x004e1060

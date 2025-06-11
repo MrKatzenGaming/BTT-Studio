@@ -1,13 +1,10 @@
 # TODO
 
-## Try before tourney
-
-- [ ] Enter kingdom cappy text
-
 - [ ] Travel to current kingdom
-- [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts
+- [] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts
   - [x] text
-  - [ ] fix cutscene skips
+  - [x] fix cutscene skips
+  - [ ] cappy talk
 - [ ] completely custom moon text (read bin file, make bin file with website)
 
 ## Hard

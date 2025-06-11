@@ -17,13 +17,18 @@ void Menu::drawPageOptions() {
             ImGui::Checkbox("Refresh Seeds", &set->getSettings()->mIsEnableFlowerPotRefresh);
             ImGui::Checkbox("Refresh Toad Text", &set->getSettings()->mIsEnableRefreshNpc);
             ImGui::Checkbox("Disable Saving Coin Stacks", &set->getSettings()->mIsEnableDisableCoinStackSave);
-
-            ImGui::BeginDisabled();
-
-            ImGui::Checkbox("Refresh Moon Shards", &set->getSettings()->mIsEnableShardRefresh);
             ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
+            if (GImGui->NavId == ImGui::GetID("Refresh Kingdom Enter Cutscenes")) {
+                ImGui::SetTooltip("Doesn't refresh Cappy text after landing in Cascade, Sand, Metro, Lost and Moon.");
+            }
 
+#ifndef BTTDEBUG
+            ImGui::BeginDisabled();
+#endif
+            ImGui::Checkbox("Refresh Moon Shards", &set->getSettings()->mIsEnableShardRefresh);
+#ifndef BTTDEBUG
             ImGui::EndDisabled();
+#endif
             ImGui::Unindent();
         }
         if (ImGui::CollapsingHeader("Disable")) {

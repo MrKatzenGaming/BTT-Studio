@@ -78,10 +78,6 @@ HkTrampoline<void, PlayerHitPointData*> NoDamageHook = hk::hook::trampoline([](P
     if (!SettingsMgr::instance()->getSettings()->mIsEnableNoDamage) NoDamageHook.orig(hitPointData);
 });
 
-HkTrampoline<bool, GameDataHolderAccessor> kingdomEnterHook = hk::hook::trampoline([](GameDataHolderAccessor accessor) -> bool {
-    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshKingdomEnter ? false : kingdomEnterHook.orig(accessor);
-});
-
 HkTrampoline<bool, GameDataHolderAccessor> warpTextHook = hk::hook::trampoline([](GameDataHolderAccessor accessor) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshWarpText ? false : warpTextHook.orig(accessor);
 });
@@ -279,6 +275,10 @@ HkTrampoline<void, al::LiveActor*, al::PlacementId*, int*> coinStackRefreshHook 
         }
     });
 
+HkTrampoline<bool, GameProgressData*, int> kingdomEnterHook = hk::hook::trampoline([](GameProgressData* data, int i) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshKingdomEnter ? false : kingdomEnterHook.orig(data, i);
+});
+
 void SettingsHooks::installSettingsHooks() {
     installDemoHooks();
     installWigglerHooks();
@@ -311,8 +311,8 @@ void SettingsHooks::installSettingsHooks() {
     hintPhotoHook.installAtSym<"_ZN2rs19checkSavedHintPhotoEPKN2al9LiveActorEPKc">();
     worldTravelingHook.installAtSym<"_ZN16GameDataFunction23getWorldTravelingStatusEPK17WorldTravelingNpc">();
     worldTravelingHook2.installAtSym<"_ZN16GameDataFunction27isFirstWorldTravelingStatusEPK17WorldTravelingNpc">();
-    // kingdomEnterHook.installAtSym<"_ZN16GameDataFunction11isGameClearE22GameDataHolderAccessor">();
     toadRefreshHook.installAtSym<"_ZN2rs34isOnFlagKinopioBrigadeNpcFirstTalkEPKN2al9LiveActorE">();
     // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
     coinStackRefreshHook.installAtSym<"_ZN2rs13saveCoinStackEPKN2al9LiveActorEPKNS0_11PlacementIdEi">();
+    kingdomEnterHook.installAtSym<"_ZNK16GameProgressData16isAlreadyGoWorldEi">();
 }

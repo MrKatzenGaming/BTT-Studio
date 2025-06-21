@@ -6,6 +6,7 @@
   - [x] fix cutscene skips
   - [ ] cappy talk
 - [ ] completely custom moon text (read bin file, make bin file with website)
+- [ ] refresh cappy get cutscene
 
 ## Hard
 

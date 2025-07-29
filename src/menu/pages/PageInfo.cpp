@@ -4,8 +4,8 @@
 #include "game/System/GameDataFunction.h"
 #include "game/Util/AchievementUtil.h"
 
-#include "getHelper.h"
-#include "Menu.h"
+#include "helpers/getHelper.h"
+#include "menu/Menu.h"
 
 using namespace btt;
 

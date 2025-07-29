@@ -25,7 +25,7 @@
 #include <nn/nifm.h>
 #include <nn/socket.h>
 
-#include "getHelper.h"
+#include "helpers/getHelper.h"
 
 HkTrampoline<void> disableSocketInit = hk::hook::trampoline([]() -> void {});
 

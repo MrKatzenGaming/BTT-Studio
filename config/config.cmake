@@ -5,7 +5,7 @@ set(OPTIMIZE_OPTIONS_DEBUG -O2 -gdwarf-4)
 set(OPTIMIZE_OPTIONS_RELEASE -O3 -ffast-math -flto)
 set(WARN_OPTIONS -Werror=return-type -Wno-invalid-offsetof)
 
-set(INCLUDES include include/agl)
+set(INCLUDES include lib/OdysseyHeaders/agl)
 set(DEFINITIONS IMGUI_DISABLE_TTY_FUNCTIONS IMGUI_DISABLE_FILE_FUNCTIONS)
 set(EXCEPTION_FLAGS -fno-exceptions)
 

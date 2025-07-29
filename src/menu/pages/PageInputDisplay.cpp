@@ -1,6 +1,6 @@
 #include "imgui.h"
-#include "InputDisplay.h"
-#include "Menu.h"
+#include "menu/InputDisplay.h"
+#include "menu/Menu.h"
 
 using namespace btt;
 

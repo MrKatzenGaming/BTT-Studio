@@ -1,4 +1,4 @@
-#include "Timer.h"
+#include "menu/Timer.h"
 
 #include <cstdio>
 
@@ -14,22 +14,22 @@ Timer::Timer() {
 }
 
 void Timer::start() {
-    mStartTick = nn::os::GetSystemTick();
+    mStartTick = nn::os::GetSystemTick().value;
     mIsRunning = true;
     mFrames = 0;
 }
 
 void Timer::stop() {
     if (mIsRunning) {
-        mEndTick = nn::os::GetSystemTick();
+        mEndTick = nn::os::GetSystemTick().value;
         mIsRunning = false;
     }
 }
 
 void Timer::reset() {
     auto now = nn::os::GetSystemTick();
-    mStartTick = now;
-    mEndTick = now;
+    mStartTick = now.value;
+    mEndTick = now.value;
     mIsRunning = false;
     mFrames = 0;
 }
@@ -49,10 +49,10 @@ void Timer::event(TimerHookType type) {
 void Timer::showSplit() {
     auto tick = nn::os::GetSystemTick();
     if (!mIsRunning) {
-        mStartTick = tick;
-        mEndTick = tick;
+        mStartTick = tick.value;
+        mEndTick = tick.value;
     }
-    mShowSplitTick = tick;
+    mShowSplitTick = tick.value;
 }
 
 void Timer::draw() {
@@ -63,17 +63,17 @@ void Timer::draw() {
     if (true) {
         char buffer[32] { 0 };
 
-        s64 timerNow = mIsRunning ? nn::os::GetSystemTick() : mEndTick;
-        bool isShowSplit = mShowSplitTick && float(nn::os::GetSystemTick() - mShowSplitTick) / nn::os::GetSystemTickFrequency() <= 2;
+        s64 timerNow = mIsRunning ? nn::os::GetSystemTick().value : mEndTick;
+        bool isShowSplit = mShowSplitTick && float(nn::os::GetSystemTick().value - mShowSplitTick) / nn::os::GetSystemTickFrequency().value <= 2;
         if (isShowSplit) timerNow = mShowSplitTick;
 
         s64 time = timerNow - mStartTick;
-        s64 seconds = time / nn::os::GetSystemTickFrequency();
+        s64 seconds = time / nn::os::GetSystemTickFrequency().value;
         s64 minutes = seconds / 60;
         s64 remainingSeconds = seconds % 60;
-        s64 milliseconds = (time % nn::os::GetSystemTickFrequency()) * 1000 / nn::os::GetSystemTickFrequency();
+        s64 milliseconds = (time % nn::os::GetSystemTickFrequency().value) * 1000 / nn::os::GetSystemTickFrequency().value;
 
-        if (time / nn::os::GetSystemTickFrequency() >= 60)
+        if (time / nn::os::GetSystemTickFrequency().value >= 60)
             snprintf(buffer, 32, "%ld:%02ld.%03ld", minutes, remainingSeconds, milliseconds);
         else
             snprintf(buffer, 32, "%02ld.%03ld", remainingSeconds, milliseconds);

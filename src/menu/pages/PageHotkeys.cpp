@@ -15,7 +15,7 @@
 
 #include "helpers/InputHelper.h"
 #include "imgui.h"
-#include "Menu.h"
+#include "menu/Menu.h"
 
 using namespace btt;
 

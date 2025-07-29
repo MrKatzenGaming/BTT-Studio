@@ -3,9 +3,9 @@
 #include <sead/heap/seadDisposer.h>
 #include <sead/math/seadQuat.h>
 
+#include <custom/game/Scene/StageScene.h>
 #include <game/Player/PlayerActorBase.h>
 #include <game/Player/PlayerActorHakoniwa.h>
-#include <game/Scene/StageScene.h>
 #include <game/Sequence/HakoniwaSequence.h>
 
 #include <cstdio>

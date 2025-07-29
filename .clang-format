@@ -28,22 +28,22 @@ ContinuationIndentWidth: 4
 Cpp11BracedListStyle: false
 EmptyLineBeforeAccessModifier: LogicalBlock
 FixNamespaceComments: true
-IncludeBlocks:   Regroup
+IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           ^("|<)hk/
-    Priority:        1
-  - Regex:           ^("|<)al/
-    Priority:        2
-  - Regex:           ^("|<)agl/
-    Priority:        3
-  - Regex:           ^("|<)sead/
-    Priority:        4
-  - Regex:           ^("|<)game/
-    Priority:        5
-  - Regex:           ^<
-    Priority:        6
-  - Regex:           ^"
-    Priority:        7
+  - Regex: ^("|<)hk/
+    Priority: 1
+  - Regex: ^("|<)(al/|custom/al/)
+    Priority: 2
+  - Regex: ^("|<)(agl/|custom/agl/)
+    Priority: 3
+  - Regex: ^("|<)(sead/|custom/sead/)
+    Priority: 4
+  - Regex: ^("|<)(game/|custom/game/)
+    Priority: 5
+  - Regex: ^<
+    Priority: 6
+  - Regex: ^"
+    Priority: 7
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false
@@ -86,6 +86,6 @@ SpacesInLineCommentPrefix:
 SpacesInParens: Never
 SpacesInSquareBrackets: false
 Standard: c++20
-TypeNames: [ u8, s8, u16, s16, u32, s32, f32, u64, s64, f64 ]
+TypeNames: [u8, s8, u16, s16, u32, s32, f32, u64, s64, f64]
 TabWidth: 4
 UseTab: Never

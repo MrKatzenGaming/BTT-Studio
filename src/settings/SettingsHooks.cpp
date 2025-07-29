@@ -1,4 +1,4 @@
-#include "SettingsHooks.h"
+#include "settings/SettingsHooks.h"
 
 #include "hk/hook/InstrUtil.h"
 #include "hk/hook/Trampoline.h"
@@ -13,19 +13,19 @@
 #include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveUtil.h>
 
-#include "game/System/GameDataFile.h"
+#include "custom/game/System/GameDataFile.h"
+#include <custom/game/MapObj/DoorAreaChange.h>
 #include <game/Item/CoinStackGroup.h>
-#include <game/MapObj/DoorAreaChange.h>
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameDataHolder.h>
 #include <game/System/GameDataHolderWriter.h>
 #include <game/System/GameDataUtil.h>
 #include <game/System/PlayerHitPointData.h>
 
-#include "InputHelper.h"
-#include "Menu.h"
+#include "helpers/InputHelper.h"
+#include "menu/Menu.h"
 #include "settings/DemoHooks.hpp"
-#include "SettingsMgr.h"
+#include "settings/SettingsMgr.h"
 
 using namespace hk;
 using namespace btt;

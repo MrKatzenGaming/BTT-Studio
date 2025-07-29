@@ -1,11 +1,11 @@
-#include "saveFileHelper.h"
+#include "helpers/saveFileHelper.h"
 
 #include <sead/heap/seadHeapMgr.h>
 
 #include <cstddef>
 #include <nn/fs.h>
 
-#include "fsHelper.h"
+#include "helpers/fsHelper.h"
 #include "logger.h"
 #include "nn/os.h"
 #include "settings/SettingsMgr.h"

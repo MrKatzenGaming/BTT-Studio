@@ -1,14 +1,11 @@
-#include "InputDisplay.h"
+#include "menu/InputDisplay.h"
 
 #include "al/Library/Controller/InputFunction.h"
-#include "al/Library/Pad/NpadController.h"
+#include "custom/al/Library/Pad/NpadController.h"
 
 #include "sead/controller/seadControllerMgr.h"
 #include <sead/math/seadVector.h>
 
-#include "game/Player/PlayerInputFunction.h"
-
-#include "getHelper.h"
 #include "imgui_internal.h"
 
 namespace btt {

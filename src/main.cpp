@@ -14,15 +14,15 @@
 #include <nn/fs.h>
 
 #include "helpers/InputHelper.h"
+#include "helpers/saveFileHelper.h"
 #include "ImGui.h"
-#include "InputDisplay.h"
 #include "logger.h"
-#include "Menu.h"
-#include "saveFileHelper.h"
+#include "menu/InputDisplay.h"
+#include "menu/Menu.h"
+#include "menu/Timer.h"
 #include "settings/SettingsHooks.h"
 #include "settings/SettingsMgr.h"
 #include "settings/TimerHooks.h"
-#include "Timer.h"
 
 using namespace hk;
 

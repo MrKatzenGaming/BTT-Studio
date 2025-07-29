@@ -4,7 +4,7 @@
 
 #include <sead/heap/seadDisposer.h>
 
-#include "Menu.h"
+#include "menu/Menu.h"
 
 class SaveFileHelper {
     SEAD_SINGLETON_DISPOSER(SaveFileHelper)

@@ -9,9 +9,9 @@
 #include "al/Library/Nerve/NerveKeeper.h"
 #include "al/Library/Nerve/NerveStateCtrl.h"
 
+#include "custom/game/System/GameDataFile.h"
 #include "game/Player/PlayerFunction.h"
 #include "game/Player/PlayerHackKeeper.h"
-#include "game/System/GameDataFile.h"
 #include "game/System/GameDataFunction.h"
 #include <game/Sequence/ChangeStageInfo.h>
 
@@ -22,9 +22,9 @@
 #include "helpers/saveFileHelper.h"
 #include "imgui.h"
 #include "imgui_internal.h"
-#include "Menu.h"
-#include "stage_warp.h"
-#include "Timer.h"
+#include "menu/Menu.h"
+#include "menu/stage_warp.h"
+#include "menu/Timer.h"
 
 using namespace btt;
 

@@ -1,10 +1,10 @@
-#include "Menu.h"
+#include "menu/Menu.h"
 
 #include "al/Library/Camera/CameraUtil.h"
 #include "al/Library/LiveActor/ActorMovementFunction.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
 
-#include "game/Scene/StageScene.h"
+#include "custom/game/Scene/StageScene.h"
 #include "game/System/GameDataFunction.h"
 
 #include <cstdio>
@@ -12,11 +12,11 @@
 #include <nn/oe.h>
 
 #include "helpers/getHelper.h"
+#include "helpers/InputHelper.h"
 #include "imgui.h"
 #include "imgui_internal.h"
-#include "InputHelper.h"
+#include "menu/stage_warp.h"
 #include "settings/SettingsMgr.h"
-#include "stage_warp.h"
 
 #ifdef BTTDEBUG
 # include "hk/ro/RoUtil.h"
@@ -26,7 +26,7 @@
 
 # include <sead/heap/seadHeapMgr.h>
 
-# include "game/System/GameDataFile.h"
+# include "custom/game/System/GameDataFile.h"
 
 # include <cxxabi.h>
 # include <typeinfo>

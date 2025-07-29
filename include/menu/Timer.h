@@ -1,6 +1,7 @@
 #pragma once
 
 #include "basis/seadTypes.h"
+#include "nn/os.h"
 
 namespace btt {
 

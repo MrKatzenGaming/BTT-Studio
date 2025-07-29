@@ -12,13 +12,14 @@ file(GLOB_RECURSE SOURCES_CXX ${PROJECT_SOURCE_DIR}/src/*.cpp)
 set(SOURCES ${SOURCES_ASM} ${SOURCES_C} ${SOURCES_CXX} )#${SOURCES_IMGUI})
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-include_directories(lib/custom)
-include_directories(lib/custom/sead)
-include_directories(lib/custom/nn)
+include_directories(lib)
 
-include_directories(include/sead)
-include_directories(include/al)
-include_directories(include/game)
+include_directories(lib/OdysseyHeaders)
+include_directories(lib/OdysseyHeaders/sead)
+include_directories(lib/OdysseyHeaders/al)
+include_directories(lib/OdysseyHeaders/game)
+include_directories(lib/OdysseyHeaders/NintendoSDK)
+
 include_directories(lib/imgui)
 
 include_directories(src)

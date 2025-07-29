@@ -1,4 +1,4 @@
-#include "stage_warp.h"
+#include "menu/stage_warp.h"
 
 #include <al/Library/Base/StringUtil.h>
 
@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <cstdio>
 
-#include "getHelper.h"
+#include "helpers/getHelper.h"
 #include "imgui.h"
 #include "imgui_internal.h"
 

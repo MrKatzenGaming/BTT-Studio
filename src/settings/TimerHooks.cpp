@@ -1,4 +1,4 @@
-#include "TimerHooks.h"
+#include "settings/TimerHooks.h"
 
 #include "hk/hook/Trampoline.h"
 
@@ -7,7 +7,7 @@
 #include "al/Library/Nerve/NerveKeeper.h"
 #include "al/Library/Nerve/NerveUtil.h"
 
-#include "game/Scene/StageScene.h"
+#include "custom/game/Scene/StageScene.h"
 
 #include "menu/Timer.h"
 

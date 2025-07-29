@@ -1,0 +1,13 @@
+@smo:100,101,110,120
+
+_ZN2al10WipeSimpleC1EPKcS2_RKNS_14LayoutInitInfoES2_
+_ZN2al10WipeSimple13tryStartCloseEi
+_ZNK2al10WipeSimple10isCloseEndEv
+_ZN2al10WipeSimple9startOpenEi
+
+@smo:130
+
+_ZN2al10WipeSimpleC1EPKcS2_RKNS_14LayoutInitInfoES2_ = 0x0070e1c0
+_ZN2al10WipeSimple13tryStartCloseEi = 0x0070e390
+_ZNK2al10WipeSimple10isCloseEndEv = 0x0070e600
+_ZN2al10WipeSimple9startOpenEi = 0x0070e4a0

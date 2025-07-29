@@ -1,7 +1,9 @@
 @smo:100,101,110,120
 
 _ZN16HakoniwaSequence6updateEv
+_ZTI16HakoniwaSequence
 
 @smo:130
 
 _ZN16HakoniwaSequence6updateEv = 0x004b4e90
+_ZTI16HakoniwaSequence = 0x012cfaa0

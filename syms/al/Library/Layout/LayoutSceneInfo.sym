@@ -1,0 +1,9 @@
+@smo:100,101,110,120
+
+_ZN2al15LayoutSceneInfoC1Ev
+_ZN2al15LayoutSceneInfoC2Ev
+
+@smo:130
+
+_ZN2al15LayoutSceneInfoC1Ev = 0x00638400
+_ZN2al15LayoutSceneInfoC2Ev = 0x00638400

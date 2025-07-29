@@ -239,9 +239,6 @@ void Menu::handleAlways() {
 
     menuTimer++;
 
-    static bool wasMenuDisabled = false;
-    static bool prevMouseDis = true;
-
     handleHotkeys();
 
     if (reloadPosTimer != -1 && playerHak) {
@@ -258,19 +255,9 @@ void Menu::handleAlways() {
     }
 
     if (InputHelper::isPressStickL() && mIsEnabledMenu) {
-        prevNavId = GImGui->NavId;
-        mIsEnabledMenu = false;
-        prevMouseDis = InputHelper::isDisableMouse();
-        InputHelper::setDisableMouse(true);
-        if (mIsPopup) {
-            mIsPopup = false;
-            strcpy(popupText, "Input Disabled");
-        }
+        hideMenu();
     } else if (InputHelper::isPressStickL() && !mIsEnabledMenu) {
-        mIsEnabledMenu = true;
-        wasMenuDisabled = true;
-        menuTimer = 0;
-        InputHelper::setDisableMouse(prevMouseDis);
+        showMenu();
     }
     if (menuTimer < 5) {
         if (wasMenuDisabled && mIsEnabledMenu) {
@@ -288,6 +275,24 @@ void Menu::handleAlways() {
             strcpy(popupText, "Input Disabled");
         }
     }
+}
+
+void Menu::hideMenu() {
+    prevNavId = GImGui->NavId;
+    mIsEnabledMenu = false;
+    prevMouseDis = InputHelper::isDisableMouse();
+    InputHelper::setDisableMouse(true);
+    if (mIsPopup) {
+        mIsPopup = false;
+        strcpy(popupText, "Input Disabled");
+    }
+}
+
+void Menu::showMenu() {
+    mIsEnabledMenu = true;
+    wasMenuDisabled = true;
+    menuTimer = 0;
+    InputHelper::setDisableMouse(prevMouseDis);
 }
 
 void Menu::drawPopup() {

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "hk/os/Mutex.h"
 
 #include "al/Library/Thread/AsyncFunctorThread.h"

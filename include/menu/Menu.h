@@ -33,6 +33,8 @@ public:
     int getPatternTarget(int a);
 
     const char* getMoonRefreshText();
+    void hideMenu();
+    void showMenu();
 
 public:
     struct TpState {
@@ -92,6 +94,8 @@ private:
     void* mLastMapTarget = nullptr;
 
     bool mIsPopup = false;
+    bool prevMouseDis = true;
+    bool wasMenuDisabled = false;
     bool isEnableInfoWindow = false;
     bool isEnablePlayerInfo = false;
     bool mIsReloadPos = false;

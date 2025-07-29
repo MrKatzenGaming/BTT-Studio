@@ -1,7 +1,9 @@
 @smo:100,101,110,120
 
 _ZN2al11isFirstStepEPKNS_9IUseNerveE
+_ZN2al8setNerveEPNS_9IUseNerveEPKNS_5NerveE
 
 @smo:130
 
 _ZN2al11isFirstStepEPKNS_9IUseNerveE = 0x006c7cc0
+_ZN2al8setNerveEPNS_9IUseNerveEPKNS_5NerveE = 0x006c7b20

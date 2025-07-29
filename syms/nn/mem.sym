@@ -1,0 +1,5 @@
+@sdk
+
+_ZN2nn3mem17StandardAllocator8AllocateEm
+_ZN2nn3mem17StandardAllocator4FreeEPv
+_ZN2nn3mem17StandardAllocator10ReallocateEPvm

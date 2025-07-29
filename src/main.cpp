@@ -13,6 +13,7 @@
 
 #include <nn/fs.h>
 
+#include "customBoot/BootHooks.hpp"
 #include "helpers/InputHelper.h"
 #include "helpers/saveFileHelper.h"
 #include "ImGui.h"
@@ -159,6 +160,8 @@ extern "C" void hkMain() {
 
     btt::SettingsHooks::installSettingsHooks();
     btt::TimerHooks::installTimerHooks();
+
+    customboot::prepareCustomBootHook.installAtSym<"_ZN10BootLayoutC1ERKN2al14LayoutInitInfoE">();
 
     hk::gfx::ImGuiBackendNvn::instance()->installHooks(false);
 

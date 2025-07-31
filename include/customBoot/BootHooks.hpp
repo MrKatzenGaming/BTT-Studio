@@ -13,7 +13,7 @@
 #include "nn/oe.h"
 
 namespace customboot {
-static float autoCloseAfter = nn::oe::GetOperationMode() == nn::oe::OperationMode_Docked ? 12.f : 13.f;
+static float autoCloseAfter = nn::oe::GetOperationMode() == nn::oe::OperationMode_Docked ? 13.f : 13.f;
 
 static al::LayoutInitInfo copiedInitInfo;
 

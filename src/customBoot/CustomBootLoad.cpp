@@ -51,7 +51,7 @@ void CustomBootLoad::exeWait() {
     }
 }
 
-// Reimplementation if al::setPaneVtxColor bc it doesn't exist on 1.3 (most variable names made up by Github Copilot)
+// Reimplementation and edit of al::setPaneVtxColor bc it doesn't exist on 1.3 (most variable names made up by Github Copilot)
 void SetVtxColor(const al::IUseLayout* layoutUser, const char* paneName, const sead::Color4u8& color) {
     // Get the layout pointer from the IUseLayout vtable
     al::LayoutKeeper* keeper = layoutUser->getLayoutKeeper();
@@ -63,12 +63,10 @@ void SetVtxColor(const al::IUseLayout* layoutUser, const char* paneName, const s
     auto findPane = reinterpret_cast<long* (*)(long*, const char*, int)>(*reinterpret_cast<void**>(*paneMgr + 0x60));
     long* pane = findPane(paneMgr, paneName, 1);
 
-    sead::Color4u8 c = (&color)[3];
-
     // Set the vertex color for indices 0 and 2
-    auto setVtxColor = reinterpret_cast<void (*)(long*, int, sead::Color4u8*)>(*reinterpret_cast<void**>(*pane + 0x28));
-    setVtxColor(pane, 0, const_cast<sead::Color4u8*>(&c));
-    setVtxColor(pane, 2, const_cast<sead::Color4u8*>(&c));
+    auto setVtxColor = reinterpret_cast<void (*)(long*, int, const sead::Color4u8*)>(*reinterpret_cast<void**>(*pane + 0x28));
+    setVtxColor(pane, 0, &color);
+    setVtxColor(pane, 2, &color);
 }
 
 void CustomBootLoad::exeDecrease() {
@@ -104,7 +102,7 @@ void CustomBootLoad::exeDecrease() {
 
     mProgression = mTime / mAutoCloseAfter;
 
-    sead::Color4u8 fixedColor = { 0, 0, 139, 255 };
+    sead::Color4u8 fixedColor = { 255, 0, 0, 255 };
     mRotTime += 0.03f;
     float rotation = cosf(mTime) * 5;
 

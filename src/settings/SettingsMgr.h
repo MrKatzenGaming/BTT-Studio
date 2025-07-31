@@ -29,6 +29,7 @@ public:
     struct Settings {
         char Version[16] = VERSION;
         SETTING(MoonRefresh);
+        SETTING(GrayMoonRefresh);
         SETTING(NoDamage);
         SETTING(DisableMoonLock);
         SETTING(AlwaysManualCutscene);

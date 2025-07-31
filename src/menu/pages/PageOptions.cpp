@@ -9,7 +9,8 @@ void Menu::drawPageOptions() {
         ImGui::Indent();
         if (ImGui::CollapsingHeader("Refresh")) {
             ImGui::Indent();
-            ImGui::Checkbox("Moon Refresh", &set->getSettings()->mIsEnableMoonRefresh);
+            ImGui::Checkbox("Disable Saving Moons", &set->getSettings()->mIsEnableMoonRefresh);
+            ImGui::Checkbox("Refresh Gray Moons", &set->getSettings()->mIsEnableGrayMoonRefresh);
             ImGui::Checkbox("Always Manually Skip Cutscene", &set->getSettings()->mIsEnableAlwaysManualCutscene);
             ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
             ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);

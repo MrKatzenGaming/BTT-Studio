@@ -37,7 +37,7 @@ class CheckpointFlag;
 
 HkTrampoline<bool, GameDataHolderWriter, const ShineInfo*> GreyShineRefreshHook =
     hk::hook::trampoline([](GameDataHolderWriter writer, const ShineInfo* shineInfo) -> bool {
-        return SettingsMgr::instance()->getSettings()->mIsEnableMoonRefresh ? false : GreyShineRefreshHook.orig(writer, shineInfo);
+        return SettingsMgr::instance()->getSettings()->mIsEnableGrayMoonRefresh ? false : GreyShineRefreshHook.orig(writer, shineInfo);
     });
 
 HkTrampoline<void, GameDataHolderWriter, const ShineInfo*> ShineRefreshHook =

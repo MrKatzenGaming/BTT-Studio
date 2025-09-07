@@ -1,7 +1,7 @@
 # TODO
 
 - [ ] Travel to current kingdom
-- [] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts
+- [ ] is it possible to make a scene where you just enter the kingdom? with all the cutscenes and texts
   - [x] text
   - [x] fix cutscene skips
   - [ ] cappy talk
@@ -10,6 +10,8 @@
 
 ## Hard
 
+- [ ] reload sceene different fade
+- [ ] disable tp puppet only moon get
 - [ ] refresh deep woods nut
 - [ ] refresh shards
 - [ ] timer for every splice

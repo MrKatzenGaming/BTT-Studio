@@ -10,6 +10,7 @@
 
 ## Hard
 
+- [ ] spawn all spawnable moons
 - [ ] reload sceene different fade
 - [ ] disable tp puppet only moon get
 - [ ] refresh deep woods nut

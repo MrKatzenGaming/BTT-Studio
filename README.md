@@ -1,6 +1,6 @@
 # BTT-Studio
 
-A modification for Super Mario Odyssey made to make grindin BTT segmnts easier.
+A modification for Super Mario Odyssey made to make grindin BTT segments easier.
 
 ## Installing
 

@@ -4,25 +4,42 @@ import socket
 import struct
 import threading
 from datetime import datetime
-from termcolor import colored
+import subprocess
 
 import os
 os.chdir(os.path.dirname(__file__))
 
 SWITCH_PORT:int = 8171
 
+class Colorcodes(object):
+    def __init__(self):
+        try:
+            self.bold = subprocess.check_output("tput bold".split()).decode()
+            self.reset = subprocess.check_output("tput sgr0".split()).decode()
+
+            self.blue = subprocess.check_output("tput setaf 4".split()).decode()
+            self.green = subprocess.check_output("tput setaf 2".split()).decode()
+            self.yellow = subprocess.check_output("tput setaf 3".split()).decode()
+            self.red = subprocess.check_output("tput setaf 1".split()).decode()
+        except subprocess.CalledProcessError as e:
+            self.bold = ""
+            self.reset = ""
+
+            self.blue = ""
+            self.green = ""
+            self.yellow = ""
+            self.red = ""
+
+c = Colorcodes()
+
 msg_queue:queue.Queue = queue.Queue()
 
 
 # ========== LOGGING ==========
 
-# TODO: remove
-# _print = print
-# print = None
-
-def log(message: str, color: str = "white") -> None:
+def log(message: str, color: str = c.reset) -> None:
     timestamp = datetime.now().strftime("%H:%M:%S")
-    print(colored(f"[{timestamp}] {message}", color))
+    print(f"{color}[{timestamp}] {message}{c.reset}")
 
 
 # ========== PACKETS ==========
@@ -204,7 +221,7 @@ def console_input_func() -> None:
         try:
             user_input = input("")
             if user_input.strip().lower() == "exit":
-                log("shutting down server...", "green")
+                log("shutting down server...", c.green)
                 os._exit(0)  # Forcefully exit the server
             elif user_input.strip().startswith(strerr):
                 # Example: Send error message as a packet to the client
@@ -227,7 +244,7 @@ def console_input_func() -> None:
                 packet = Packet()
                 msg_queue.put(packet)
         except EOFError:
-            log("console input closed", "green")
+            log("console input closed", c.green)
             break
     
 def serve_switch() -> None:
@@ -241,12 +258,12 @@ def serve_switch() -> None:
 
     # start listening on socket
     server_sock.listen(2)
-    log(f"listening on port {SWITCH_PORT}", "green")
+    log(f"listening on port {SWITCH_PORT}", c.green)
 
     while True:
-        log("waiting for connection...", "green")
+        log("waiting for connection...", c.green)
         client_sock, client_addr = server_sock.accept()
-        log(f"connection from {client_addr[0]}", "green")
+        log(f"connection from {client_addr[0]}", c.green)
 
         # create thread
         stop_switch_send_thread = False
@@ -263,15 +280,15 @@ def serve_switch() -> None:
                     try:
                         match type:
                             case RecPacketType.LOG.value:
-                                # log('Switch', f"{data[1:].decode('utf-8')}", "green")
+                                # log('Switch', f"{data[1:].decode('utf-8')}", _c.green)
                                 print(f"{data[1:].decode('utf-8')}",end='')
                             case _:
-                                log(f"unknown packet type: {type} and length {len(data)}", "yellow")
-                                # log("Info-SW", f"received unknown packet: {data[1:]}", "green")
+                                log(f"unknown packet type: {type} and length {len(data)}", c.yellow)
+                                # log("Info-SW", f"received unknown packet: {data[1:]}", _c.green)
                     except UnicodeDecodeError:
-                        log(f"failed to decode packet: {data[1:]}", "red")
+                        log(f"failed to decode packet: {data[1:]}", c.red)
                 else:
-                    log(f"received 0 bytes", "green")
+                    log(f"received 0 bytes", c.green)
                     break
 
                 # log("switch", f"{client_addr} -> {data}")
@@ -279,14 +296,14 @@ def serve_switch() -> None:
                 #     client_sock.send(msg_queue.get())
 
         except ConnectionResetError:
-            log("connection reset", "green")
+            log("connection reset", c.green)
             break
 
         finally:
-            log("client disconnected", "green")
+            log("client disconnected", c.green)
             stop_switch_send_thread = True
             switch_send_thread.join()
-            log("send thread terminated", "green")
+            log("send thread terminated", c.green)
             client_sock.close()
 
 
@@ -295,7 +312,7 @@ def main() -> None:
     try:
         serve_switch()
     except KeyboardInterrupt:
-        log("closing server...", "green")
+        log("closing server...", c.green)
 
 
 if __name__ == "__main__":

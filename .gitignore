@@ -6,3 +6,5 @@ make-release/BTT-Studio.nss
 make-release/Btt-Studio.zip
 make-release/Btt-Studio-SimpleModManager.zip
 
+.direnv
+

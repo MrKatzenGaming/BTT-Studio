@@ -1,8 +1,8 @@
 #include "logger.h"
 
-#include "hk/types.h"
 #include <hk/diag/diag.h>
 #include <hk/hook/Trampoline.h>
+#include <hk/types.h>
 
 #include <sead/heap/seadDisposer.h>
 #include <sead/heap/seadHeap.h>
@@ -10,8 +10,8 @@
 #include <sead/math/seadMathCalcCommon.h>
 #include <sead/prim/seadEndian.h>
 
-#include "game/Sequence/HakoniwaSequence.h"
-#include <game/Sequence/ChangeStageInfo.h>
+#include <game/MapObj/ChangeStageInfo.h>
+#include <game/Sequence/HakoniwaSequence.h>
 
 #include <cstdarg>
 #include <cstdio>
@@ -27,7 +27,7 @@
 
 #include "helpers/getHelper.h"
 
-HkTrampoline<void> disableSocketInit = hk::hook::trampoline([]() -> void {});
+HkTrampoline disableSocketInit = [](TrampolineStatic()) -> void {};
 
 static constexpr int socketPoolSize = 0x600000;
 static constexpr int socketAllocPoolSize = 0x20000;

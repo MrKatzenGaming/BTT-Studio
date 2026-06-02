@@ -10,11 +10,14 @@ debug_sym: format check_symbols
 	cmake -DCMAKE_BUILD_TYPE=Debug -DDEBUG=TRUE -S . -B build && $(MAKE) -C build
 
 release: clean format
-	cmake -DCMAKE_BUILD_TYPE=Debug -DDEBUG=FALSE -S . -B build && $(MAKE) -C build
+	cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DDEBUG=FALSE -S . -B build && $(MAKE) -C build
 	python ./make-release/release.py
 
 format:
-	find ./src -name "*.*" | xargs clang-format -i
+	clear
+	find src include lib/custom -name "*.*" | xargs clang-format -i
+	find src include -name "*.cpp" -o -name "*.hpp" -o -name "*.h" | xargs python3 config/check_includes.py --fix
+
 
 clean:
-	rm -r build || true
+	rm -rf build

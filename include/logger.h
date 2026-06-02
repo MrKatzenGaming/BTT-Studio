@@ -1,8 +1,8 @@
 #pragma once
 
-#include "hk/os/Mutex.h"
+#include <hk/os/Mutex.h>
 
-#include "al/Library/Thread/AsyncFunctorThread.h"
+#include <al/Library/Thread/AsyncFunctorThread.h>
 
 #include <sead/basis/seadTypes.h>
 #include <sead/heap/seadExpHeap.h>

@@ -1,8 +1,3 @@
-## clang format all files
-```bash
-find ./src -name "*.*" | xargs clang-format -i
-```
-
 # info stuff
 
 ```cpp
@@ -118,16 +113,22 @@ if (playerHak) {
     if (stateName) free(stateName);
 }
 ```
+
 ## Infinite load on scene kill
+
 StateNrvs
+
 - SkipDemo
 - Skip
+
 States
+
 - PauseMenu
 - SnapShot
 
 ## World Traveling Status
-- Init                      (Not via getWorldTravelingStatus)
+
+- Init (Not via getWorldTravelingStatus)
 - CityWorld0
 - WaterfallWorld0
 - LavaWorld0

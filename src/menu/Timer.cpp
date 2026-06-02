@@ -1,9 +1,9 @@
 #include "menu/Timer.h"
 
 #include <cstdio>
+#include <nn/os.h>
 
-#include "nn/os.h"
-#include "settings/SettingsMgr.h"
+#include "src/settings/SettingsMgr.h"
 
 namespace btt {
 

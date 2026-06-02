@@ -1,7 +1,7 @@
 #pragma once
 
 #include "imgui.h"
-#include "settings/SettingsMgr.h"
+#include "src/settings/SettingsMgr.h"
 
 namespace btt {
 

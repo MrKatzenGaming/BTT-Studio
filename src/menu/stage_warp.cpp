@@ -2,7 +2,7 @@
 
 #include <al/Library/Base/StringUtil.h>
 
-#include <game/Sequence/ChangeStageInfo.h>
+#include <game/MapObj/ChangeStageInfo.h>
 #include <game/Sequence/HakoniwaSequence.h>
 
 #include <cstddef>

@@ -4,11 +4,11 @@
 
 #include <cstddef>
 #include <nn/fs.h>
+#include <nn/os.h>
 
 #include "helpers/fsHelper.h"
 #include "logger.h"
-#include "nn/os.h"
-#include "settings/SettingsMgr.h"
+#include "src/settings/SettingsMgr.h"
 
 SEAD_SINGLETON_DISPOSER_IMPL(SaveFileHelper);
 

@@ -1,17 +1,17 @@
 #include "customBoot/CustomBootLoad.hpp"
 
-#include "al/Library/Layout/LayoutActionFunction.h"
-#include "al/Library/Layout/LayoutActorUtil.h"
-#include "al/Library/Nerve/NerveUtil.h"
-#include "custom/al/Library/Play/Layout/WipeSimple.h"
+#include <al/Library/Layout/IUseLayout.h>
+#include <al/Library/Layout/LayoutActionFunction.h>
+#include <al/Library/Layout/LayoutActorUtil.h>
+#include <al/Library/Layout/LayoutKeeper.h>
+#include <al/Library/Nerve/NerveUtil.h>
+#include <custom/al/Library/Play/Layout/WipeSimple.h>
 
-#include "sead/math/seadVectorFwd.h"
+#include <sead/gfx/seadColor.h>
+#include <sead/math/seadVectorFwd.h>
 
-#include "game/Sequence/HakoniwaSequence.h"
+#include <game/Sequence/HakoniwaSequence.h>
 
-#include "gfx/seadColor.h"
-#include "Library/Layout/IUseLayout.h"
-#include "Library/Layout/LayoutKeeper.h"
 #include "menu/Menu.h"
 
 #ifdef BTTDEBUG

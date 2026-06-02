@@ -4,9 +4,8 @@
 
 class DoorAreaChange : public al::LiveActor {
 public:
-DoorAreaChange(const char* name);
+    DoorAreaChange(const char* name);
 
     void init(const al::ActorInitInfo& info) override;
     void switchCloseAgain();
-    
 };

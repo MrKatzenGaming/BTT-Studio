@@ -14,17 +14,18 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 include_directories(lib)
 
-include_directories(lib/OdysseyHeaders)
-include_directories(lib/OdysseyHeaders/sead)
-include_directories(lib/OdysseyHeaders/al)
-include_directories(lib/OdysseyHeaders/game)
-include_directories(lib/OdysseyHeaders/NintendoSDK)
-
 include_directories(lib/imgui)
 
-include_directories(src)
-include_directories(src/helpers)
-include_directories(src/menu)
+include_directories(lib/custom)
+include_directories(lib/OdysseyHeaders)
+
+file(GLOB LIBS_OH LIST_DIRECTORIES true lib/OdysseyHeaders/*)
+file(GLOB LIBS_CUST LIST_DIRECTORIES true lib/custom/*)
+include_directories(${LIBS_OH} ${LIBS_CUST})
+
+include_directories(include)
+
+include_directories(${PROJECT_SOURCE_DIR})
 
 include(sys/cmake/module.cmake)
 include(sys/cmake/deploy.cmake)

@@ -7,7 +7,7 @@
 #include <al/Library/Player/PlayerUtil.h>
 #include <al/Library/Scene/SceneUtil.h>
 
-#include <game/Sequence/ChangeStageInfo.h>
+#include <game/MapObj/ChangeStageInfo.h>
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameSystem.h>
 

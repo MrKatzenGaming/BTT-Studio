@@ -1,6 +1,6 @@
 #include "helpers/fsHelper.h"
 
-#include "hk/diag/diag.h"
+#include <hk/diag/diag.h>
 
 #include <nn/fs.h>
 

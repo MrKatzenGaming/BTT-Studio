@@ -22,7 +22,6 @@
 #include "menu/Menu.h"
 #include "menu/Timer.h"
 #include "settings/SettingsHooks.h"
-#include "settings/SettingsMgr.h"
 #include "settings/TimerHooks.h"
 
 using namespace hk;
@@ -33,7 +32,7 @@ sead::Heap* initializeHeap() {
 }
 } // namespace btt
 
-HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
+HkTrampoline gameSystemInit = [](TrampolineStatic(), GameSystem* gameSystem) -> void {
     sead::Heap* heap = btt::initializeHeap();
 
     Logger* logger = Logger::createInstance(heap);
@@ -83,30 +82,30 @@ HkTrampoline<void, GameSystem*> gameSystemInit = hk::hook::trampoline([](GameSys
 
     InputHelper::setDisableMouse(true);
 
-    gameSystemInit.orig(gameSystem);
+    orig(gameSystem);
 
     logger->log(Logger::LogType::LogInfo, "GameSystem initialized");
-});
+};
 
-HkTrampoline<void, GameSystem*> drawMainHook = hk::hook::trampoline([](GameSystem* gameSystem) -> void {
-    drawMainHook.orig(gameSystem);
+HkTrampoline drawMainHook = [](TrampolineStatic(), GameSystem* gameSystem) -> void {
+    orig(gameSystem);
 
     auto drawContext = Application::instance()->mDrawSystemInfo->drawContext;
     btt::imgui::draw(drawContext);
-});
+};
 
-HkTrampoline<void, sead::FileDeviceMgr*> fileDeviceMgrHook = hk::hook::trampoline([](sead::FileDeviceMgr* fileDeviceMgr) -> void {
-    fileDeviceMgrHook.orig(fileDeviceMgr);
+HkTrampoline fileDeviceMgrHook = [](TrampolineStatic(), sead::FileDeviceMgr* fileDeviceMgr) -> void {
+    orig(fileDeviceMgr);
 
     fileDeviceMgr->mMountedSd = nn::fs::MountSdCardForDebug("sd") == 0;
-});
+};
 
 int timer = 0;
-HkTrampoline<void, HakoniwaSequence*> hakoniwaSequenceUpdate = hk::hook::trampoline([](HakoniwaSequence* hakoniwaSequence) -> void {
-    hakoniwaSequenceUpdate.orig(hakoniwaSequence);
+HkTrampoline hakoniwaSequenceUpdate = [](TrampolineStatic(), HakoniwaSequence* hakoniwaSequence) -> void {
+    orig(hakoniwaSequence);
 
     btt::Menu::instance()->handleAlways();
-});
+};
 
 void disableButtons(nn::hid::NpadBaseState* state) {
     if (!InputHelper::isReadInputs() && InputHelper::isInputToggled() && btt::Menu::instance()->mIsEnabledMenu) {
@@ -117,40 +116,35 @@ void disableButtons(nn::hid::NpadBaseState* state) {
     }
 }
 
-HkTrampoline<int, int*, nn::hid::NpadFullKeyState*, int, const unsigned int&> DisableFullKeyState =
-    hk::hook::trampoline([](int* unkInt, nn::hid::NpadFullKeyState* state, int count, const unsigned int& port) -> int {
-        int result = DisableFullKeyState.orig(unkInt, state, count, port);
-        disableButtons(state);
-        return result;
-    });
+HkTrampoline DisableFullKeyState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadFullKeyState* state, int count, const unsigned int& port) -> int {
+    int result = orig(unkInt, state, count, port);
+    disableButtons(state);
+    return result;
+};
 
-HkTrampoline<int, int*, nn::hid::NpadHandheldState*, int, const unsigned int&> DisableHandheldState =
-    hk::hook::trampoline([](int* unkInt, nn::hid::NpadHandheldState* state, int count, const unsigned int& port) -> int {
-        int result = DisableHandheldState.orig(unkInt, state, count, port);
-        disableButtons(state);
-        return result;
-    });
+HkTrampoline DisableHandheldState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadHandheldState* state, int count, const unsigned int& port) -> int {
+    int result = orig(unkInt, state, count, port);
+    disableButtons(state);
+    return result;
+};
 
-HkTrampoline<int, int*, nn::hid::NpadJoyDualState*, int, const unsigned int&> DisableJoyDualState =
-    hk::hook::trampoline([](int* unkInt, nn::hid::NpadJoyDualState* state, int count, const unsigned int& port) -> int {
-        int result = DisableJoyDualState.orig(unkInt, state, count, port);
-        disableButtons(state);
-        return result;
-    });
+HkTrampoline DisableJoyDualState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyDualState* state, int count, const unsigned int& port) -> int {
+    int result = orig(unkInt, state, count, port);
+    disableButtons(state);
+    return result;
+};
 
-HkTrampoline<int, int*, nn::hid::NpadJoyLeftState*, int, const unsigned int&> DisableJoyLeftState =
-    hk::hook::trampoline([](int* unkInt, nn::hid::NpadJoyLeftState* state, int count, const unsigned int& port) -> int {
-        int result = DisableJoyLeftState.orig(unkInt, state, count, port);
-        disableButtons(state);
-        return result;
-    });
+HkTrampoline DisableJoyLeftState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyLeftState* state, int count, const unsigned int& port) -> int {
+    int result = orig(unkInt, state, count, port);
+    disableButtons(state);
+    return result;
+};
 
-HkTrampoline<int, int*, nn::hid::NpadJoyRightState*, int, const unsigned int&> DisableJoyRightState =
-    hk::hook::trampoline([](int* unkInt, nn::hid::NpadJoyRightState* state, int count, const unsigned int& port) -> int {
-        int result = DisableJoyRightState.orig(unkInt, state, count, port);
-        disableButtons(state);
-        return result;
-    });
+HkTrampoline DisableJoyRightState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyRightState* state, int count, const unsigned int& port) -> int {
+    int result = orig(unkInt, state, count, port);
+    disableButtons(state);
+    return result;
+};
 
 extern "C" void hkMain() {
     gameSystemInit.installAtSym<"_ZN10GameSystem4initEv">();

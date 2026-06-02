@@ -1,6 +1,7 @@
 #include "helpers/InputHelper.h"
 
-#include "custom/nn/hid_custom.h"
+#include <custom/nn/hid_custom.h>
+
 #include "menu/Menu.h"
 
 static const char* styleNames[] = {

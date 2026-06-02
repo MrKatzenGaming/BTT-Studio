@@ -1,7 +1,7 @@
 #include "ImGui.h"
 
-#include "hk/diag/diag.h"
-#include "hk/gfx/ImGuiBackendNvn.h"
+#include <hk/diag/diag.h>
+#include <hk/gfx/ImGuiBackendNvn.h>
 
 #include <nn/hid.h>
 #include <nn/oe.h>

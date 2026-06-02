@@ -11,7 +11,7 @@
 #include <cstdio>
 
 #include "imgui.h"
-#include "settings/SettingsMgr.h"
+#include "src/settings/SettingsMgr.h"
 
 class WorldTravelingNpc;
 

@@ -1,4 +1,4 @@
-#include "settings/SettingsMgr.h"
+#include "src/settings/SettingsMgr.h"
 
 #include <sead/heap/seadHeapMgr.h>
 

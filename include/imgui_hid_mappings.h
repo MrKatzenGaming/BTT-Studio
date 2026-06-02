@@ -1,7 +1,8 @@
 #pragma once
 
+#include <nn/hid.h>
+
 #include "imgui.h"
-#include "nn/hid.h"
 
 constexpr int npad_mapping[][2] = {
     { ImGuiKey_GamepadFaceDown, static_cast<const int>(nn::hid::NpadButton::A) },

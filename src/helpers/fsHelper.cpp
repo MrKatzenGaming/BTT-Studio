@@ -41,7 +41,7 @@ nn::Result writeFileToPath(void* buf, size_t size, const char* path) {
 void loadFileFromPath(LoadData& loadData, sead::Heap* heap) {
     nn::fs::FileHandle handle;
 
-    HK_ASSERT(FsHelper::isFileExist(loadData.path)); //, "Failed to Find File!\nPath: %s", loadData.path
+    HK_ABORT_UNLESS(FsHelper::isFileExist(loadData.path), "Failed to Find File!\nPath: %s", loadData.path);
 
     HK_ABORT_UNLESS_R(nn::fs::OpenFile(&handle, loadData.path, nn::fs::OpenMode_Read).IsFailure());
 
@@ -51,7 +51,7 @@ void loadFileFromPath(LoadData& loadData, sead::Heap* heap) {
     // loadData.buffer = malloc(size);
     loadData.bufSize = size;
 
-    HK_ASSERT(loadData.buffer); //, "Failed to Allocate Buffer! File Size: %ld", size
+    HK_ABORT_UNLESS(loadData.buffer, "Failed to Allocate Buffer! File Size: %ld", size);
 
     HK_ABORT_UNLESS_R(nn::fs::ReadFile(handle, 0, loadData.buffer, size).IsFailure());
 

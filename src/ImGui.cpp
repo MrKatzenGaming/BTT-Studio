@@ -85,7 +85,7 @@ void updateInput() {
 }
 
 void addDrawFunc(ProcDrawFunc func) {
-    HK_ASSERT(!drawQueue.contains(func)); //, "Function has already been added to queue!"
+    HK_ABORT_UNLESS(!drawQueue.contains(func), "Function has already been added to queue!");
 
     drawQueue.push_back(func);
 }

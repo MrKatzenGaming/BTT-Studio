@@ -44,14 +44,19 @@ HkTrampoline gameSystemInit = [](TrampolineStatic(), GameSystem* gameSystem) -> 
 
     btt::SettingsMgr::createInstance(heap);
     logger->log(Logger::LogType::LogInfo, "SettingsMgr instance created");
+
     btt::Menu* menu = btt::Menu::createInstance(heap);
     logger->log(Logger::LogType::LogInfo, "Menu instance created");
+
     btt::Timer* timer = new btt::Timer();
     logger->log(Logger::LogType::LogInfo, "Timer instance created");
+
     SaveFileHelper* save = SaveFileHelper::createInstance(heap);
     logger->log(Logger::LogType::LogInfo, "SaveFileHelper instance created");
+
     save->init(heap);
     logger->log(Logger::LogType::LogInfo, "SaveFileHelper initialized");
+
     save->loadSettings(heap);
     save->loadTeleport(menu->tpStates, hk::util::arraySize(menu->tpStates), heap);
     save->mSaveThread->start();
@@ -59,23 +64,31 @@ HkTrampoline gameSystemInit = [](TrampolineStatic(), GameSystem* gameSystem) -> 
 
     btt::imgui::init(heap);
     logger->log(Logger::LogType::LogInfo, "ImGui initialized");
+
     btt::imgui::setupStyle();
+    // Main menu + Popup and Info Window
     btt::imgui::addDrawFunc([] {
         btt::Menu* menu = btt::Menu::instance();
         if (menu) {
             if (menu->mIsEnabledMenu) menu->draw();
             menu->drawInfoWindow();
-            if (btt::SettingsMgr::instance()->getSettings()->mIsEnableInputDisplay) {
-                btt::drawInputDisplay();
-                if (btt::SettingsMgr::instance()->getSettings()->mIsEnableInput2P) btt::drawInputDisplayP2();
-            }
-            if (btt::SettingsMgr::instance()->getSettings()->mIsEnableSegmentTimer) {
-                btt::Timer* timer = btt::Timer::sInstance;
-                if (timer) {
-                    timer->draw();
-                }
-            }
             menu->drawPopup();
+        }
+    });
+    // Input Displays
+    btt::imgui::addDrawFunc([] {
+        if (btt::Menu::instance() && btt::SettingsMgr::instance()->getSettings()->mIsEnableInputDisplay) {
+            btt::drawInputDisplay();
+            if (btt::SettingsMgr::instance()->getSettings()->mIsEnableInput2P) btt::drawInputDisplayP2();
+        }
+    });
+    // Timer
+    btt::imgui::addDrawFunc([] {
+        if (btt::Menu::instance() && btt::SettingsMgr::instance()->getSettings()->mIsEnableSegmentTimer) {
+            btt::Timer* timer = btt::Timer::sInstance;
+            if (timer) {
+                timer->draw();
+            }
         }
     });
     logger->log(Logger::LogType::LogInfo, "ImGui setup done");

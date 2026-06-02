@@ -2,6 +2,7 @@
 
 #include <hk/hook/InstrUtil.h>
 #include <hk/hook/Trampoline.h>
+#include <hk/Result.h>
 #include <hk/ro/RoUtil.h>
 #include <hk/sail/detail.h>
 
@@ -23,6 +24,7 @@
 #include <game/System/PlayerHitPointData.h>
 
 #include "helpers/InputHelper.h"
+#include "logger.h"
 #include "menu/Menu.h"
 #include "settings/DemoHooks.hpp"
 #include "src/settings/SettingsMgr.h"
@@ -44,8 +46,7 @@ HkTrampoline ShineRefreshHook = [](TrampolineStatic(), GameDataHolderWriter writ
     ptr offset = addr - ro::getMainModule()->range().start();
     const char* text = Menu::instance()->getMoonRefreshText();
     ro::getMainModule()->writeRo(offset, text, strlen(text) + 1);
-
-    orig(writer, shineInfo);
+    if (!SettingsMgr::instance()->getSettings()->mIsEnableMoonRefresh) orig(writer, shineInfo);
 };
 
 HkTrampoline marioControl = [](TrampolineStatic(), al::LiveActor* player) -> void { orig(player); };
@@ -108,7 +109,7 @@ HkTrampoline cloudSkipHook = [](TrampolineStatic(), StageScene* stageScene) -> b
     if (!SettingsMgr::instance()->getSettings()->mIsEnableSkipCloud) {
         functionCalls = 0;
         Menu::instance()->noGetPlayer = false;
-        orig(stageScene);
+        return orig(stageScene);
     }
     // When debugging, returning true right away will skip Lost and go straight to (Day!) Metro with a broken Odyssey back in Wooded.
     // Since isDefeatKoopaLv1 is called multiple times, we can return false the first time, then return true the second time, which
@@ -165,7 +166,7 @@ HkTrampoline allCheckpointsHook = [](TrampolineStatic(), GameDataHolderAccessor 
     if (SettingsMgr::instance()->getSettings()->mIsEnableAllCheckpoints) {
         auto checkpointTrans = GameDataFunction::getCheckpointTransInWorld(acc, checkpointIdx);
         if (checkpointTrans.x == 0 && checkpointTrans.y == 0 && checkpointTrans.z == 0) {
-            orig(acc, checkpointIdx);
+            return orig(acc, checkpointIdx);
         }
         return true;
     }

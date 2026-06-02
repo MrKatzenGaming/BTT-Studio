@@ -1,5 +1,7 @@
 #include "customBoot/CustomBootLoad.hpp"
 
+#include <hk/ro/RoUtil.h>
+
 #include <al/Library/Layout/IUseLayout.h>
 #include <al/Library/Layout/LayoutActionFunction.h>
 #include <al/Library/Layout/LayoutActorUtil.h>
@@ -51,29 +53,11 @@ void CustomBootLoad::exeWait() {
     }
 }
 
-// Reimplementation and edit of al::setPaneVtxColor bc it doesn't exist on 1.3 (most variable names made up by Github Copilot)
-void SetVtxColor(const al::IUseLayout* layoutUser, const char* paneName, const sead::Color4u8& color) {
-    // Get the layout pointer from the IUseLayout vtable
-    al::LayoutKeeper* keeper = layoutUser->getLayoutKeeper();
-
-    // Get the pane manager
-    long* paneMgr = *reinterpret_cast<long**>(*reinterpret_cast<long*>(keeper + 0x10 /*Layout*/) + 0x18);
-
-    // Find the pane by name
-    auto findPane = reinterpret_cast<long* (*)(long*, const char*, int)>(*reinterpret_cast<void**>(*paneMgr + 0x60));
-    long* pane = findPane(paneMgr, paneName, 1);
-
-    // Set the vertex color for indices 0 and 2
-    auto setVtxColor = reinterpret_cast<void (*)(long*, int, const sead::Color4u8*)>(*reinterpret_cast<void**>(*pane + 0x28));
-    setVtxColor(pane, 0, &color);
-    setVtxColor(pane, 2, &color);
-}
-
 void CustomBootLoad::exeDecrease() {
     mTime += 1.f / 60.f;
     al::setPaneString(this, "TxtTip", u"Hiiiiiiii :3", 0);
     al::setPaneString(this, "TxtName", u"BTT-Studio", 0);
-    al::setPaneString(this, "TxtConnecting", u"\u00A9 2025, MrKatzenGaming", 0);
+    al::setPaneString(this, "TxtConnecting", u"\u00A9 2026, MrKatzenGaming", 0);
 
     // if (al::isPadTriggerPlus(-1)) {
     //     Logger::log("Plus button pressed. Opening keyboard for IP and Port input.\n");
@@ -160,9 +144,6 @@ void CustomBootLoad::exeDecrease() {
     // if (mProgression < 1.5f) {
     al::setPaneLocalScale(this, "PicBar", { mProgression, 2.f });
     al::setPaneLocalScale(this, "PicBarFill", { 30.f, 1.f });
-
-    SetVtxColor(this, "PicBar", fixedColor);
-    SetVtxColor(this, "PicBarFill", fixedColor);
 
     al::setPaneLocalRotate(this, "PicMoon", { 0.f, 0.f, rotation });
     al::setPaneLocalRotate(this, "Arrows", { 0.f, 0.f, arrowRotation });

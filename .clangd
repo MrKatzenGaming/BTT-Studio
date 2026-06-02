@@ -1,0 +1,7 @@
+Diagnostics:
+    Suppress: []
+
+CompileFlags:
+    CompilationDatabase: build
+    Remove: [-resource-dir=*]
+    Add: [-resource-dir=/nix/store/j1386jqr1ckirblgiags4a6cw225zfc6-clang-wrapper-20.1.8/resource-root] #BAD!!!!!

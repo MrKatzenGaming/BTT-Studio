@@ -6,7 +6,7 @@
 
 namespace btt {
 
-enum TimerHookType {
+enum class TimerHookType : u8 {
     None,
     ShineGrab,
     ShineTick,

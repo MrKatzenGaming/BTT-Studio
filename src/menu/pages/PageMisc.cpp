@@ -130,9 +130,12 @@ void Menu::drawPageMisc() {
             if (ImGui::Button("Reset")) {
                 btt::Timer::sInstance->reset();
             }
-            static int startType = 0;
-            ImGui::Combo("Start Type", &set->getSettings()->mTimerStartType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes));
-            ImGui::Combo("End Type", &set->getSettings()->mTimerEndType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes));
+            static int startType = (u8)set->getSettings()->mTimerStartType;
+            static int endType = (u8)set->getSettings()->mTimerEndType;
+
+            if (ImGui::Combo("Start Type", &startType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes)))
+                set->getSettings()->mTimerStartType = (TimerHookType)startType;
+            if (ImGui::Combo("End Type", &endType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes))) set->getSettings()->mTimerEndType = (TimerHookType)endType;
             static int posX = set->getSettings()->mTimerPos.x;
             static int posY = set->getSettings()->mTimerPos.y;
             ImGui::PushItemWidth(200);
@@ -142,8 +145,11 @@ void Menu::drawPageMisc() {
             ImGui::Unindent();
         }
         ImGui::PushItemWidth(200);
-        ImGui::Combo("Wiggler Pattern", &set->getSettings()->mWigglerPattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns));
-        ImGui::Combo("Tourist Status", &set->getSettings()->mWorldTravelingStatus, worldTravelingStatus, IM_ARRAYSIZE(worldTravelingStatus));
+        static int pattern = set->getSettings()->mWigglerPattern;
+        static int status = set->getSettings()->mWorldTravelingStatus;
+        if (ImGui::Combo("Wiggler Pattern", &pattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns))) set->getSettings()->mWigglerPattern = pattern;
+        if (ImGui::Combo("Tourist Status", &status, worldTravelingStatus, IM_ARRAYSIZE(worldTravelingStatus)))
+            set->getSettings()->mWorldTravelingStatus = status;
         ImGui::PopItemWidth();
 
         if (ImGui::Button("Kill Mario")) {
@@ -251,8 +257,10 @@ void Menu::drawPageMisc() {
             ImGui::SetTooltip("Doesn't save!!! \nWill break normal reload \n(To fix: re enter stage)");
         }
         ImGui::PushItemWidth(200);
-        ImGui::Combo("Moon Refresh Text", &set->getSettings()->mMoonRefreshText, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts));
-        ImGui::Combo("Menu Corner", &set->getSettings()->mMenuCorner, Corners, IM_ARRAYSIZE(Corners));
+        static int txt = set->getSettings()->mMoonRefreshText;
+        static int corner = set->getSettings()->mMenuCorner;
+        if (ImGui::Combo("Moon Refresh Text", &txt, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts))) set->getSettings()->mMoonRefreshText = txt;
+        if (ImGui::Combo("Menu Corner", &corner, Corners, IM_ARRAYSIZE(Corners))) set->getSettings()->mMenuCorner = corner;
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }

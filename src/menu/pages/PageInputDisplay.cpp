@@ -6,11 +6,11 @@ using namespace btt;
 
 void Menu::drawPageInputDisplay() {
     if (ImGui::CollapsingHeader("Input Display")) {
-        static int bgColor = u8(set->getSettings()->mInputDisplayBackColor);
-        static int ringColor = u8(set->getSettings()->mInputDisplayRingColor);
-        static int stickColor = u8(set->getSettings()->mInputDisplayStickColor);
-        static int buttonPressedColor = u8(set->getSettings()->mInputDisplayButtonPressedColor);
-        static int buttonColor = u8(set->getSettings()->mInputDisplayButtonColor);
+        static int bgColor = (u8)set->getSettings()->mInputDisplayBackColor;
+        static int ringColor = (u8)set->getSettings()->mInputDisplayRingColor;
+        static int stickColor = (u8)set->getSettings()->mInputDisplayStickColor;
+        static int buttonPressedColor = (u8)set->getSettings()->mInputDisplayButtonPressedColor;
+        static int buttonColor = (u8)set->getSettings()->mInputDisplayButtonColor;
         static int posX = set->getSettings()->mInputDisplayPos.x;
         static int posY = set->getSettings()->mInputDisplayPos.y;
         static int posXP2 = set->getSettings()->mInputDisplayPosP2.x;

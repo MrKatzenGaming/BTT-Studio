@@ -16,28 +16,56 @@
 #include "helpers/InputHelper.h"
 #include "imgui.h"
 #include "menu/Menu.h"
+#include "src/settings/SettingsMgr.h"
 
 using namespace btt;
 
 void Menu::drawPageHotkeys() {
     if (ImGui::CollapsingHeader("Hotkeys")) {
+        static int killKey = (u8)set->getSettings()->mKillSceneKey;
+        static int healKey = (u8)set->getSettings()->mHealMarioKey;
+        static int lifeupKey = (u8)set->getSettings()->mLifeUpKey;
+        static int prevSceneKey = (u8)set->getSettings()->mPrevSceneKey;
+        static int inctpKey = (u8)set->getSettings()->mIncTpIndexKey;
+        static int dectpKey = (u8)set->getSettings()->mDecTpIndexKey;
+        static int addCoinsKey = (u8)set->getSettings()->mAddCoinsKey;
+        static int decCoinsKey = (u8)set->getSettings()->mDecCoinsKey;
+        static int incPatternKey = (u8)set->getSettings()->mIncPatternKey;
+        static int decPatternKey = (u8)set->getSettings()->mDecPatternKey;
+        static int warpCpKey = (u8)set->getSettings()->mWarpLastCpKey;
+        static int timerStartKey = (u8)set->getSettings()->mTimerStartKey;
+        static int timerEndKey = (u8)set->getSettings()->mTimerEndKey;
+        static int timerResetKey = (u8)set->getSettings()->mTimerResetKey;
+
         ImGui::Indent();
         ImGui::Text("Usage: Hold Hotkey + Press DPad-Up");
         ImGui::PushItemWidth(200);
-        ImGui::Combo("Kill Scene##Key", &set->mSettings.mKillSceneKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Heal Mario##Key", &set->mSettings.mHealMarioKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Life Up Heart##Key", &set->mSettings.mLifeUpKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Prev Scene##Key", &set->mSettings.mPrevSceneKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Increment Tp Index##Key", &set->mSettings.mIncTpIndexKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Decrement Tp Index##Key", &set->mSettings.mDecTpIndexKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Add 1000 Coins##Key", &set->mSettings.mAddCoinsKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Remove 1000 Coins##Key", &set->mSettings.mDecCoinsKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Next Wiggler Pattern##Key", &set->mSettings.mIncPatternKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Prev Wiggler Pattern##Key", &set->mSettings.mDecPatternKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Warp to last Checkpoint##Key", &set->mSettings.mWarpLastCpKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Start Timer##Key", &set->mSettings.mTimerStartKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("End Timer##Key", &set->mSettings.mTimerEndKey, Keys, IM_ARRAYSIZE(Keys));
-        ImGui::Combo("Reset Timer##Key", &set->mSettings.mTimerResetKey, Keys, IM_ARRAYSIZE(Keys));
+        if (ImGui::Combo("Kill Scene##Key", &killKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mKillSceneKey = (SettingsMgr::SettingsHotkey)killKey;
+        if (ImGui::Combo("Heal Mario##Key", &healKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mHealMarioKey = (SettingsMgr::SettingsHotkey)healKey;
+
+        if (ImGui::Combo("Life Up Heart##Key", &lifeupKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mLifeUpKey = (SettingsMgr::SettingsHotkey)lifeupKey;
+        if (ImGui::Combo("Prev Scene##Key", &prevSceneKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mPrevSceneKey = (SettingsMgr::SettingsHotkey)prevSceneKey;
+        if (ImGui::Combo("Increment Tp Index##Key", &inctpKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mIncTpIndexKey = (SettingsMgr::SettingsHotkey)inctpKey;
+        if (ImGui::Combo("Decrement Tp Index##Key", &dectpKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mDecTpIndexKey = (SettingsMgr::SettingsHotkey)dectpKey;
+        if (ImGui::Combo("Add 1000 Coins##Key", &addCoinsKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mAddCoinsKey = (SettingsMgr::SettingsHotkey)addCoinsKey;
+        if (ImGui::Combo("Remove 1000 Coins##Key", &decCoinsKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mDecCoinsKey = (SettingsMgr::SettingsHotkey)decCoinsKey;
+        if (ImGui::Combo("Next Wiggler Pattern##Key", &incPatternKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mIncPatternKey = (SettingsMgr::SettingsHotkey)incPatternKey;
+        if (ImGui::Combo("Prev Wiggler Pattern##Key", &decPatternKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mDecPatternKey = (SettingsMgr::SettingsHotkey)decPatternKey;
+        if (ImGui::Combo("Warp to last Checkpoint##Key", &warpCpKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mWarpLastCpKey = (SettingsMgr::SettingsHotkey)warpCpKey;
+        if (ImGui::Combo("Start Timer##Key", &timerStartKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mTimerStartKey = (SettingsMgr::SettingsHotkey)timerStartKey;
+        if (ImGui::Combo("End Timer##Key", &timerEndKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mTimerEndKey = (SettingsMgr::SettingsHotkey)timerEndKey;
+        if (ImGui::Combo("Reset Timer##Key", &timerResetKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mTimerResetKey = (SettingsMgr::SettingsHotkey)timerResetKey;
+
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }
@@ -74,7 +102,7 @@ void Menu::handleHotkeys() {
         loadTeleport(tpStates[tpIndex]);
     }
 
-    if (isHotkey(set->getSettings()->mKillSceneKey)) {
+    if (isHotkey((u8)set->getSettings()->mKillSceneKey)) {
         if (stageScene && playerHak) {
             al::NerveKeeper* sceneNerveKeeper = stageScene->getNerveKeeper();
             char* stateName = nullptr;
@@ -126,26 +154,26 @@ void Menu::handleHotkeys() {
             }
         }
     }
-    if (isHotkey(set->getSettings()->mHealMarioKey)) {
+    if (isHotkey((u8)set->getSettings()->mHealMarioKey)) {
         if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
     }
-    if (isHotkey(set->getSettings()->mPrevSceneKey)) {
+    if (isHotkey((u8)set->getSettings()->mPrevSceneKey)) {
         if (stageScene) GameDataHolderAccessor(stageScene)->returnPrevStage();
     }
-    if (isHotkey(set->getSettings()->mIncTpIndexKey)) {
+    if (isHotkey((u8)set->getSettings()->mIncTpIndexKey)) {
         tpIndex++;
         if (tpIndex >= hk::util::arraySize(tpStates)) tpIndex = 0;
         setPopupText("Tp Index: %d", tpIndex);
     }
-    if (isHotkey(set->getSettings()->mDecTpIndexKey)) {
+    if (isHotkey((u8)set->getSettings()->mDecTpIndexKey)) {
         tpIndex--;
         if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
         setPopupText("Tp Index: %d", tpIndex);
     }
-    if (isHotkey(set->getSettings()->mAddCoinsKey)) {
+    if (isHotkey((u8)set->getSettings()->mAddCoinsKey)) {
         if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
     }
-    if (isHotkey(set->getSettings()->mDecCoinsKey)) {
+    if (isHotkey((u8)set->getSettings()->mDecCoinsKey)) {
         if (stageScene) {
             int coinNum = GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene));
             if (coinNum < 1000)
@@ -154,20 +182,20 @@ void Menu::handleHotkeys() {
                 GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
         }
     }
-    if (isHotkey(set->getSettings()->mLifeUpKey)) {
+    if (isHotkey((u8)set->getSettings()->mLifeUpKey)) {
         if (playerHak) GameDataFunction::getLifeMaxUpItem(playerHak);
     }
-    if (isHotkey(set->getSettings()->mIncPatternKey)) {
+    if (isHotkey((u8)set->getSettings()->mIncPatternKey)) {
         set->getSettings()->mWigglerPattern++;
         if (set->getSettings()->mWigglerPattern >= hk::util::arraySize(WigglerPatterns)) set->getSettings()->mWigglerPattern = 0;
         setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
-    if (isHotkey(set->getSettings()->mDecPatternKey)) {
+    if (isHotkey((u8)set->getSettings()->mDecPatternKey)) {
         set->getSettings()->mWigglerPattern--;
         if (set->getSettings()->mWigglerPattern < 0) set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
         setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
-    if (isHotkey(set->getSettings()->mWarpLastCpKey)) {
+    if (isHotkey((u8)set->getSettings()->mWarpLastCpKey)) {
         if (stageScene) {
             if (mLastMapTarget) {
                 stageScene->mStateCollection->mStateStageMap->mMapThing = mLastMapTarget;
@@ -176,19 +204,19 @@ void Menu::handleHotkeys() {
             }
         }
     }
-    if (isHotkey(set->getSettings()->mTimerStartKey)) {
+    if (isHotkey((u8)set->getSettings()->mTimerStartKey)) {
         if (Timer::sInstance) {
             Timer::sInstance->start();
             setPopupText("Timer started");
         }
     }
-    if (isHotkey(set->getSettings()->mTimerEndKey)) {
+    if (isHotkey((u8)set->getSettings()->mTimerEndKey)) {
         if (Timer::sInstance) {
             Timer::sInstance->stop();
             setPopupText("Timer stopped");
         }
     }
-    if (isHotkey(set->getSettings()->mTimerResetKey)) {
+    if (isHotkey((u8)set->getSettings()->mTimerResetKey)) {
         if (Timer::sInstance) {
             Timer::sInstance->reset();
             setPopupText("Timer reset");

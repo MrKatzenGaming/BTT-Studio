@@ -34,7 +34,10 @@ void SaveFileHelper::saveSettings() {
         nn::fs::CreateDirectory("sd:/BTT-Studio");
     }
 
-    FsHelper::writeFileToPath(reinterpret_cast<void*>(&btt::SettingsMgr::instance()->mSettings), sizeof(btt::SettingsMgr::Settings), mSettingsPath);
+    FsHelper::writeFileToPath(
+        reinterpret_cast<void*>(&btt::SettingsMgr::instance()->mSettings), sizeof(btt::SettingsMgr::Settings),
+        mSettingsPath
+    );
 }
 
 void SaveFileHelper::loadSettings(sead::Heap* heap) {
@@ -51,14 +54,18 @@ void SaveFileHelper::loadSettings(sead::Heap* heap) {
         return;
     }
     if (data.bufSize != sizeof(btt::SettingsMgr::Settings)) {
-        Logger::instance()->log(Logger::LogType::LogErr, "Invalid settings size: %zu, expected: %zu", data.bufSize, sizeof(btt::SettingsMgr::Settings));
+        Logger::instance()->log(
+            Logger::LogType::LogErr, "Invalid settings size: %zu, expected: %zu", data.bufSize,
+            sizeof(btt::SettingsMgr::Settings)
+        );
         return;
     }
     btt::SettingsMgr::Settings* configData = reinterpret_cast<btt::SettingsMgr::Settings*>(data.buffer);
 
     if (strcmp(configData->Version, btt::SettingsMgr::instance()->mSettings.Version) != 0) {
         Logger::instance()->log(
-            Logger::LogType::LogWarn, "Version mismatch: %s != %s, resetting Settings", configData->Version, btt::SettingsMgr::instance()->mSettings.Version
+            Logger::LogType::LogWarn, "Version mismatch: %s != %s, resetting Settings", configData->Version,
+            btt::SettingsMgr::instance()->mSettings.Version
         );
         return;
     }

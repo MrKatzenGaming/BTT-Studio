@@ -125,7 +125,8 @@ void Logger::handlePacket() {
 
         if (chunkBuf[0] != '\0') {
             ChangeStageInfo stageInfo(
-                gameSeq->mGameDataHolderAccessor.mData, "start", (char*)chunkBuf, false, -1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                gameSeq->mGameDataHolderAccessor.mData, "start", (char*)chunkBuf, false, -1,
+                ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
             );
             gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&stageInfo, 0);
         } else {

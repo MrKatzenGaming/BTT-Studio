@@ -28,7 +28,9 @@ using namespace hk;
 
 namespace btt {
 sead::Heap* initializeHeap() {
-    return sead::ExpHeap::create(2_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false);
+    return sead::ExpHeap::create(
+        2_MB, "BTTStudioHeap", al::getStationedHeap(), 8, sead::Heap::cHeapDirection_Forward, false
+    );
 }
 } // namespace btt
 
@@ -121,7 +123,8 @@ HkTrampoline hakoniwaSequenceUpdate = [](TrampolineStatic(), HakoniwaSequence* h
 };
 
 void disableButtons(nn::hid::NpadBaseState* state) {
-    if (!InputHelper::isReadInputs() && InputHelper::isInputToggled() && btt::Menu::instance()->mIsEnabledMenu) {
+    if (!InputHelper::isReadInputs() && InputHelper::isInputToggled() &&
+        btt::Menu::instance()->mIsEnabledMenu) {
         // clear out the data within the state (except for the sampling number and attributes)
         state->mButtons = nn::hid::NpadButtonSet();
         state->mAnalogStickL = nn::hid::AnalogStickState();
@@ -129,31 +132,36 @@ void disableButtons(nn::hid::NpadBaseState* state) {
     }
 }
 
-HkTrampoline DisableFullKeyState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadFullKeyState* state, int count, const unsigned int& port) -> int {
+HkTrampoline DisableFullKeyState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadFullKeyState* state,
+                                      int count, const unsigned int& port) -> int {
     int result = orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 };
 
-HkTrampoline DisableHandheldState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadHandheldState* state, int count, const unsigned int& port) -> int {
+HkTrampoline DisableHandheldState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadHandheldState* state,
+                                       int count, const unsigned int& port) -> int {
     int result = orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 };
 
-HkTrampoline DisableJoyDualState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyDualState* state, int count, const unsigned int& port) -> int {
+HkTrampoline DisableJoyDualState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyDualState* state,
+                                      int count, const unsigned int& port) -> int {
     int result = orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 };
 
-HkTrampoline DisableJoyLeftState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyLeftState* state, int count, const unsigned int& port) -> int {
+HkTrampoline DisableJoyLeftState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyLeftState* state,
+                                      int count, const unsigned int& port) -> int {
     int result = orig(unkInt, state, count, port);
     disableButtons(state);
     return result;
 };
 
-HkTrampoline DisableJoyRightState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyRightState* state, int count, const unsigned int& port) -> int {
+HkTrampoline DisableJoyRightState = [](TrampolineStatic(), int* unkInt, nn::hid::NpadJoyRightState* state,
+                                       int count, const unsigned int& port) -> int {
     int result = orig(unkInt, state, count, port);
     disableButtons(state);
     return result;

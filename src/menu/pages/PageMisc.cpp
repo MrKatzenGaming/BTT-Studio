@@ -57,7 +57,9 @@ void Menu::drawTeleportCat() {
 
         ImGui::SameLine();
         if (ImGui::Button("Load From File")) {
-            SaveFileHelper::instance()->loadTeleport(tpStates, hk::util::arraySize(tpStates), al::getStationedHeap());
+            SaveFileHelper::instance()->loadTeleport(
+                tpStates, hk::util::arraySize(tpStates), al::getStationedHeap()
+            );
         }
         ImGui::Unindent();
     }
@@ -69,7 +71,10 @@ void Menu::saveTeleport(TpState& state) {
     state.saved = true;
     state.pos = al::getTrans(playerHak);
     state.quat = al::getQuat(playerHak);
-    strcpy(state.stageName, getEnglishName(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene))));
+    strcpy(
+        state.stageName,
+        getEnglishName(GameDataFunction::getCurrentStageName(GameDataHolderAccessor(stageScene)))
+    );
 }
 
 void Menu::loadTeleport(TpState& state) {
@@ -110,7 +115,9 @@ void Menu::drawPageMisc() {
             if (ImGui::Button("Set Outfit")) {
                 if (gameSeq->mGameDataHolderAccessor.mData && stageScene) {
                     GameDataFunction::wearCap(gameSeq->mGameDataHolderAccessor.mData, capNames[mSelectedCap]);
-                    GameDataFunction::wearCostume(gameSeq->mGameDataHolderAccessor.mData, bodyNames[mSelectedBody]);
+                    GameDataFunction::wearCostume(
+                        gameSeq->mGameDataHolderAccessor.mData, bodyNames[mSelectedBody]
+                    );
                     stageScene->kill();
                 }
             }
@@ -136,7 +143,8 @@ void Menu::drawPageMisc() {
 
             if (ImGui::Combo("Start Type", &startType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes)))
                 set->getSettings()->mTimerStartType = (TimerHookType)startType;
-            if (ImGui::Combo("End Type", &endType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes))) set->getSettings()->mTimerEndType = (TimerHookType)endType;
+            if (ImGui::Combo("End Type", &endType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes)))
+                set->getSettings()->mTimerEndType = (TimerHookType)endType;
             static int posX = set->getSettings()->mTimerPos.x;
             static int posY = set->getSettings()->mTimerPos.y;
             ImGui::PushItemWidth(200);
@@ -148,7 +156,8 @@ void Menu::drawPageMisc() {
         ImGui::PushItemWidth(200);
         static int pattern = set->getSettings()->mWigglerPattern;
         static int status = set->getSettings()->mWorldTravelingStatus;
-        if (ImGui::Combo("Wiggler Pattern", &pattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns))) set->getSettings()->mWigglerPattern = pattern;
+        if (ImGui::Combo("Wiggler Pattern", &pattern, WigglerPatterns, IM_ARRAYSIZE(WigglerPatterns)))
+            set->getSettings()->mWigglerPattern = pattern;
         if (ImGui::Combo("Tourist Status", &status, worldTravelingStatus, IM_ARRAYSIZE(worldTravelingStatus)))
             set->getSettings()->mWorldTravelingStatus = status;
         ImGui::PopItemWidth();
@@ -204,18 +213,24 @@ void Menu::drawPageMisc() {
                     if (state) {
                         const al::Nerve* stateNerve = state->state->getNerveKeeper()->getCurrentNerve();
                         int status;
-                        stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                        stateName =
+                            abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
                         stateNameShort = stateName + strlen("StageSceneState");
 
                         if (stateName) {
-                            stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
+                            stateNrvName =
+                                abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
 
                             if (stateNrvName) {
-                                auto prefixLen2 = stateNrvName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
-                                stateNrvNameShort = stateNrvName + prefixLen2 + strlen(stateName) + strlen("nrv");
+                                auto prefixLen2 =
+                                    stateNrvName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+                                stateNrvNameShort =
+                                    stateNrvName + prefixLen2 + strlen(stateName) + strlen("nrv");
 
-                                cmpNrv = strcmp(stateNrvNameShort, "SkipDemo") == 0 || strcmp(stateNrvNameShort, "Skip") == 0;
-                                cmpState = strcmp(stateNameShort, "PauseMenu") == 0 || strcmp(stateNameShort, "SnapShot") == 0;
+                                cmpNrv = strcmp(stateNrvNameShort, "SkipDemo") == 0 ||
+                                         strcmp(stateNrvNameShort, "Skip") == 0;
+                                cmpState = strcmp(stateNameShort, "PauseMenu") == 0 ||
+                                           strcmp(stateNameShort, "SnapShot") == 0;
                             }
                         }
                     }
@@ -227,8 +242,9 @@ void Menu::drawPageMisc() {
                             reloadStagePos = al::getTrans(playerHak);
                             reloadStageQuat = al::getQuat(playerHak);
                             ChangeStageInfo info = ChangeStageInfo(
-                                gameSeq->mGameDataHolderAccessor, "", GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), false, -1,
-                                ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                                gameSeq->mGameDataHolderAccessor, "",
+                                GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor),
+                                false, -1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                             );
                             gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&info, 0);
                         } else {
@@ -260,8 +276,10 @@ void Menu::drawPageMisc() {
         ImGui::PushItemWidth(200);
         static int txt = set->getSettings()->mMoonRefreshText;
         static int corner = set->getSettings()->mMenuCorner;
-        if (ImGui::Combo("Moon Refresh Text", &txt, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts))) set->getSettings()->mMoonRefreshText = txt;
-        if (ImGui::Combo("Menu Corner", &corner, Corners, IM_ARRAYSIZE(Corners))) set->getSettings()->mMenuCorner = corner;
+        if (ImGui::Combo("Moon Refresh Text", &txt, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts)))
+            set->getSettings()->mMoonRefreshText = txt;
+        if (ImGui::Combo("Menu Corner", &corner, Corners, IM_ARRAYSIZE(Corners)))
+            set->getSettings()->mMenuCorner = corner;
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }

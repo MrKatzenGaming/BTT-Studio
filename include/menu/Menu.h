@@ -109,37 +109,57 @@ private:
     char popupText[0x40] = "Input Disabled";
 
     constexpr static const char* Corners[4] { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
-    constexpr static const char* MoonRefreshTexts[] { "BTT Studio", "BTT", "Hi BTT", "I am Cool", "Super Mario Odyssey", "Entrance to Shiveria", "<blank>" };
-    constexpr static const char* WigglerPatterns[23] { "Random", "Ghost",   "Nose",    "C",        "W",     "J", "Medal",    "Plane",
-                                                       "5",      "Hangman", "Spanish", "Siblings", "Snake", "8", "Mushroom", "Z",
-                                                       "Tetris", "Ear",     "Bomb",    "Bird",     "L",     "O", "Star" };
-    constexpr static const char* worldTravelingStatus[] = { "<Normal>", "First Talk", "Metro",     "Cascade",        "Luncheon",
-                                                            "Moon",     "Mushroom",   "Last Talk", "After Last Talk" };
+    constexpr static const char* MoonRefreshTexts[] {
+        "BTT Studio", "BTT", "Hi BTT", "I am Cool", "Super Mario Odyssey", "Entrance to Shiveria", "<blank>"
+    };
+    constexpr static const char* WigglerPatterns[23] { "Random",  "Ghost",    "Nose",  "C",    "W",
+                                                       "J",       "Medal",    "Plane", "5",    "Hangman",
+                                                       "Spanish", "Siblings", "Snake", "8",    "Mushroom",
+                                                       "Z",       "Tetris",   "Ear",   "Bomb", "Bird",
+                                                       "L",       "O",        "Star" };
+    constexpr static const char* worldTravelingStatus[] = { "<Normal>", "First Talk", "Metro",
+                                                            "Cascade",  "Luncheon",   "Moon",
+                                                            "Mushroom", "Last Talk",  "After Last Talk" };
 
     constexpr static const char* Keys[] {
         "Disabled", "None", "L", "R", "ZL", "ZR", "L + R", "L + ZL", "L + ZR", "R + ZL", "R + ZR",
     };
 
     constexpr static const char* bodyNames[] = {
-        "Mario",          "Mario64",         "Mario64Metal",      "MarioAloha",      "MarioArmor",     "MarioBone",      "MarioClown",    "MarioColorClassic",
-        "MarioColorGold", "MarioColorLuigi", "MarioColorWaluigi", "MarioColorWario", "MarioCook",      "MarioDiddyKong", "MarioDoctor",   "MarioExplorer",
-        "MarioFootball",  "MarioGolf",       "MarioGunman",       "MarioHakama",     "MarioHappi",     "MarioKing",      "MarioKoopa",    "MarioMaker",
-        "MarioMechanic",  "MarioNew3DS",     "MarioPainter",      "MarioPeach",      "MarioPilot",     "MarioPirate",    "MarioPoncho",   "MarioPrimitiveMan",
-        "MarioSailor",    "MarioScientist",  "MarioShopman",      "MarioSnowSuit",   "MarioSpaceSuit", "MarioSuit",      "MarioSwimwear", "MarioTailCoat",
+        "Mario",          "Mario64",         "Mario64Metal",      "MarioAloha",
+        "MarioArmor",     "MarioBone",       "MarioClown",        "MarioColorClassic",
+        "MarioColorGold", "MarioColorLuigi", "MarioColorWaluigi", "MarioColorWario",
+        "MarioCook",      "MarioDiddyKong",  "MarioDoctor",       "MarioExplorer",
+        "MarioFootball",  "MarioGolf",       "MarioGunman",       "MarioHakama",
+        "MarioHappi",     "MarioKing",       "MarioKoopa",        "MarioMaker",
+        "MarioMechanic",  "MarioNew3DS",     "MarioPainter",      "MarioPeach",
+        "MarioPilot",     "MarioPirate",     "MarioPoncho",       "MarioPrimitiveMan",
+        "MarioSailor",    "MarioScientist",  "MarioShopman",      "MarioSnowSuit",
+        "MarioSpaceSuit", "MarioSuit",       "MarioSwimwear",     "MarioTailCoat",
         "MarioTuxedo",    "MarioUnderwear"
     };
 
     constexpr static const char* capNames[] = {
-        "Mario",          "Mario64",         "Mario64Metal",      "MarioAloha",      "MarioArmor",     "MarioBone",      "MarioClown",    "MarioColorClassic",
-        "MarioColorGold", "MarioColorLuigi", "MarioColorWaluigi", "MarioColorWario", "MarioCook",      "MarioDiddyKong", "MarioDoctor",   "MarioExplorer",
-        "MarioFootball",  "MarioGolf",       "MarioGunman",       "MarioHakama",     "MarioHappi",     "MarioKing",      "MarioKoopa",    "MarioMaker",
-        "MarioMechanic",  "MarioNew3DS",     "MarioPainter",      "MarioPeach",      "MarioPilot",     "MarioPirate",    "MarioPoncho",   "MarioPrimitiveMan",
-        "MarioSailor",    "MarioScientist",  "MarioShopman",      "MarioSnowSuit",   "MarioSpaceSuit", "MarioSuit",      "MarioSwimwear", "MarioTailCoat",
+        "Mario",          "Mario64",         "Mario64Metal",      "MarioAloha",
+        "MarioArmor",     "MarioBone",       "MarioClown",        "MarioColorClassic",
+        "MarioColorGold", "MarioColorLuigi", "MarioColorWaluigi", "MarioColorWario",
+        "MarioCook",      "MarioDiddyKong",  "MarioDoctor",       "MarioExplorer",
+        "MarioFootball",  "MarioGolf",       "MarioGunman",       "MarioHakama",
+        "MarioHappi",     "MarioKing",       "MarioKoopa",        "MarioMaker",
+        "MarioMechanic",  "MarioNew3DS",     "MarioPainter",      "MarioPeach",
+        "MarioPilot",     "MarioPirate",     "MarioPoncho",       "MarioPrimitiveMan",
+        "MarioSailor",    "MarioScientist",  "MarioShopman",      "MarioSnowSuit",
+        "MarioSpaceSuit", "MarioSuit",       "MarioSwimwear",     "MarioTailCoat",
         "MarioTuxedo",    "MarioInvisible"
     };
 
     constexpr static const char* TimerHookTypes[] = {
-        "None", "Shine Grab (Kinda Broken)", "Shine Tick", "Game Start (Not Implemented)", "Escape Wire (Not Implemented)", "Capture Glow (Not Implemented)",
+        "None",
+        "Shine Grab (Kinda Broken)",
+        "Shine Tick",
+        "Game Start (Not Implemented)",
+        "Escape Wire (Not Implemented)",
+        "Capture Glow (Not Implemented)",
     };
 };
 } // namespace btt

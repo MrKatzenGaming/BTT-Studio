@@ -11,7 +11,9 @@ namespace customboot {
 
 class CustomBootLoad : public al::LayoutActor {
 public:
-    CustomBootLoad(WorldResourceLoader* resourceLoader, const al::LayoutInitInfo& initInfo, float autoCloseAfter);
+    CustomBootLoad(
+        WorldResourceLoader* resourceLoader, const al::LayoutInitInfo& initInfo, float autoCloseAfter
+    );
 
     void exeAppear();
     void exeWait();

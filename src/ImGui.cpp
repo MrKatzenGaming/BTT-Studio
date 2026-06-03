@@ -22,7 +22,8 @@ void init(sead::Heap* heap) {
     static sead::Heap* sImHeap = heap;
 
     imgui->setAllocator(
-        { [](size allocSize, size alignment) -> void* { return sImHeap->tryAlloc(allocSize, alignment); }, [](void* ptr) -> void { sImHeap->free(ptr); } }
+        { [](size allocSize, size alignment) -> void* { return sImHeap->tryAlloc(allocSize, alignment); },
+          [](void* ptr) -> void { sImHeap->free(ptr); } }
     );
     imgui->tryInitialize();
 
@@ -101,7 +102,9 @@ void draw(agl::DrawContext* drawContext) {
     }
     ImGui::Render();
 
-    hk::gfx::ImGuiBackendNvn::instance()->draw(ImGui::GetDrawData(), drawContext->getCommandBuffer()->ToData()->pNvnCommandBuffer);
+    hk::gfx::ImGuiBackendNvn::instance()->draw(
+        ImGui::GetDrawData(), drawContext->getCommandBuffer()->ToData()->pNvnCommandBuffer
+    );
 }
 
 void setupStyle() {

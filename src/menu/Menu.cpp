@@ -51,7 +51,11 @@ void Menu::draw() {
         wasInputToggled = false;
     }
 
-    ImGui::Begin(windowName, nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavFocus);
+    ImGui::Begin(
+        windowName, nullptr,
+        ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_NoNavFocus
+    );
     ImGui::SetWindowSize(mWindowSize, ImGuiCond_FirstUseEver);
     if (!set)
         ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
@@ -85,9 +89,15 @@ void Menu::draw() {
         }
         ImGui::Text("Menu Timer: %lu", menuTimer);
         ImGui::Text("NavId: %u", GImGui->NavId);
-        ImGui::Text("Stage: %s", gameSeq ? GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor) : NULL);
+        ImGui::Text(
+            "Stage: %s",
+            gameSeq ? GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor) : NULL
+        );
         ImGui::Text("Scenario: %u", playerHak ? GameDataFunction::getScenarioNo(playerHak) : -1);
-        ImGui::Text("Entrance: %s", gameSeq ? gameSeq->mGameDataHolderAccessor.mData->mPlayingFile->mPlayerStartId.cstr() : NULL);
+        ImGui::Text(
+            "Entrance: %s",
+            gameSeq ? gameSeq->mGameDataHolderAccessor.mData->mPlayingFile->mPlayerStartId.cstr() : NULL
+        );
         ImGui::Text("WorldTravelingStatus: %s", mWorldTravelingStatus);
 
         if (ImGui::CollapsingHeader("Player Sutff")) {
@@ -101,7 +111,10 @@ void Menu::draw() {
             ImGui::Text("Quat: %.2f, %.2f, %.2f, %.2f", quat.x, quat.y, quat.z, quat.w);
             ImGui::Text("ReloadPosTimer: %d", reloadPosTimer);
             ImGui::Text("ReloadPos: %.2f, %.2f, %.2f", reloadStagePos.x, reloadStagePos.y, reloadStagePos.z);
-            ImGui::Text("ReloadQuat: %.2f, %.2f, %.2f, %.2f", reloadStageQuat.x, reloadStageQuat.y, reloadStageQuat.z, reloadStageQuat.w);
+            ImGui::Text(
+                "ReloadQuat: %.2f, %.2f, %.2f, %.2f", reloadStageQuat.x, reloadStageQuat.y, reloadStageQuat.z,
+                reloadStageQuat.w
+            );
         }
 
         drawComplexHeapTreeItem(sead::HeapMgr::instance()->getRootHeap(0));
@@ -123,12 +136,16 @@ void Menu::draw() {
                     const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
                     if (currentNerve) {
                         NrvAddr = (uintptr_t)currentNerve;
-                        nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
+                        nerveName =
+                            abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
                         prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
                     }
                     if (gameSeq->getNerveKeeper()->mStateCtrl) {
-                        al::NerveStateCtrl::State* state = gameSeq->getNerveKeeper()->mStateCtrl->mCurrentState;
-                        if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                        al::NerveStateCtrl::State* state =
+                            gameSeq->getNerveKeeper()->mStateCtrl->mCurrentState;
+                        if (state)
+                            stateName =
+                                abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
                     }
                 }
 
@@ -158,12 +175,16 @@ void Menu::draw() {
                     const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
                     if (currentNerve) {
                         NrvAddr = (uintptr_t)currentNerve;
-                        nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
+                        nerveName =
+                            abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
                         prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
                     }
                     if (stageScene->getNerveKeeper()->mStateCtrl) {
-                        al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
-                        if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                        al::NerveStateCtrl::State* state =
+                            stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
+                        if (state)
+                            stateName =
+                                abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
                     }
                 }
 
@@ -193,12 +214,16 @@ void Menu::draw() {
                     const al::Nerve* currentNerve = nerveKeeper->getCurrentNerve();
                     if (currentNerve) {
                         NrvAddr = (uintptr_t)currentNerve;
-                        nerveName = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
+                        nerveName =
+                            abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status);
                         prefixLen = nerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
                     }
                     if (playerHak->getNerveKeeper()->mStateCtrl) {
-                        al::NerveStateCtrl::State* state = playerHak->getNerveKeeper()->mStateCtrl->mCurrentState;
-                        if (state) stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+                        al::NerveStateCtrl::State* state =
+                            playerHak->getNerveKeeper()->mStateCtrl->mCurrentState;
+                        if (state)
+                            stateName =
+                                abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
                     }
                 }
 
@@ -227,7 +252,10 @@ void Menu::handleAlways() {
     stageScene = helpers::tryGetStageScene(gameSeq);
     // BAAAADD
     if (stageScene) {
-        if (strcmp(GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), "ClashWorldHomeStage") == 0) noGetPlayer = false;
+        if (strcmp(
+                GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), "ClashWorldHomeStage"
+            ) == 0)
+            noGetPlayer = false;
     }
     if (noGetPlayer) {
         playerHak = nullptr;
@@ -299,8 +327,9 @@ void Menu::drawPopup() {
     if (!mIsPopup) return;
     ImGui::Begin(
         "Popup", nullptr,
-        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
-            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoNavFocus
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+            ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoNavFocus
     );
     ImGui::SetWindowSize(ImVec2(0, 0));
     ImGui::SetWindowPos(ImVec2(mWindowSize.x + 10, 0));
@@ -346,8 +375,10 @@ void Menu::drawComplexHeapTreeItem(sead::Heap* heap) {
     ImGui::BeginGroup();
 
     // Create a unindented tree node, replacing arrow with bullet if no children exist
-    bool expanded =
-        ImGui::TreeNodeEx(heap->getName().cstr(), ImGuiTreeNodeFlags_NoTreePushOnOpen | (hasNoChildren ? ImGuiTreeNodeFlags_Bullet : ImGuiTreeNodeFlags_None));
+    bool expanded = ImGui::TreeNodeEx(
+        heap->getName().cstr(), ImGuiTreeNodeFlags_NoTreePushOnOpen |
+                                    (hasNoChildren ? ImGuiTreeNodeFlags_Bullet : ImGuiTreeNodeFlags_None)
+    );
 
     float used = (heap->getSize() - heap->getFreeSize());
     float size = heap->getSize();

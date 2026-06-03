@@ -21,7 +21,8 @@ constexpr static ImVec4 sInputDisplayColors[] {
 };
 
 constexpr const char* sInputDisplayColorNames[] {
-    "None", "White", "Gray", "Black", "Red", "Blue", "Yellow", "Green", "Orange", "Purple", "Pink", "Light Blue"
+    "None",   "White", "Gray",   "Black",  "Red",  "Blue",
+    "Yellow", "Green", "Orange", "Purple", "Pink", "Light Blue"
 };
 
 void drawInputDisplay();

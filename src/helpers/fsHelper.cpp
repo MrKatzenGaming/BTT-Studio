@@ -24,7 +24,9 @@ nn::Result writeFileToPath(void* buf, size_t size, const char* path) {
         // Logger::log("Failed to Open File.\n");
         return result;
     }
-    result = nn::fs::WriteFile(handle, 0, buf, size, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush));
+    result = nn::fs::WriteFile(
+        handle, 0, buf, size, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush)
+    );
     if (result.IsFailure()) {
         // Logger::log("Failed to Write to File.\n");
         return result;

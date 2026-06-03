@@ -22,19 +22,31 @@ void Menu::drawPageInputDisplay() {
 
         ImGui::PushItemWidth(200);
 
-        if (ImGui::Combo("Button Color", &buttonColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)))
+        if (ImGui::Combo(
+                "Button Color", &buttonColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)
+            ))
             set->getSettings()->mInputDisplayButtonColor = (SettingsMgr::InputDisplayColor)buttonColor;
 
-        if (ImGui::Combo("Pressed Color", &buttonPressedColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)))
-            set->getSettings()->mInputDisplayButtonPressedColor = (SettingsMgr::InputDisplayColor)buttonPressedColor;
+        if (ImGui::Combo(
+                "Pressed Color", &buttonPressedColor, sInputDisplayColorNames,
+                IM_ARRAYSIZE(sInputDisplayColorNames)
+            ))
+            set->getSettings()->mInputDisplayButtonPressedColor =
+                (SettingsMgr::InputDisplayColor)buttonPressedColor;
 
-        if (ImGui::Combo("Stick Color", &stickColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)))
+        if (ImGui::Combo(
+                "Stick Color", &stickColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)
+            ))
             set->getSettings()->mInputDisplayStickColor = (SettingsMgr::InputDisplayColor)stickColor;
 
-        if (ImGui::Combo("Ring Color", &ringColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)))
+        if (ImGui::Combo(
+                "Ring Color", &ringColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)
+            ))
             set->getSettings()->mInputDisplayRingColor = (SettingsMgr::InputDisplayColor)ringColor;
 
-        if (ImGui::Combo("BG Color", &bgColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)))
+        if (ImGui::Combo(
+                "BG Color", &bgColor, sInputDisplayColorNames, IM_ARRAYSIZE(sInputDisplayColorNames)
+            ))
             set->getSettings()->mInputDisplayBackColor = (SettingsMgr::InputDisplayColor)bgColor;
 
         if (ImGui::InputInt("Position X", &posX, 5)) set->getSettings()->mInputDisplayPos.x = posX;

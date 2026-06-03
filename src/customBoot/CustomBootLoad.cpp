@@ -20,7 +20,9 @@
 #endif
 
 namespace customboot {
-CustomBootLoad::CustomBootLoad(WorldResourceLoader* resourceLoader, const al::LayoutInitInfo& initInfo, float autoCloseAfter) :
+CustomBootLoad::CustomBootLoad(
+    WorldResourceLoader* resourceLoader, const al::LayoutInitInfo& initInfo, float autoCloseAfter
+) :
     al::LayoutActor("SpeedbootLoad"), worldResourceLoader(resourceLoader), mAutoCloseAfter(autoCloseAfter) {
     al::initLayoutActor(this, initInfo, "SpeedbootLoad", nullptr);
     initNerve(&NrvCustomBootLoad.Appear, 0);
@@ -87,7 +89,8 @@ void CustomBootLoad::exeDecrease() {
 #ifdef BTTDEBUG
     // Debug stuff
     sead::WFormatFixedSafeString<0x50> debugString(
-        u"Display Time: %.02f\nRot Time: %.02f\nSine Value: %.02f\nAutoClose: %.02f", mTime, mRotTime, rotation, mAutoCloseAfter
+        u"Display Time: %.02f\nRot Time: %.02f\nSine Value: %.02f\nAutoClose: %.02f", mTime, mRotTime,
+        rotation, mAutoCloseAfter
     );
     al::setPaneString(this, "TxtDebug", debugString.cstr(), 0);
     al::setPaneLocalTrans(this, "TxtDebug", sead::Vector2f(-590, 140));
@@ -109,8 +112,9 @@ void CustomBootLoad::exeDecrease() {
     //             mDotTimer = 0.0f;
     //         }
 
-    //         const char16_t* dots[] = { u"Connecting to server", u"Connecting to server.", u"Connecting to server..", u"Connecting to server..." };
-    //         al::setPaneString(this, "TxtConnecting", dots[mConnectingDotState], 0);
+    //         const char16_t* dots[] = { u"Connecting to server", u"Connecting to server.", u"Connecting to
+    //         server..", u"Connecting to server..." }; al::setPaneString(this, "TxtConnecting",
+    //         dots[mConnectingDotState], 0);
     //     }
 
     // } else {

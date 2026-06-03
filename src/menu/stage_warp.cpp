@@ -32,8 +32,9 @@ bool isShowMenu = false;
 s32 curScenario = 0;
 
 KingdomEnglishNameSub subNamesCap[] = {
-    { "FrogSearchExStage", "Frog Pond" },      { "CapWorldTowerStage", "Inside Cap Tower" }, { "PoisonWaveExStage", "Poison Tides" },
-    { "RollingExStage", "Precision Rolling" }, { "PushBlockExStage", "Push Block Peril" },
+    { "FrogSearchExStage", "Frog Pond" },       { "CapWorldTowerStage", "Inside Cap Tower" },
+    { "PoisonWaveExStage", "Poison Tides" },    { "RollingExStage", "Precision Rolling" },
+    { "PushBlockExStage", "Push Block Peril" },
 };
 KingdomEnglishNameSub subNamesCascade[] = {
     { "Lift2DExStage", "8-Bit Chasm Lifts" },
@@ -318,7 +319,8 @@ void drawStageWarpWindow() {
         if (curScenario < 0) curScenario = 15;
         if (curScenario > 15) curScenario = 0;
         ImGui::PopItemWidth();
-        if (ctx->NavId == ImGui::GetID("Scenario")) ImGui::SetTooltip("(NC) = No Change, () = First Arrival,\n(PG) = Post-Game, (MR) = Moon Rock");
+        if (ctx->NavId == ImGui::GetID("Scenario"))
+            ImGui::SetTooltip("(NC) = No Change, () = First Arrival,\n(PG) = Post-Game, (MR) = Moon Rock");
 
         for (KingdomEnglishNameMain& entry : mainNames) {
             char popupStr[0x60] = {};
@@ -335,7 +337,8 @@ void drawStageWarpWindow() {
                 if (!isInGame) continue;
                 if (curScenario == 0) curScenario = -1;
                 ChangeStageInfo stageInfo(
-                    gameSeq->mGameDataHolderAccessor.mData, "start", entry.mInternal, false, curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                    gameSeq->mGameDataHolderAccessor.mData, "start", entry.mInternal, false, curScenario,
+                    ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                 );
                 gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&stageInfo, 0);
                 if (curScenario == -1) curScenario = 0;
@@ -355,8 +358,8 @@ void drawStageWarpWindow() {
                         if (ImGui::MenuItem(getEnglishName(stageName))) {
                             if (curScenario == 0) curScenario = -1;
                             ChangeStageInfo stageInfo(
-                                gameSeq->mGameDataHolderAccessor.mData, "start", stageName, false, curScenario,
-                                ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                                gameSeq->mGameDataHolderAccessor.mData, "start", stageName, false,
+                                curScenario, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                             );
                             gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&stageInfo, 0);
                             if (curScenario == -1) curScenario = 0;

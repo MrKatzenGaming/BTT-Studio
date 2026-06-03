@@ -41,10 +41,13 @@ void Menu::drawPageHotkeys() {
         ImGui::Indent();
         ImGui::Text("Usage: Hold Hotkey + Press DPad-Up");
         ImGui::PushItemWidth(200);
-        if (ImGui::Combo("Kill Scene##Key", &killKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mKillSceneKey = (SettingsMgr::SettingsHotkey)killKey;
-        if (ImGui::Combo("Heal Mario##Key", &healKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mHealMarioKey = (SettingsMgr::SettingsHotkey)healKey;
+        if (ImGui::Combo("Kill Scene##Key", &killKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mKillSceneKey = (SettingsMgr::SettingsHotkey)killKey;
+        if (ImGui::Combo("Heal Mario##Key", &healKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mHealMarioKey = (SettingsMgr::SettingsHotkey)healKey;
 
-        if (ImGui::Combo("Life Up Heart##Key", &lifeupKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mLifeUpKey = (SettingsMgr::SettingsHotkey)lifeupKey;
+        if (ImGui::Combo("Life Up Heart##Key", &lifeupKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mLifeUpKey = (SettingsMgr::SettingsHotkey)lifeupKey;
         if (ImGui::Combo("Prev Scene##Key", &prevSceneKey, Keys, IM_ARRAYSIZE(Keys)))
             set->getSettings()->mPrevSceneKey = (SettingsMgr::SettingsHotkey)prevSceneKey;
         if (ImGui::Combo("Increment Tp Index##Key", &inctpKey, Keys, IM_ARRAYSIZE(Keys)))
@@ -63,7 +66,8 @@ void Menu::drawPageHotkeys() {
             set->getSettings()->mWarpLastCpKey = (SettingsMgr::SettingsHotkey)warpCpKey;
         if (ImGui::Combo("Start Timer##Key", &timerStartKey, Keys, IM_ARRAYSIZE(Keys)))
             set->getSettings()->mTimerStartKey = (SettingsMgr::SettingsHotkey)timerStartKey;
-        if (ImGui::Combo("End Timer##Key", &timerEndKey, Keys, IM_ARRAYSIZE(Keys))) set->getSettings()->mTimerEndKey = (SettingsMgr::SettingsHotkey)timerEndKey;
+        if (ImGui::Combo("End Timer##Key", &timerEndKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mTimerEndKey = (SettingsMgr::SettingsHotkey)timerEndKey;
         if (ImGui::Combo("Reset Timer##Key", &timerResetKey, Keys, IM_ARRAYSIZE(Keys)))
             set->getSettings()->mTimerResetKey = (SettingsMgr::SettingsHotkey)timerResetKey;
 
@@ -95,7 +99,8 @@ bool Menu::isHotkey(int key) {
 }
 
 void Menu::handleHotkeys() {
-    bool isAllowTP = set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu);
+    bool isAllowTP =
+        set->getSettings()->mIsEnableTpHotkeys && (!InputHelper::isInputToggled() || !mIsEnabledMenu);
 
     if (InputHelper::isPressPadLeft() && isAllowTP) {
         saveTeleport(tpStates[tpIndex]);
@@ -123,14 +128,17 @@ void Menu::handleHotkeys() {
                     stateNameShort = stateName + strlen("StageSceneState");
 
                     if (stateName) {
-                        stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
+                        stateNrvName =
+                            abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
 
                         if (stateNrvName) {
                             auto prefixLen2 = stateNrvName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
                             stateNrvNameShort = stateNrvName + prefixLen2 + strlen(stateName) + strlen("nrv");
 
-                            cmpNrv = strcmp(stateNrvNameShort, "SkipDemo") == 0 || strcmp(stateNrvNameShort, "Skip") == 0;
-                            cmpState = strcmp(stateNameShort, "PauseMenu") == 0 || strcmp(stateNameShort, "SnapShot") == 0;
+                            cmpNrv = strcmp(stateNrvNameShort, "SkipDemo") == 0 ||
+                                     strcmp(stateNrvNameShort, "Skip") == 0;
+                            cmpState = strcmp(stateNameShort, "PauseMenu") == 0 ||
+                                       strcmp(stateNameShort, "SnapShot") == 0;
                         }
                     }
                 }
@@ -144,8 +152,9 @@ void Menu::handleHotkeys() {
                             reloadStageQuat = al::getQuat(playerHak);
                         }
                         ChangeStageInfo info = ChangeStageInfo(
-                            gameSeq->mGameDataHolderAccessor, "", GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), false, -1,
-                            ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+                            gameSeq->mGameDataHolderAccessor, "",
+                            GameDataFunction::getCurrentStageName(gameSeq->mGameDataHolderAccessor), false,
+                            -1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
                         );
                         gameSeq->mGameDataHolderAccessor.mData->changeNextStage(&info, 0);
                     } else {
@@ -188,12 +197,14 @@ void Menu::handleHotkeys() {
     }
     if (isHotkey((u8)set->getSettings()->mIncPatternKey)) {
         set->getSettings()->mWigglerPattern++;
-        if (set->getSettings()->mWigglerPattern >= hk::util::arraySize(WigglerPatterns)) set->getSettings()->mWigglerPattern = 0;
+        if (set->getSettings()->mWigglerPattern >= hk::util::arraySize(WigglerPatterns))
+            set->getSettings()->mWigglerPattern = 0;
         setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
     if (isHotkey((u8)set->getSettings()->mDecPatternKey)) {
         set->getSettings()->mWigglerPattern--;
-        if (set->getSettings()->mWigglerPattern < 0) set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
+        if (set->getSettings()->mWigglerPattern < 0)
+            set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
         setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
     if (isHotkey((u8)set->getSettings()->mWarpLastCpKey)) {

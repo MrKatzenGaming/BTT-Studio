@@ -64,14 +64,17 @@ void Timer::draw() {
         char buffer[32] { 0 };
 
         s64 timerNow = mIsRunning ? nn::os::GetSystemTick().value : mEndTick;
-        bool isShowSplit = mShowSplitTick && float(nn::os::GetSystemTick().value - mShowSplitTick) / nn::os::GetSystemTickFrequency().value <= 2;
+        bool isShowSplit = mShowSplitTick && float(nn::os::GetSystemTick().value - mShowSplitTick) /
+                                                     nn::os::GetSystemTickFrequency().value <=
+                                                 2;
         if (isShowSplit) timerNow = mShowSplitTick;
 
         s64 time = timerNow - mStartTick;
         s64 seconds = time / nn::os::GetSystemTickFrequency().value;
         s64 minutes = seconds / 60;
         s64 remainingSeconds = seconds % 60;
-        s64 milliseconds = (time % nn::os::GetSystemTickFrequency().value) * 1000 / nn::os::GetSystemTickFrequency().value;
+        s64 milliseconds =
+            (time % nn::os::GetSystemTickFrequency().value) * 1000 / nn::os::GetSystemTickFrequency().value;
 
         if (time / nn::os::GetSystemTickFrequency().value >= 60)
             snprintf(buffer, 32, "%ld:%02ld.%03ld", minutes, remainingSeconds, milliseconds);
@@ -80,12 +83,13 @@ void Timer::draw() {
 
         if (isShowSplit)
             ImGui::GetForegroundDrawList()->AddText(
-                ImGui::GetIO().Fonts->Fonts[0], 50, btt::SettingsMgr::instance()->getSettings()->mTimerPos, IM_COL32(255, 0, 0, mFrames % 20 <= 10 ? 255 : 0),
-                buffer
+                ImGui::GetIO().Fonts->Fonts[0], 50, btt::SettingsMgr::instance()->getSettings()->mTimerPos,
+                IM_COL32(255, 0, 0, mFrames % 20 <= 10 ? 255 : 0), buffer
             );
         else
             ImGui::GetForegroundDrawList()->AddText(
-                ImGui::GetIO().Fonts->Fonts[0], 50, btt::SettingsMgr::instance()->getSettings()->mTimerPos, IM_COL32(255, 255, 255, 255), buffer
+                ImGui::GetIO().Fonts->Fonts[0], 50, btt::SettingsMgr::instance()->getSettings()->mTimerPos,
+                IM_COL32(255, 255, 255, 255), buffer
             );
     }
 }

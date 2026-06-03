@@ -15,7 +15,8 @@
 namespace customboot {
 static float autoCloseAfter = nn::oe::GetOperationMode() == nn::oe::OperationMode_Docked ? 13.f : 13.f;
 
-static HkTrampoline prepareCustomBootHook = [](TrampolineStatic(), BootLayout* boot, al::LayoutInitInfo& initInfo) -> void {
+static HkTrampoline prepareCustomBootHook = [](TrampolineStatic(), BootLayout* boot,
+                                               al::LayoutInitInfo& initInfo) -> void {
     al::NerveExecutor* e;
     __asm("MOV %[result], X19" : [result] "=r"(e)); // Hacky but it works
 

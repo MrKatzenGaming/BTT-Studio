@@ -11,16 +11,22 @@ void Menu::drawPageOptions() {
             ImGui::Indent();
             ImGui::Checkbox("Disable Saving Moons", &set->getSettings()->mIsEnableMoonRefresh);
             ImGui::Checkbox("Refresh Gray Moons", &set->getSettings()->mIsEnableGrayMoonRefresh);
-            ImGui::Checkbox("Always Manually Skip Cutscene", &set->getSettings()->mIsEnableAlwaysManualCutscene);
+            ImGui::Checkbox(
+                "Always Manually Skip Cutscene", &set->getSettings()->mIsEnableAlwaysManualCutscene
+            );
             ImGui::Checkbox("Refresh Warp Text", &set->getSettings()->mIsEnableRefreshWarpText);
             ImGui::Checkbox("Refresh Purple Coins", &set->getSettings()->mIsEnableRefreshPurps);
             ImGui::Checkbox("Refresh Doors", &set->getSettings()->mIsEnableDoorRefresh);
             ImGui::Checkbox("Refresh Seeds", &set->getSettings()->mIsEnableFlowerPotRefresh);
             ImGui::Checkbox("Refresh Toad Text", &set->getSettings()->mIsEnableRefreshNpc);
             ImGui::Checkbox("Disable Saving Coin Stacks", &set->getSettings()->mIsEnableDisableCoinStackSave);
-            ImGui::Checkbox("Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter);
+            ImGui::Checkbox(
+                "Refresh Kingdom Enter Cutscenes", &set->getSettings()->mIsEnableRefreshKingdomEnter
+            );
             if (GImGui->NavId == ImGui::GetID("Refresh Kingdom Enter Cutscenes")) {
-                ImGui::SetTooltip("Doesn't refresh Cappy text after landing in Cascade, Sand, Metro, Lost and Moon.");
+                ImGui::SetTooltip(
+                    "Doesn't refresh Cappy text after landing in Cascade, Sand, Metro, Lost and Moon."
+                );
             }
 
 #ifndef BTTDEBUG
@@ -39,7 +45,8 @@ void Menu::drawPageOptions() {
             ImGui::Checkbox("No Damage", &set->getSettings()->mIsEnableNoDamage);
             ImGui::Checkbox("Disable Music", &set->getSettings()->mIsEnableDisableMusic);
             ImGui::Checkbox("Disable Teleport Puppet", &set->getSettings()->mIsEnableDisableTpPuppet);
-            if (GImGui->NavId == ImGui::GetID("Disable Teleport Puppet")) ImGui::SetTooltip("Only in Moon Get Animation");
+            if (GImGui->NavId == ImGui::GetID("Disable Teleport Puppet"))
+                ImGui::SetTooltip("Only in Moon Get Animation");
             ImGui::Checkbox("No Checkpoint Touch", &set->getSettings()->mIsEnableNoCheckpointTouch);
             ImGui::Unindent();
         }

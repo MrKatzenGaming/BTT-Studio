@@ -96,7 +96,8 @@ StageScene* tryGetStageScene() {
         auto gameSeq = (HakoniwaSequence*)curSequence;
         auto curScene = gameSeq->mCurrentScene;
 
-        if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) return (StageScene*)gameSeq->mCurrentScene;
+        if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene"))
+            return (StageScene*)gameSeq->mCurrentScene;
     }
 
     return nullptr;
@@ -105,7 +106,8 @@ StageScene* tryGetStageScene() {
 StageScene* tryGetStageScene(HakoniwaSequence* curSequence) {
     auto curScene = curSequence->mCurrentScene;
 
-    if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) return (StageScene*)curScene;
+    if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene"))
+        return (StageScene*)curScene;
 
     return nullptr;
 }
@@ -206,7 +208,8 @@ PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(al::Scene* scene) {
 
     PlayerActorBase* playerBase = (PlayerActorBase*)rs::getPlayerActor(scene);
 
-    if (al::isEqualString(typeid(*playerBase).name(), typeid(PlayerActorHakoniwa).name())) return (PlayerActorHakoniwa*)playerBase;
+    if (al::isEqualString(typeid(*playerBase).name(), typeid(PlayerActorHakoniwa).name()))
+        return (PlayerActorHakoniwa*)playerBase;
 
     return nullptr;
 }
@@ -218,7 +221,8 @@ bool tryReloadStage() {
     if (!scene) return false;
 
     ChangeStageInfo stageInfo(
-        accessor->mData, "start", GameDataFunction::getCurrentStageName(*accessor), false, -1, ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
+        accessor->mData, "start", GameDataFunction::getCurrentStageName(*accessor), false, -1,
+        ChangeStageInfo::SubScenarioType::NO_SUB_SCENARIO
     );
     GameDataFunction::tryChangeNextStage(GameDataHolderWriter(scene), &stageInfo);
     return true;
@@ -235,7 +239,8 @@ bool isGetShineState(StageScene* stageScene) {
     if (!state) return false;
 
     // stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
-    stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status) + strlen("StageSceneState");
+    stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status) +
+                strlen("StageSceneState");
 
     bool cmp = strcmp(stateName, "GetShine") == 0;
     free(stateName);

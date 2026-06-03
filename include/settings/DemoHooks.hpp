@@ -4,10 +4,10 @@
 
 #include "src/settings/SettingsMgr.h"
 
-#define HOOK_CALLBACK(NAME)                                                                                                                                    \
-    inline HkTrampoline NAME = [](TrampolineStatic(), void* thisPtr) -> bool {                                                                                 \
-        if (btt::SettingsMgr::instance()->getSettings()->mIsEnableAlwaysManualCutscene) return true;                                                           \
-        return orig(thisPtr);                                                                                                                                  \
+#define HOOK_CALLBACK(NAME)                                                                                  \
+    inline HkTrampoline NAME = [](TrampolineStatic(), void* thisPtr) -> bool {                               \
+        if (btt::SettingsMgr::instance()->getSettings()->mIsEnableAlwaysManualCutscene) return true;         \
+        return orig(thisPtr);                                                                                \
     };
 
 HOOK_CALLBACK(RsDemoHook);

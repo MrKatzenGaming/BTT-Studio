@@ -24,7 +24,20 @@ private:
 public:
     SettingsMgr() = default;
 
-    enum class InputDisplayColor : u8 { None, White, Gray, Black, Red, Blue, Yellow, Green, Orange, Purple, Pink, LightBlue };
+    enum class InputDisplayColor : u8 {
+        None,
+        White,
+        Gray,
+        Black,
+        Red,
+        Blue,
+        Yellow,
+        Green,
+        Orange,
+        Purple,
+        Pink,
+        LightBlue
+    };
     enum class SettingsHotkey : u8 { Disabled, None, L, R, ZL, ZR, LR, LZL, LZR, RZL, RZR };
 
     struct __attribute__((packed)) Settings {

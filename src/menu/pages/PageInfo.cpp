@@ -67,8 +67,8 @@ void Menu::drawInfoWindow() {
     if (!isEnableInfoWindow) return;
     ImGui::Begin(
         "Info", nullptr,
-        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
-            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+            ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
     );
     ImGui::SetWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
     if (!set)
@@ -112,7 +112,8 @@ void Menu::drawInfoWindow() {
 
     char textBuffer[64];
 
-    float hSpeed = al::calcSpeedH(playerHak), vSpeed = al::calcSpeedV(playerHak), speed = al::calcSpeed(playerHak);
+    float hSpeed = al::calcSpeedH(playerHak), vSpeed = al::calcSpeedV(playerHak),
+          speed = al::calcSpeed(playerHak);
     float hSpeedAngle = atan2f(pose->getVelocityPtr()->z, pose->getVelocityPtr()->x);
     if (hSpeedAngle < 0) hSpeedAngle += M_PI * 2;
     float hSpeedAngleDeg = hSpeedAngle * 180 / M_PI;
@@ -124,8 +125,12 @@ void Menu::drawInfoWindow() {
     sead::Vector3f playerRot = QuatToEuler(pose->getQuatPtr());
 
     ImGui::DragFloat3("Trans", &pose->mTrans.x, 50.f, 0.f, 0.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat);
-    ImGui::DragFloat3("Velocity", &pose->getVelocityPtr()->x, 1.f, 0.f, 0.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat);
-    ImGui::DragFloat3("Vel Delta", &playerVelDelta.x, 1.f, 0.f, 0.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat);
+    ImGui::DragFloat3(
+        "Velocity", &pose->getVelocityPtr()->x, 1.f, 0.f, 0.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat
+    );
+    ImGui::DragFloat3(
+        "Vel Delta", &playerVelDelta.x, 1.f, 0.f, 0.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat
+    );
 
     snprintf(textBuffer, sizeof(textBuffer), "Speed H: %s", "%.3f");
     ImGui::Text(textBuffer, hSpeed);
@@ -139,7 +144,9 @@ void Menu::drawInfoWindow() {
     snprintf(textBuffer, sizeof(textBuffer), "H Speed Angle: %s", "%.3f");
     ImGui::Text(textBuffer, hSpeedAngleDeg);
 
-    ImGui::DragFloat4("Player Quaternion", &pose->getQuatPtr()->x, 1.f, -1.f, 1.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat);
+    ImGui::DragFloat4(
+        "Player Quaternion", &pose->getQuatPtr()->x, 1.f, -1.f, 1.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat
+    );
     ImGui::DragFloat3("Euler", &playerRot.x, 1.f, -1.f, 1.f, "%.3f", ImGuiSliderFlags_NoRoundToFormat);
 
     ImGui::End();

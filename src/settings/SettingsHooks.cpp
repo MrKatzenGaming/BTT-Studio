@@ -37,11 +37,13 @@ class ShineChip;
 class GrowFlowerPot;
 class CheckpointFlag;
 
-HkTrampoline GreyShineRefreshHook = [](TrampolineStatic(), GameDataHolderWriter writer, const ShineInfo* shineInfo) -> bool {
+HkTrampoline GreyShineRefreshHook = [](TrampolineStatic(), GameDataHolderWriter writer,
+                                       const ShineInfo* shineInfo) -> bool {
     return SettingsMgr::instance()->getSettings()->mIsEnableGrayMoonRefresh ? false : orig(writer, shineInfo);
 };
 
-HkTrampoline ShineRefreshHook = [](TrampolineStatic(), GameDataHolderWriter writer, const ShineInfo* shineInfo) -> void {
+HkTrampoline ShineRefreshHook = [](TrampolineStatic(), GameDataHolderWriter writer,
+                                   const ShineInfo* shineInfo) -> void {
     ptr addr = sail::lookupSymbolFromDb<>("MoonRefreshText");
     ptr offset = addr - ro::getMainModule()->range().start();
     const char* text = Menu::instance()->getMoonRefreshText();
@@ -67,7 +69,8 @@ HkTrampoline checkpointWarpHook = [](TrampolineStatic(), void* thisPtr) -> bool 
     return SettingsMgr::instance()->getSettings()->mIsEnableAlwaysCheckpoints ? true : orig(thisPtr);
 };
 
-HkTrampoline disableMoonLockHook = [](TrampolineStatic(), GameDataHolder* thisPtr, bool* isCrashList, int worldID) -> int {
+HkTrampoline disableMoonLockHook = [](TrampolineStatic(), GameDataHolder* thisPtr, bool* isCrashList,
+                                      int worldID) -> int {
     int lockSize = orig(thisPtr, isCrashList, worldID);
 
     return SettingsMgr::instance()->getSettings()->mIsEnableDisableMoonLock ? 0 : lockSize;
@@ -81,11 +84,14 @@ HkTrampoline warpTextHook = [](TrampolineStatic(), GameDataHolderAccessor access
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshWarpText ? false : orig(accessor);
 };
 
-HkTrampoline refreshPurpsHook = [](TrampolineStatic(), GameDataHolderAccessor accessor, al::ActorInitInfo* actorInitInfo) -> bool {
-    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshPurps ? false : orig(accessor, actorInitInfo);
+HkTrampoline refreshPurpsHook = [](TrampolineStatic(), GameDataHolderAccessor accessor,
+                                   al::ActorInitInfo* actorInitInfo) -> bool {
+    return SettingsMgr::instance()->getSettings()->mIsEnableRefreshPurps ? false :
+                                                                           orig(accessor, actorInitInfo);
 };
 
-HkTrampoline doorRefreshHook = [](TrampolineStatic(), DoorAreaChange* doorAreaChange, al::ActorInitInfo info) -> void {
+HkTrampoline doorRefreshHook = [](TrampolineStatic(), DoorAreaChange* doorAreaChange,
+                                  al::ActorInitInfo info) -> void {
     orig(doorAreaChange, info);
 
     if (SettingsMgr::instance()->getSettings()->mIsEnableDoorRefresh) doorAreaChange->switchCloseAgain();
@@ -94,8 +100,11 @@ HkTrampoline doorRefreshHook = [](TrampolineStatic(), DoorAreaChange* doorAreaCh
 HkTrampoline shardRefreshHook = [](TrampolineStatic(), ShineChip* shineChip, al::ActorInitInfo info) -> void {
     orig(shineChip, info);
     if (SettingsMgr::instance()->getSettings()->mIsEnableShardRefresh) {
-        // al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf8));
-        al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf0));
+        // al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() +
+        // 0x1cbeaf8));
+        al::setNerve(
+            (al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf0)
+        );
     }
 };
 
@@ -111,11 +120,12 @@ HkTrampoline cloudSkipHook = [](TrampolineStatic(), StageScene* stageScene) -> b
         Menu::instance()->noGetPlayer = false;
         return orig(stageScene);
     }
-    // When debugging, returning true right away will skip Lost and go straight to (Day!) Metro with a broken Odyssey back in Wooded.
-    // Since isDefeatKoopaLv1 is called multiple times, we can return false the first time, then return true the second time, which
-    // seems to correctly skip the Bowser fight. This is a very hacky way of skipping the Bowser fight, so if there is some way to
-    // deduce from other game variables which function call we're in, that would be ideal. It would eliminate the need to introduce
-    // our own variable to keep track of the number of isDefeatKoopaLv1 calls.
+    // When debugging, returning true right away will skip Lost and go straight to (Day!) Metro with a broken
+    // Odyssey back in Wooded. Since isDefeatKoopaLv1 is called multiple times, we can return false the first
+    // time, then return true the second time, which seems to correctly skip the Bowser fight. This is a very
+    // hacky way of skipping the Bowser fight, so if there is some way to deduce from other game variables
+    // which function call we're in, that would be ideal. It would eliminate the need to introduce our own
+    // variable to keep track of the number of isDefeatKoopaLv1 calls.
     functionCalls++;
     if (functionCalls == 2) {
         functionCalls = 0;
@@ -133,10 +143,12 @@ struct MofumofuPatternEntry {
 };
 
 constexpr static const MofumofuPatternEntry mPatternEntries[22] = {
-    { "Ghost", 0, false }, { "Nose", 0, true },     { "C", 1, false },       { "W", 1, true },       { "J", 2, false },        { "Medal", 2, true },
-    { "Plane", 3, false }, { "5", 3, true },        { "Hangman", 4, false }, { "Spanish", 4, true }, { "Siblings", 5, false }, { "Snake", 5, true },
-    { "8", 6, false },     { "Mushroom", 6, true }, { "Z", 7, false },       { "Tetris", 7, true },  { "Ear", 8, false },      { "Bomb", 8, true },
-    { "Bird", 9, false },  { "L", 9, true },        { "O", 10, false },      { "Star", 10, true }
+    { "Ghost", 0, false },   { "Nose", 0, true },     { "C", 1, false },        { "W", 1, true },
+    { "J", 2, false },       { "Medal", 2, true },    { "Plane", 3, false },    { "5", 3, true },
+    { "Hangman", 4, false }, { "Spanish", 4, true },  { "Siblings", 5, false }, { "Snake", 5, true },
+    { "8", 6, false },       { "Mushroom", 6, true }, { "Z", 7, false },        { "Tetris", 7, true },
+    { "Ear", 8, false },     { "Bomb", 8, true },     { "Bird", 9, false },     { "L", 9, true },
+    { "O", 10, false },      { "Star", 10, true }
 };
 
 bool isPatternReverse() {
@@ -162,7 +174,8 @@ void installWigglerHooks() {
     hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)getPatternTarget);
 }
 
-HkTrampoline allCheckpointsHook = [](TrampolineStatic(), GameDataHolderAccessor acc, int checkpointIdx) -> bool {
+HkTrampoline allCheckpointsHook = [](TrampolineStatic(), GameDataHolderAccessor acc,
+                                     int checkpointIdx) -> bool {
     if (SettingsMgr::instance()->getSettings()->mIsEnableAllCheckpoints) {
         auto checkpointTrans = GameDataFunction::getCheckpointTransInWorld(acc, checkpointIdx);
         if (checkpointTrans.x == 0 && checkpointTrans.y == 0 && checkpointTrans.z == 0) {
@@ -196,7 +209,10 @@ HkTrampoline noclipHook = [](TrampolineStatic(), PlayerActorHakoniwa* player) ->
 
         player->startDemoPuppetable();
 
-        float d = sqrt((playerPos->x - cameraPos.x) * (playerPos->x - cameraPos.x) + ((playerPos->z - cameraPos.z) * (playerPos->z - cameraPos.z)));
+        float d = sqrt(
+            (playerPos->x - cameraPos.x) * (playerPos->x - cameraPos.x) +
+            ((playerPos->z - cameraPos.z) * (playerPos->z - cameraPos.z))
+        );
         float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos.x);
         float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos.z);
 
@@ -242,8 +258,9 @@ HkTrampoline hintPhotoHook = [](TrampolineStatic(), al::LiveActor* actor, char* 
     return SettingsMgr::instance()->getSettings()->mIsEnableHintPhotoSpawn ? true : orig(actor, name);
 };
 
-constexpr static const char* worldTravelingStatus[] = { "Init", "CityWorld0", "WaterfallWorld0", "LavaWorld0", "MoonWorld0", "PeachCastleWorld0",
-                                                        "Last", "LastAfter" };
+constexpr static const char* worldTravelingStatus[] = { "Init",       "CityWorld0", "WaterfallWorld0",
+                                                        "LavaWorld0", "MoonWorld0", "PeachCastleWorld0",
+                                                        "Last",       "LastAfter" };
 
 HkTrampoline worldTravelingHook = [](TrampolineStatic(), WorldTravelingNpc* actor) -> const char* {
     // Menu::instance()->mWorldTravelingStatus = worldTravelingHook.orig(actor);
@@ -265,7 +282,8 @@ HkTrampoline toadRefreshHook = [](TrampolineStatic(), al::LiveActor* actor) -> b
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshNpc ? false : orig(actor);
 };
 
-HkTrampoline coinStackRefreshHook = [](TrampolineStatic(), al::LiveActor* actor, al::PlacementId* id, int* i) -> void {
+HkTrampoline coinStackRefreshHook = [](TrampolineStatic(), al::LiveActor* actor, al::PlacementId* id,
+                                       int* i) -> void {
     if (SettingsMgr::instance()->getSettings()->mIsEnableDisableCoinStackSave) {
         return;
     } else {
@@ -289,7 +307,8 @@ void SettingsHooks::installSettingsHooks() {
     offset = addr - ro::getMainModule()->range().start();
     ro::getMainModule()->writeRo(offset, "BTT Studio", strlen("BTT Studio") + 1);
 
-    GreyShineRefreshHook.installAtSym<"_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo">();
+    GreyShineRefreshHook
+        .installAtSym<"_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo">();
     ShineRefreshHook.installAtSym<"_ZN16GameDataFunction11setGotShineE20GameDataHolderWriterPK9ShineInfo">();
     marioControl.installAtSym<"_ZN19PlayerActorHakoniwa7controlEv">();
     stageSceneControlHook.installAtSym<"_ZN10StageScene7controlEv">();
@@ -297,18 +316,22 @@ void SettingsHooks::installSettingsHooks() {
     checkpointWarpHook.installAtSym<"_ZNK9MapLayout22isEnableCheckpointWarpEv">();
     disableMoonLockHook.installAtSym<"_ZNK14GameDataHolder18findUnlockShineNumEPbi">();
     NoDamageHook.installAtSym<"_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter">();
-    warpTextHook.installAtSym<"_ZN16GameDataFunction34isAlreadyShowExplainCheckpointFlagE22GameDataHolderAccessor">();
-    refreshPurpsHook.installAtSym<"_ZN16GameDataFunction16isGotCoinCollectE22GameDataHolderAccessorRKN2al13ActorInitInfoE">();
+    warpTextHook
+        .installAtSym<"_ZN16GameDataFunction34isAlreadyShowExplainCheckpointFlagE22GameDataHolderAccessor">();
+    refreshPurpsHook.installAtSym<
+        "_ZN16GameDataFunction16isGotCoinCollectE22GameDataHolderAccessorRKN2al13ActorInitInfoE">();
     doorRefreshHook.installAtSym<"_ZN14DoorAreaChange4initERKN2al13ActorInitInfoE">();
     seedRefreshHook.installAtSym<"_ZN2rs17getGrowFlowerTimeEPKN2al9LiveActorEPKNS0_11PlacementIdE">();
     seedRefreshHook2.installAtSym<"_ZN2rs20isUsedGrowFlowerSeedEPKN2al9LiveActorEPKNS0_11PlacementIdE">();
     checkpointFlagHook.installAtSym<"_ZN2rs31setTouchCheckpointFlagToWatcherEP14CheckpointFlag">();
     cloudSkipHook.installAtSym<"_ZNK10StageScene16isDefeatKoopaLv1Ev">();
-    allCheckpointsHook.installAtSym<"_ZN16GameDataFunction22isGotCheckpointInWorldE22GameDataHolderAccessori">();
+    allCheckpointsHook
+        .installAtSym<"_ZN16GameDataFunction22isGotCheckpointInWorldE22GameDataHolderAccessori">();
     noclipHook.installAtSym<"_ZN19PlayerActorHakoniwa8movementEv">();
     hintPhotoHook.installAtSym<"_ZN2rs19checkSavedHintPhotoEPKN2al9LiveActorEPKc">();
     worldTravelingHook.installAtSym<"_ZN16GameDataFunction23getWorldTravelingStatusEPK17WorldTravelingNpc">();
-    worldTravelingHook2.installAtSym<"_ZN16GameDataFunction27isFirstWorldTravelingStatusEPK17WorldTravelingNpc">();
+    worldTravelingHook2
+        .installAtSym<"_ZN16GameDataFunction27isFirstWorldTravelingStatusEPK17WorldTravelingNpc">();
     toadRefreshHook.installAtSym<"_ZN2rs34isOnFlagKinopioBrigadeNpcFirstTalkEPKN2al9LiveActorE">();
     // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
     coinStackRefreshHook.installAtSym<"_ZN2rs13saveCoinStackEPKN2al9LiveActorEPKNS0_11PlacementIdEi">();

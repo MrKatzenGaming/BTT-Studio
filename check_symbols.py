@@ -48,8 +48,8 @@ def process_symbol_file(file_path, output_file):
         out_file.write("\n")
 
 def main():
-    directory = '/home/kassu/SMO-Projects/btt-mod/syms'
-    output_file = '/home/kassu/SMO-Projects/btt-mod/missing.txt'
+    directory = '/home/kassu/SMO-Projects/BTT-Studio/syms'
+    output_file = '/home/kassu/SMO-Projects/BTT-Studio/missing.txt'
     
     if not os.path.exists(directory):
         print(f"Directory {directory} does not exist.")

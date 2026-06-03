@@ -1,5 +1,7 @@
 #include "helpers/saveFileHelper.h"
 
+#include <hk/diag/diag.h>
+
 #include <sead/heap/seadHeapMgr.h>
 
 #include <cstddef>
@@ -44,7 +46,6 @@ void SaveFileHelper::loadSettings(sead::Heap* heap) {
     FsHelper::LoadData data;
     data.path = mSettingsPath;
     FsHelper::loadFileFromPath(data, heap);
-
     if (!data.buffer) {
         Logger::instance()->log(Logger::LogType::LogErr, "Failed to load settings from %s", mSettingsPath);
         return;

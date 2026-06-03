@@ -14,7 +14,7 @@
 
 namespace btt::imgui {
 
-hk::VecSpan<ProcDrawFunc> drawQueue;
+ImVector<ProcDrawFunc> drawQueue;
 
 void init(sead::Heap* heap) {
     auto* imgui = hk::gfx::ImGuiBackendNvn::instance();
@@ -86,9 +86,9 @@ void updateInput() {
 }
 
 void addDrawFunc(ProcDrawFunc func) {
-    HK_ABORT_UNLESS(!drawQueue.includes(func), "Function has already been added to queue!");
+    HK_ABORT_UNLESS(!drawQueue.contains(func), "Function has already been added to queue!");
 
-    drawQueue.add(func);
+    drawQueue.push_back(func);
 }
 
 void draw(agl::DrawContext* drawContext) {

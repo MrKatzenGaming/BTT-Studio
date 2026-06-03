@@ -25,6 +25,7 @@ public:
         LogWarn = 0x03,
     };
 
+    void log(const char* fmt, ...);
     void log(LogType type, const char* fmt, ...);
     void log(LogType type, const char* fmt, va_list args);
 

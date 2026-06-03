@@ -12,6 +12,7 @@
 
 #include <game/MapObj/ChangeStageInfo.h>
 #include <game/Sequence/HakoniwaSequence.h>
+#include <game/System/GameDataHolder.h>
 
 #include <cstdarg>
 #include <cstdio>
@@ -181,6 +182,13 @@ s32 Logger::connect(const char* serverIP, u16 port) {
     mRecvThread->start();
 
     return 0;
+}
+
+void Logger::log(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    log(LogType::LogInfo, fmt, args);
+    va_end(args);
 }
 
 void Logger::log(Logger::LogType type, const char* fmt, ...) {

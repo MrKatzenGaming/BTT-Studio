@@ -9,6 +9,7 @@
 #include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveStateCtrl.h>
 
+#include <custom/game/Scene/StageSceneStateStageMap.h>
 #include <game/MapObj/ChangeStageInfo.h>
 #include <game/Player/PlayerFunction.h>
 #include <game/Player/PlayerHackKeeper.h>
@@ -244,7 +245,7 @@ void Menu::drawPageMisc() {
         if (ImGui::Button("Warp to Last Checkpoint")) {
             if (stageScene) {
                 if (mLastMapTarget) {
-                    stageScene->mStateCollection->mStateStageMap->mMapThing = mLastMapTarget;
+                    stageScene->mStateCollectionList->mStateStageMap->mMapThing = mLastMapTarget;
                     ptr addr = hk::sail::lookupSymbolFromDb<>("StageSceneNrvWarpToCheckpoint");
                     stageScene->getNerveKeeper()->setNerve((al::Nerve*)addr);
                 }

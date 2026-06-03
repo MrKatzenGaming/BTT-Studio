@@ -7,7 +7,7 @@
 #include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveUtil.h>
 
-#include <custom/game/Scene/StageScene.h>
+#include <game/Scene/StageScene.h>
 
 #include "menu/Timer.h"
 

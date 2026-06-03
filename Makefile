@@ -15,8 +15,8 @@ release: clean format
 
 format:
 	clear
-	find src include lib/custom -name "*.*" | xargs clang-format -i
-	find src include -name "*.cpp" -o -name "*.hpp" -o -name "*.h" | xargs python3 config/check_includes.py --fix
+	find src include lib/custom -name "*.c*" -o -name "*.h*" | xargs clang-format -i
+	find src include -name "*.c*" -o -name "*.h*"  | xargs python3 config/check_includes.py --fix
 
 
 clean:

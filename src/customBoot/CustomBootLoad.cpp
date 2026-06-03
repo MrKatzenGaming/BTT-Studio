@@ -7,7 +7,6 @@
 #include <al/Library/Layout/LayoutActorUtil.h>
 #include <al/Library/Layout/LayoutKeeper.h>
 #include <al/Library/Nerve/NerveUtil.h>
-#include <custom/al/Library/Play/Layout/WipeSimple.h>
 
 #include <sead/gfx/seadColor.h>
 #include <sead/math/seadVectorFwd.h>
@@ -27,13 +26,8 @@ CustomBootLoad::CustomBootLoad(WorldResourceLoader* resourceLoader, const al::La
     initNerve(&NrvCustomBootLoad.Appear, 0);
     appear();
 
-    // if (!al::isEqualString(hk::ro::getMainModule()->getVersionName(), "130")) {
-    //     wipe = new al::WipeSimple("黒フェード", "FadeBlack", initInfo, 0);
-    // } else {
-    //     wipe = new al::WipeSimple("黒フェードシーン情報", "FadeBlack", initInfo, 0);
-    // }
-
-    wipe = new al::WipeSimple("スキップワイプ", "WipeSkip", initInfo, 0);
+    wipe = (al::WipeSimple*)malloc(sizeof(al::WipeSimple) + sizeof(u32) /*something in 1.3*/ + 4 /*Padding*/);
+    wipe = new (wipe) al::WipeSimple("スキップワイプ", "WipeSkip", initInfo, 0);
 }
 
 void CustomBootLoad::exeAppear() {

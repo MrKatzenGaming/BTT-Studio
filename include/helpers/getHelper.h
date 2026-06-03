@@ -2,9 +2,9 @@
 
 #include <al/Library/Scene/Scene.h>
 
-#include <custom/game/Scene/StageScene.h>
 #include <game/Player/PlayerActorBase.h>
 #include <game/Player/PlayerActorHakoniwa.h>
+#include <game/Scene/StageScene.h>
 #include <game/Sequence/HakoniwaSequence.h>
 
 namespace helpers {
@@ -32,7 +32,7 @@ GameDataHolder* tryGetGameDataHolder(HakoniwaSequence* curSequence);
 GameDataHolder* tryGetGameDataHolder(StageScene* scene);
 GameDataHolderAccessor* tryGetGameDataHolderAccess();
 GameDataHolderAccessor* tryGetGameDataHolderAccess(HakoniwaSequence* curSequence);
-GameDataHolderAccessor* tryGetGameDataHolderAccess(StageScene* scene);
+// GameDataHolderAccessor* tryGetGameDataHolderAccess(StageScene* scene);
 
 PlayerActorBase* tryGetPlayerActor();
 PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence);

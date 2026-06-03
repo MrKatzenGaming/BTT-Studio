@@ -15,6 +15,7 @@
 #include <al/Library/Nerve/NerveUtil.h>
 
 #include <custom/game/MapObj/DoorAreaChange.h>
+#include <custom/game/Scene/StageSceneStateStageMap.h>
 #include <game/Item/CoinStackGroup.h>
 #include <game/System/GameDataFile.h>
 #include <game/System/GameDataFunction.h>
@@ -24,7 +25,6 @@
 #include <game/System/PlayerHitPointData.h>
 
 #include "helpers/InputHelper.h"
-#include "logger.h"
 #include "menu/Menu.h"
 #include "settings/DemoHooks.hpp"
 #include "src/settings/SettingsMgr.h"

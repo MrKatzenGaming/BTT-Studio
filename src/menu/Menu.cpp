@@ -4,7 +4,7 @@
 #include <al/Library/LiveActor/ActorMovementFunction.h>
 #include <al/Library/LiveActor/ActorPoseUtil.h>
 
-#include <custom/game/Scene/StageScene.h>
+#include <game/Scene/StageScene.h>
 #include <game/System/GameDataFunction.h>
 
 #include <cstdio>

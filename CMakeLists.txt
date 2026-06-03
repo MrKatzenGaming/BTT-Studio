@@ -12,20 +12,19 @@ file(GLOB_RECURSE SOURCES_CXX ${PROJECT_SOURCE_DIR}/src/*.cpp)
 set(SOURCES ${SOURCES_ASM} ${SOURCES_C} ${SOURCES_CXX})
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-include_directories(lib)
+target_include_directories(${PROJECT_NAME} PRIVATE lib)
 
-include_directories(lib/imgui)
+target_include_directories(${PROJECT_NAME} PRIVATE lib/imgui)
 
-include_directories(lib/custom)
-include_directories(lib/OdysseyHeaders)
+target_include_directories(${PROJECT_NAME} PRIVATE lib/custom)
+target_include_directories(${PROJECT_NAME} PRIVATE lib/OdysseyHeaders)
 
 file(GLOB LIBS_OH LIST_DIRECTORIES true lib/OdysseyHeaders/*)
 file(GLOB LIBS_CUST LIST_DIRECTORIES true lib/custom/*)
-include_directories(${LIBS_OH} ${LIBS_CUST})
+target_include_directories(${PROJECT_NAME} PRIVATE ${LIBS_OH} ${LIBS_CUST})
 
-include_directories(include)
-
-include_directories(${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
 include(sys/cmake/module.cmake)
 include(sys/cmake/deploy.cmake)

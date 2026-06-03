@@ -3,7 +3,7 @@
 #include <al/Library/Layout/LayoutActor.h>
 #include <al/Library/Layout/LayoutInitInfo.h>
 #include <al/Library/Nerve/NerveSetupUtil.h>
-#include <custom/al/Library/Play/Layout/WipeSimple.h>
+#include <al/Library/Play/Layout/WipeSimple.h>
 
 #include <game/Sequence/WorldResourceLoader.h>
 

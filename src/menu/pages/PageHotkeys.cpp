@@ -8,6 +8,7 @@
 
 #include <game/MapObj/ChangeStageInfo.h>
 #include <game/Player/PlayerFunction.h>
+#include <game/Scene/StageSceneStateStageMap.h>
 #include <game/System/GameDataFunction.h>
 
 #include <cxxabi.h>
@@ -198,7 +199,7 @@ void Menu::handleHotkeys() {
     if (isHotkey((u8)set->getSettings()->mWarpLastCpKey)) {
         if (stageScene) {
             if (mLastMapTarget) {
-                stageScene->mStateCollection->mStateStageMap->mMapThing = mLastMapTarget;
+                stageScene->mStateCollectionList->mStateStageMap->mMapThing = mLastMapTarget;
                 ptr addr = hk::sail::lookupSymbolFromDb<>("StageSceneNrvWarpToCheckpoint");
                 stageScene->getNerveKeeper()->setNerve((al::Nerve*)addr);
             }

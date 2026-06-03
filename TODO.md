@@ -12,7 +12,6 @@
 
 - [ ] spawn all spawnable moons
 - [ ] reload sceene different fade
-- [ ] disable tp puppet only moon get
 - [ ] refresh deep woods nut
 - [ ] refresh shards
 - [ ] timer for every splice
@@ -104,3 +103,4 @@
 - [x] move tourist to different kingdoms
 - [x] outfit changer
 - [x] coin stack refresh
+- [x] disable tp puppet only moon get

@@ -1,5 +1,6 @@
 #include "helpers/getHelper.h"
 
+#include <al/Library/Nerve/Nerve.h>
 #include <al/Library/Base/StringUtil.h>
 #include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveStateCtrl.h>
@@ -7,6 +8,7 @@
 #include <al/Library/Player/PlayerUtil.h>
 #include <al/Library/Scene/SceneUtil.h>
 
+#include <game/Player/PlayerActorHakoniwa.h>
 #include <game/MapObj/ChangeStageInfo.h>
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameSystem.h>
@@ -230,20 +232,29 @@ bool tryReloadStage() {
 
 bool isGetShineState(StageScene* stageScene) {
     if (!stageScene) return false;
+    PlayerActorHakoniwa* p = tryGetPlayerActorHakoniwa(stageScene);
+    if (!p) return false;
 
-    char* stateName = nullptr;
+    char* stateNameScene = nullptr;
+    char* nrvNameP = nullptr;
 
     if (!stageScene->getNerveKeeper()->mStateCtrl) return false;
+    if (!p->getNerveKeeper()) return false;
 
-    al::NerveStateCtrl::State* state = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
-    if (!state) return false;
+    al::NerveStateCtrl::State* stateScene = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
+    if (!stateScene) return false;
+    const al::Nerve* currentNerve = p->getNerveKeeper()->mCurrentNerve;
+    if (!currentNerve) return false;
 
     // stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
-    stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status) +
-                strlen("StageSceneState");
+    stateNameScene = abi::__cxa_demangle(typeid(*stateScene->state).name(), nullptr, nullptr, &status) +
+                     strlen("StageSceneState");
+    nrvNameP = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status) +
+               strlen("(anonymous namespace)::PlayerActorHakoniwaNrv");
 
-    bool cmp = strcmp(stateName, "GetShine") == 0;
-    free(stateName);
+    bool cmp = strcmp(stateNameScene, "GetShine") == 0 && strcmp(nrvNameP, "Demo") == 0;
+    free(stateNameScene);
+    free(nrvNameP);
     return cmp;
 
     return false;

@@ -74,7 +74,7 @@ private:
         popupTimer = 0;
     }
 
-    bool isHotkey(int key);
+    bool isHotkey(SettingsMgr::SettingsHotkey key);
 
     ImVec2 getCornerPos(int corner);
 

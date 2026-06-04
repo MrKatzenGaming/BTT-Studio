@@ -20,6 +20,7 @@
 #include "src/settings/SettingsMgr.h"
 
 using namespace btt;
+using Hotkey = SettingsMgr::SettingsHotkey;
 
 void Menu::drawPageHotkeys() {
     if (ImGui::CollapsingHeader("Hotkeys")) {
@@ -42,41 +43,41 @@ void Menu::drawPageHotkeys() {
         ImGui::Text("Usage: Hold Hotkey + Press DPad-Up");
         ImGui::PushItemWidth(200);
         if (ImGui::Combo("Kill Scene##Key", &killKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mKillSceneKey = (SettingsMgr::SettingsHotkey)killKey;
+            set->getSettings()->mKillSceneKey = (Hotkey)killKey;
         if (ImGui::Combo("Heal Mario##Key", &healKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mHealMarioKey = (SettingsMgr::SettingsHotkey)healKey;
+            set->getSettings()->mHealMarioKey = (Hotkey)healKey;
 
         if (ImGui::Combo("Life Up Heart##Key", &lifeupKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mLifeUpKey = (SettingsMgr::SettingsHotkey)lifeupKey;
+            set->getSettings()->mLifeUpKey = (Hotkey)lifeupKey;
         if (ImGui::Combo("Prev Scene##Key", &prevSceneKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mPrevSceneKey = (SettingsMgr::SettingsHotkey)prevSceneKey;
+            set->getSettings()->mPrevSceneKey = (Hotkey)prevSceneKey;
         if (ImGui::Combo("Increment Tp Index##Key", &inctpKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mIncTpIndexKey = (SettingsMgr::SettingsHotkey)inctpKey;
+            set->getSettings()->mIncTpIndexKey = (Hotkey)inctpKey;
         if (ImGui::Combo("Decrement Tp Index##Key", &dectpKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mDecTpIndexKey = (SettingsMgr::SettingsHotkey)dectpKey;
+            set->getSettings()->mDecTpIndexKey = (Hotkey)dectpKey;
         if (ImGui::Combo("Add 1000 Coins##Key", &addCoinsKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mAddCoinsKey = (SettingsMgr::SettingsHotkey)addCoinsKey;
+            set->getSettings()->mAddCoinsKey = (Hotkey)addCoinsKey;
         if (ImGui::Combo("Remove 1000 Coins##Key", &decCoinsKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mDecCoinsKey = (SettingsMgr::SettingsHotkey)decCoinsKey;
+            set->getSettings()->mDecCoinsKey = (Hotkey)decCoinsKey;
         if (ImGui::Combo("Next Wiggler Pattern##Key", &incPatternKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mIncPatternKey = (SettingsMgr::SettingsHotkey)incPatternKey;
+            set->getSettings()->mIncPatternKey = (Hotkey)incPatternKey;
         if (ImGui::Combo("Prev Wiggler Pattern##Key", &decPatternKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mDecPatternKey = (SettingsMgr::SettingsHotkey)decPatternKey;
+            set->getSettings()->mDecPatternKey = (Hotkey)decPatternKey;
         if (ImGui::Combo("Warp to last Checkpoint##Key", &warpCpKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mWarpLastCpKey = (SettingsMgr::SettingsHotkey)warpCpKey;
+            set->getSettings()->mWarpLastCpKey = (Hotkey)warpCpKey;
         if (ImGui::Combo("Start Timer##Key", &timerStartKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mTimerStartKey = (SettingsMgr::SettingsHotkey)timerStartKey;
+            set->getSettings()->mTimerStartKey = (Hotkey)timerStartKey;
         if (ImGui::Combo("End Timer##Key", &timerEndKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mTimerEndKey = (SettingsMgr::SettingsHotkey)timerEndKey;
+            set->getSettings()->mTimerEndKey = (Hotkey)timerEndKey;
         if (ImGui::Combo("Reset Timer##Key", &timerResetKey, Keys, IM_ARRAYSIZE(Keys)))
-            set->getSettings()->mTimerResetKey = (SettingsMgr::SettingsHotkey)timerResetKey;
+            set->getSettings()->mTimerResetKey = (Hotkey)timerResetKey;
 
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }
 }
 
-bool Menu::isHotkey(int key) {
+bool Menu::isHotkey(Hotkey key) {
     bool isAllowInput = !InputHelper::isInputToggled() || !mIsEnabledMenu;
     bool Up = InputHelper::isPressPadUp();
     bool L = InputHelper::isHoldL();
@@ -84,17 +85,17 @@ bool Menu::isHotkey(int key) {
     bool ZL = InputHelper::isHoldZL();
     bool ZR = InputHelper::isHoldZR();
     switch (key) {
-    case 1: return Up && !L && !R && !ZL && !ZR && isAllowInput;
-    case 2: return Up && L && !R && !ZL && !ZR && isAllowInput;
-    case 3: return Up && R && !L && !ZL && !ZR && isAllowInput;
-    case 4: return Up && ZL && !L && !R && !ZR && isAllowInput;
-    case 5: return Up && ZR && !L && !R && !ZL && isAllowInput;
-    case 6: return Up && L && R && !ZL && !ZR && isAllowInput;
-    case 7: return Up && L && ZL && !R && !ZR && isAllowInput;
-    case 8: return Up && L && ZR && !R && !ZL && isAllowInput;
-    case 9: return Up && R && ZL && !L && !ZR && isAllowInput;
-    case 10: return Up && R && ZR && !L && !ZL && isAllowInput;
-    default: return 0;
+    case Hotkey::None: return Up && !L && !R && !ZL && !ZR && isAllowInput;
+    case Hotkey::L: return Up && L && !R && !ZL && !ZR && isAllowInput;
+    case Hotkey::R: return Up && R && !L && !ZL && !ZR && isAllowInput;
+    case Hotkey::ZL: return Up && ZL && !L && !R && !ZR && isAllowInput;
+    case Hotkey::ZR: return Up && ZR && !L && !R && !ZL && isAllowInput;
+    case Hotkey::LR: return Up && L && R && !ZL && !ZR && isAllowInput;
+    case Hotkey::LZL: return Up && L && ZL && !R && !ZR && isAllowInput;
+    case Hotkey::LZR: return Up && L && ZR && !R && !ZL && isAllowInput;
+    case Hotkey::RZL: return Up && R && ZL && !L && !ZR && isAllowInput;
+    case Hotkey::RZR: return Up && R && ZR && !L && !ZL && isAllowInput;
+    default: return false;
     }
 }
 
@@ -108,7 +109,7 @@ void Menu::handleHotkeys() {
         loadTeleport(tpStates[tpIndex]);
     }
 
-    if (isHotkey((u8)set->getSettings()->mKillSceneKey)) {
+    if (isHotkey(set->getSettings()->mKillSceneKey)) {
         if (stageScene && playerHak) {
             al::NerveKeeper* sceneNerveKeeper = stageScene->getNerveKeeper();
             char* stateName = nullptr;
@@ -164,26 +165,26 @@ void Menu::handleHotkeys() {
             }
         }
     }
-    if (isHotkey((u8)set->getSettings()->mHealMarioKey)) {
+    if (isHotkey(set->getSettings()->mHealMarioKey)) {
         if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
     }
-    if (isHotkey((u8)set->getSettings()->mPrevSceneKey)) {
+    if (isHotkey(set->getSettings()->mPrevSceneKey)) {
         if (stageScene) GameDataHolderAccessor(stageScene)->returnPrevStage();
     }
-    if (isHotkey((u8)set->getSettings()->mIncTpIndexKey)) {
+    if (isHotkey(set->getSettings()->mIncTpIndexKey)) {
         tpIndex++;
         if (tpIndex >= hk::util::arraySize(tpStates)) tpIndex = 0;
         setPopupText("Tp Index: %d", tpIndex);
     }
-    if (isHotkey((u8)set->getSettings()->mDecTpIndexKey)) {
+    if (isHotkey(set->getSettings()->mDecTpIndexKey)) {
         tpIndex--;
         if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
         setPopupText("Tp Index: %d", tpIndex);
     }
-    if (isHotkey((u8)set->getSettings()->mAddCoinsKey)) {
+    if (isHotkey(set->getSettings()->mAddCoinsKey)) {
         if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
     }
-    if (isHotkey((u8)set->getSettings()->mDecCoinsKey)) {
+    if (isHotkey(set->getSettings()->mDecCoinsKey)) {
         if (stageScene) {
             int coinNum = GameDataFunction::getCoinNum(GameDataHolderAccessor(stageScene));
             if (coinNum < 1000)
@@ -192,22 +193,22 @@ void Menu::handleHotkeys() {
                 GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
         }
     }
-    if (isHotkey((u8)set->getSettings()->mLifeUpKey)) {
+    if (isHotkey(set->getSettings()->mLifeUpKey)) {
         if (playerHak) GameDataFunction::getLifeMaxUpItem(playerHak);
     }
-    if (isHotkey((u8)set->getSettings()->mIncPatternKey)) {
+    if (isHotkey(set->getSettings()->mIncPatternKey)) {
         set->getSettings()->mWigglerPattern++;
         if (set->getSettings()->mWigglerPattern >= hk::util::arraySize(WigglerPatterns))
             set->getSettings()->mWigglerPattern = 0;
         setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
-    if (isHotkey((u8)set->getSettings()->mDecPatternKey)) {
+    if (isHotkey(set->getSettings()->mDecPatternKey)) {
         set->getSettings()->mWigglerPattern--;
         if (set->getSettings()->mWigglerPattern < 0)
             set->getSettings()->mWigglerPattern = hk::util::arraySize(WigglerPatterns) - 1;
         setPopupText("Wiggler Pattern: %s", WigglerPatterns[set->getSettings()->mWigglerPattern]);
     }
-    if (isHotkey((u8)set->getSettings()->mWarpLastCpKey)) {
+    if (isHotkey(set->getSettings()->mWarpLastCpKey)) {
         if (stageScene) {
             if (mLastMapTarget) {
                 stageScene->mStateCollectionList->mStateStageMap->mMapThing = mLastMapTarget;
@@ -216,19 +217,19 @@ void Menu::handleHotkeys() {
             }
         }
     }
-    if (isHotkey((u8)set->getSettings()->mTimerStartKey)) {
+    if (isHotkey(set->getSettings()->mTimerStartKey)) {
         if (Timer::sInstance) {
             Timer::sInstance->start();
             setPopupText("Timer started");
         }
     }
-    if (isHotkey((u8)set->getSettings()->mTimerEndKey)) {
+    if (isHotkey(set->getSettings()->mTimerEndKey)) {
         if (Timer::sInstance) {
             Timer::sInstance->stop();
             setPopupText("Timer stopped");
         }
     }
-    if (isHotkey((u8)set->getSettings()->mTimerResetKey)) {
+    if (isHotkey(set->getSettings()->mTimerResetKey)) {
         if (Timer::sInstance) {
             Timer::sInstance->reset();
             setPopupText("Timer reset");

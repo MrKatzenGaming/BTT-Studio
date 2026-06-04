@@ -1,3 +1,4 @@
+#include <hk/diag/diag.h>
 #include <hk/sail/detail.h>
 #include <hk/util/Math.h>
 

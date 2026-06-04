@@ -91,6 +91,7 @@ public:
         TimerHookType mTimerEndType = TimerHookType::None;
         u8 mWorldTravelingStatus = 0;
         u8 mMenuCorner = 0;
+        u8 mMenuKey = 0;
         u8 mMoonRefreshText = 0;
         u8 mWigglerPattern = 0;
         ImVec2 mInfoPos = ImVec2(0, 0);
@@ -99,7 +100,9 @@ public:
         ImVec2 mInputDisplayPos = ImVec2(1600.f / 2, 900.f / 2);
     } mSettings;
 
-    Settings* getSettings() { return &mSettings; }
+    // Settings* getSettings() { return &mSettings; }
+
+    static Settings* getSettings() { return sInstance ? &sInstance->mSettings : nullptr; }
 };
 
 } // namespace btt

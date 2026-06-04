@@ -20,6 +20,7 @@
 #include <game/System/GameDataFile.h>
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameDataHolder.h>
+#include <game/System/GameDataHolderAccessor.h>
 #include <game/System/GameDataHolderWriter.h>
 #include <game/System/GameDataUtil.h>
 #include <game/System/PlayerHitPointData.h>
@@ -28,7 +29,6 @@
 #include "menu/Menu.h"
 #include "settings/DemoHooks.hpp"
 #include "src/settings/SettingsMgr.h"
-#include "System/GameDataHolderAccessor.h"
 
 using namespace hk;
 using namespace btt;

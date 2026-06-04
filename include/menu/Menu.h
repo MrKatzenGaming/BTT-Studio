@@ -124,6 +124,8 @@ private:
     constexpr static const char* Keys[] {
         "Disabled", "None", "L", "R", "ZL", "ZR", "L + R", "L + ZL", "L + ZR", "R + ZL", "R + ZR",
     };
+    constexpr static const char* MenuKeys[] { "LStick",     "RStick",    "L + DLeft",
+                                              "L + DRight", "R + DLeft", "R + DRight" };
 
     constexpr static const char* bodyNames[] = {
         "Mario",          "Mario64",         "Mario64Metal",      "MarioAloha",

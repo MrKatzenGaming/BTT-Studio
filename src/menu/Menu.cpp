@@ -62,7 +62,7 @@ void Menu::draw() {
     else
         ImGui::SetWindowPos(getCornerPos(set->getSettings()->mMenuCorner), ImGuiCond_Always);
 
-    ImGui::Text("Toggle Menu: L-Stick");
+    ImGui::Text("Toggle Menu: %s", MenuKeys[set->getSettings()->mMenuKey]);
     ImGui::Text("Toggle Input: R + ZR + L");
     ImGui::Separator();
 
@@ -246,6 +246,18 @@ void Menu::draw() {
     ImGui::End();
 }
 
+static bool isPressMenuKey() {
+    switch (SettingsMgr::getSettings()->mMenuKey) {
+    case 0: return InputHelper::isPressStickL();
+    case 1: return InputHelper::isPressStickR();
+    case 2: return InputHelper::isPressL() && InputHelper::isPressPadLeft();
+    case 3: return InputHelper::isPressL() && InputHelper::isPressPadRight();
+    case 4: return InputHelper::isPressR() && InputHelper::isPressPadLeft();
+    case 5: return InputHelper::isPressR() && InputHelper::isPressPadRight();
+    default: return false;
+    }
+}
+
 void Menu::handleAlways() {
     set = SettingsMgr::instance();
     gameSeq = helpers::tryGetHakoniwaSequence();
@@ -282,9 +294,9 @@ void Menu::handleAlways() {
         }
     }
 
-    if (InputHelper::isPressStickL() && mIsEnabledMenu) {
+    if (isPressMenuKey() && mIsEnabledMenu) {
         hideMenu();
-    } else if (InputHelper::isPressStickL() && !mIsEnabledMenu) {
+    } else if (isPressMenuKey() && !mIsEnabledMenu) {
         showMenu();
     }
     if (menuTimer < 5) {

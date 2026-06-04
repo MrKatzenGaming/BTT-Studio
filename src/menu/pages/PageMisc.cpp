@@ -276,10 +276,13 @@ void Menu::drawPageMisc() {
         ImGui::PushItemWidth(200);
         static int txt = set->getSettings()->mMoonRefreshText;
         static int corner = set->getSettings()->mMenuCorner;
+        static int key = set->getSettings()->mMenuKey;
         if (ImGui::Combo("Moon Refresh Text", &txt, MoonRefreshTexts, IM_ARRAYSIZE(MoonRefreshTexts)))
             set->getSettings()->mMoonRefreshText = txt;
         if (ImGui::Combo("Menu Corner", &corner, Corners, IM_ARRAYSIZE(Corners)))
             set->getSettings()->mMenuCorner = corner;
+        if (ImGui::Combo("Open Menu Key", &key, MenuKeys, IM_ARRAYSIZE(MenuKeys)))
+            set->getSettings()->mMenuKey = key;
         ImGui::PopItemWidth();
         ImGui::Unindent();
     }

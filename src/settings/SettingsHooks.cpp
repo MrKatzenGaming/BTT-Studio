@@ -28,6 +28,7 @@
 #include "menu/Menu.h"
 #include "settings/DemoHooks.hpp"
 #include "src/settings/SettingsMgr.h"
+#include "System/GameDataHolderAccessor.h"
 
 using namespace hk;
 using namespace btt;

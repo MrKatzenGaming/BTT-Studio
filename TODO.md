@@ -27,8 +27,28 @@
 - [ ] having the multimoon spawn at the start of every kingdom, or a way to reload stage like you got the multimoon
 - [ ] kingdom enter cutscene with stage reload
 - [ ] shorten story moon cutscenes, make the story moons not as messy
-- [ ] all persisting states should have the ability to be reset
+- [ ] all persisting states should have the ability to be reset (hook rs::isOnSaveObjInfo)
   - [ ] reset sand wall and wooded gate
+  - Coin::init
+  - ShineChip::init
+  - BlockHard::init
+  - BreakablePole::init
+  - BreakMapParts::init
+  - ChurchDoor::init
+  - DoorAreaChange::init
+  - DoorAreaChange::appear
+  - PeachWorldGate::init
+  - PeachWorldMoatWater::init
+  - QuestObj::init
+  - ReactionObjCarBreakable::init
+  - SnowWorldBigIcicle::init
+  - TreasureBox::init
+  - WaterfallorldBigBreakableWall::init
+  - CollectAnimal::isAlreadyInTheFence
+  - SphinxQuiz::init
+  - SphinxQuiz::receiveEvent
+  - RiseMapPartsHolder::init
+  - RiseMapPartsHolder::startRise
 - [ ] speed up the warp animation?
 - [ ] shop text thingys
 - [ ] refresh already collected npc moons

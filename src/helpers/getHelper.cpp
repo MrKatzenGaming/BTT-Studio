@@ -1,15 +1,15 @@
 #include "helpers/getHelper.h"
 
-#include <al/Library/Nerve/Nerve.h>
 #include <al/Library/Base/StringUtil.h>
+#include <al/Library/Nerve/Nerve.h>
 #include <al/Library/Nerve/NerveKeeper.h>
 #include <al/Library/Nerve/NerveStateCtrl.h>
 #include <al/Library/Player/PlayerHolder.h>
 #include <al/Library/Player/PlayerUtil.h>
 #include <al/Library/Scene/SceneUtil.h>
 
-#include <game/Player/PlayerActorHakoniwa.h>
 #include <game/MapObj/ChangeStageInfo.h>
+#include <game/Player/PlayerActorHakoniwa.h>
 #include <game/System/GameDataFunction.h>
 #include <game/System/GameSystem.h>
 

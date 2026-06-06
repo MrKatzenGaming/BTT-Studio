@@ -29,13 +29,8 @@ void Menu::drawPageOptions() {
                 );
             }
 
-#ifndef BTTDEBUG
-            ImGui::BeginDisabled();
-#endif
             ImGui::Checkbox("Refresh Moon Shards", &set->getSettings()->mIsEnableShardRefresh);
-#ifndef BTTDEBUG
-            ImGui::EndDisabled();
-#endif
+
             ImGui::Unindent();
         }
         if (ImGui::CollapsingHeader("Disable")) {

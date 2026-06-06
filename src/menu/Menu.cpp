@@ -250,10 +250,10 @@ static bool isPressMenuKey() {
     switch (SettingsMgr::getSettings()->mMenuKey) {
     case 0: return InputHelper::isPressStickL();
     case 1: return InputHelper::isPressStickR();
-    case 2: return InputHelper::isPressL() && InputHelper::isPressPadLeft();
-    case 3: return InputHelper::isPressL() && InputHelper::isPressPadRight();
-    case 4: return InputHelper::isPressR() && InputHelper::isPressPadLeft();
-    case 5: return InputHelper::isPressR() && InputHelper::isPressPadRight();
+    case 2: return InputHelper::isHoldL() && InputHelper::isPressPadLeft();
+    case 3: return InputHelper::isHoldL() && InputHelper::isPressPadRight();
+    case 4: return InputHelper::isHoldR() && InputHelper::isPressPadLeft();
+    case 5: return InputHelper::isHoldR() && InputHelper::isPressPadRight();
     default: return false;
     }
 }

@@ -4,6 +4,7 @@ WigglerPatternReverse = 0x0b07a8
 WigglerPatternTarget = 0x0b07f8
 UpdateMapTarget = 0x004f1238
 StageSceneNrvWarpToCheckpoint = 0x01d8ccf0
+ShineChipRefresh = 0x001d3de0
 
 @smo:101
 MoonRefreshText = 0x01834066
@@ -11,13 +12,15 @@ WigglerPatternReverse = 0x0b0840
 WigglerPatternTarget = 0x0b0890
 UpdateMapTarget = 0x004f1acc
 StageSceneNrvWarpToCheckpoint = 0x01d8ed20
-
+ShineChipRefresh = 0x001d4048
+ 
 @smo:110
 MoonRefreshText = 0x01835426
 WigglerPatternReverse = 0x0b0840
 WigglerPatternTarget = 0x0b0890
 UpdateMapTarget = 0x004f1c20
 StageSceneNrvWarpToCheckpoint = 0x01d8fd20
+ShineChipRefresh = 0x001d4048
 
 @smo:120
 MoonRefreshText = 0x018c0436
@@ -25,6 +28,7 @@ WigglerPatternReverse = 0x0b05b0
 WigglerPatternTarget = 0x0b0600
 UpdateMapTarget = 0x0051b48c
 StageSceneNrvWarpToCheckpoint = 0x01e39be0
+ShineChipRefresh = 0x001d407c
 
 @smo:130
 MoonRefreshText = 0x00e6dedd
@@ -32,3 +36,4 @@ WigglerPatternReverse = 0x000a4698
 WigglerPatternTarget = 0x000a46ec
 UpdateMapTarget = 0x0049d3d0
 StageSceneNrvWarpToCheckpoint = 0x012c5f30
+ShineChipRefresh = 0x001b8938

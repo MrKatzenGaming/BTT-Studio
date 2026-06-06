@@ -98,17 +98,6 @@ HkTrampoline doorRefreshHook = [](TrampolineStatic(), DoorAreaChange* doorAreaCh
     if (SettingsMgr::instance()->getSettings()->mIsEnableDoorRefresh) doorAreaChange->switchCloseAgain();
 };
 
-HkTrampoline shardRefreshHook = [](TrampolineStatic(), ShineChip* shineChip, al::ActorInitInfo info) -> void {
-    orig(shineChip, info);
-    if (SettingsMgr::instance()->getSettings()->mIsEnableShardRefresh) {
-        // al::setNerve((al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() +
-        // 0x1cbeaf8));
-        al::setNerve(
-            (al::IUseNerve*)shineChip, (al::Nerve*)(hk::ro::getMainModule()->range().start() + 0x1cbeaf0)
-        );
-    }
-};
-
 HkTrampoline checkpointFlagHook = [](TrampolineStatic(), CheckpointFlag* checkpointFlag) -> void {
     if (!SettingsMgr::instance()->getSettings()->mIsEnableNoCheckpointTouch) orig(checkpointFlag);
 };
@@ -296,7 +285,19 @@ HkTrampoline kingdomEnterHook = [](TrampolineStatic(), GameProgressData* data, i
     return SettingsMgr::instance()->getSettings()->mIsEnableRefreshKingdomEnter ? false : orig(data, i);
 };
 
+class SaveObjInfo {
+public:
+    void* a;
+    bool isOn;
+};
+
+bool shardRefreshHook(SaveObjInfo* info) {
+    return SettingsMgr::getSettings()->mIsEnableShardRefresh ? false : info->isOn;
+}
+
 void SettingsHooks::installSettingsHooks() {
+    hk::hook::writeBranchLinkAtSym<"ShineChipRefresh">(shardRefreshHook);
+
     installDemoHooks();
     installWigglerHooks();
 
@@ -334,7 +335,6 @@ void SettingsHooks::installSettingsHooks() {
     worldTravelingHook2
         .installAtSym<"_ZN16GameDataFunction27isFirstWorldTravelingStatusEPK17WorldTravelingNpc">();
     toadRefreshHook.installAtSym<"_ZN2rs34isOnFlagKinopioBrigadeNpcFirstTalkEPKN2al9LiveActorE">();
-    // shardRefreshHook.installAtSym<"_ZN9ShineChip4initERKN2al13ActorInitInfoE">();
     coinStackRefreshHook.installAtSym<"_ZN2rs13saveCoinStackEPKN2al9LiveActorEPKNS0_11PlacementIdEi">();
     kingdomEnterHook.installAtSym<"_ZNK16GameProgressData16isAlreadyGoWorldEi">();
 }

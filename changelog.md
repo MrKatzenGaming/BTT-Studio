@@ -1,0 +1,7 @@
+- Toad refresh
+- coin stack refresh
+- refresh kingdom enter (kinda)
+- new boot screen
+- separate moon refresh
+- disable tp puppet really only in moon cutscenes
+- kinda shard refresh

@@ -13,9 +13,7 @@ set(SOURCES ${SOURCES_ASM} ${SOURCES_C} ${SOURCES_CXX})
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE lib)
-
 target_include_directories(${PROJECT_NAME} PRIVATE lib/imgui)
-
 target_include_directories(${PROJECT_NAME} PRIVATE lib/custom)
 target_include_directories(${PROJECT_NAME} PRIVATE lib/OdysseyHeaders)
 
@@ -34,3 +32,5 @@ usesail(${PROJECT_NAME})
 if(DEBUG)
     target_compile_definitions(${PROJECT_NAME} PRIVATE BTTDEBUG)
 endif()
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_USER_CONFIG="${CMAKE_CURRENT_SOURCE_DIR}/include/imconfig.h")

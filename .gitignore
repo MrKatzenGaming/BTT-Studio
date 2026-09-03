@@ -2,9 +2,7 @@ build/
 .cache/
 compile_commands.json
 lib/std
-make-release/BTT-Studio.nss
-make-release/Btt-Studio.zip
-make-release/Btt-Studio-SimpleModManager.zip
+package/
 
 .direnv
 .vscode

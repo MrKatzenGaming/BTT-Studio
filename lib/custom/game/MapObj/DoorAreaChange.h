@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Library/LiveActor/LiveActor.h"
+#include "al/Library/LiveActor/LiveActor.h"
 
 class DoorAreaChange : public al::LiveActor {
 public:

@@ -1,7 +1,8 @@
 #include "menu/Timer.h"
 
+#include "nn/os.h"
+
 #include <cstdio>
-#include <nn/os.h>
 
 #include "src/settings/SettingsMgr.h"
 

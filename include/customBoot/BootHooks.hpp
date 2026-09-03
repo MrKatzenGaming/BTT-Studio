@@ -1,12 +1,13 @@
 #pragma once
-#include <hk/hook/Trampoline.h>
+#include "hk/hook/Trampoline.h"
 
-#include <al/Library/Base/StringUtil.h>
-#include <al/Library/Layout/LayoutInitInfo.h>
+#include "nn/oe.h"
 
-#include <game/Sequence/HakoniwaSequence.h>
+#include "al/Library/Base/StringUtil.h"
+#include "al/Library/Layout/LayoutInitInfo.h"
 
-#include <nn/oe.h>
+#include "game/Sequence/HakoniwaSequence.h"
+
 #include <typeinfo>
 
 #include "customBoot/CustomBootLoad.hpp"

@@ -16,13 +16,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE lib)
 target_include_directories(${PROJECT_NAME} PRIVATE lib/imgui)
 target_include_directories(${PROJECT_NAME} PRIVATE lib/custom)
 target_include_directories(${PROJECT_NAME} PRIVATE lib/OdysseyHeaders)
+target_include_directories(${PROJECT_NAME} PRIVATE .)
 
 file(GLOB LIBS_OH LIST_DIRECTORIES true lib/OdysseyHeaders/*)
 file(GLOB LIBS_CUST LIST_DIRECTORIES true lib/custom/*)
 target_include_directories(${PROJECT_NAME} PRIVATE ${LIBS_OH} ${LIBS_CUST})
-
-target_include_directories(${PROJECT_NAME} PRIVATE include)
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
 include(sys/cmake/module.cmake)
 include(sys/cmake/deploy.cmake)

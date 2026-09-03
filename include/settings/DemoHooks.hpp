@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hk/hook/Trampoline.h>
+#include "hk/hook/Trampoline.h"
 
 #include "src/settings/SettingsMgr.h"
 

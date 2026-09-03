@@ -1,8 +1,8 @@
 #pragma once
 
-#include <al/Library/Thread/AsyncFunctorThread.h>
+#include "al/Library/Thread/AsyncFunctorThread.h"
 
-#include <sead/heap/seadDisposer.h>
+#include "sead/heap/seadDisposer.h"
 
 #include "menu/Menu.h"
 

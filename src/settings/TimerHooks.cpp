@@ -1,13 +1,13 @@
 #include "settings/TimerHooks.h"
 
-#include <hk/hook/Trampoline.h>
+#include "hk/hook/Trampoline.h"
 
-#include <al/Library/LiveActor/ActorClippingFunction.h>
-#include <al/Library/LiveActor/LiveActor.h>
-#include <al/Library/Nerve/NerveKeeper.h>
-#include <al/Library/Nerve/NerveUtil.h>
+#include "al/Library/LiveActor/ActorClippingFunction.h"
+#include "al/Library/LiveActor/LiveActor.h"
+#include "al/Library/Nerve/NerveKeeper.h"
+#include "al/Library/Nerve/NerveUtil.h"
 
-#include <game/Scene/StageScene.h>
+#include "game/Scene/StageScene.h"
 
 #include "menu/Timer.h"
 

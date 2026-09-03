@@ -1,15 +1,16 @@
 #include "menu/Menu.h"
 
-#include <al/Library/Camera/CameraUtil.h>
-#include <al/Library/LiveActor/ActorMovementFunction.h>
-#include <al/Library/LiveActor/ActorPoseUtil.h>
+#include "nn/oe.h"
 
-#include <game/Scene/StageScene.h>
-#include <game/System/GameDataFunction.h>
+#include "al/Library/Camera/CameraUtil.h"
+#include "al/Library/LiveActor/ActorMovementFunction.h"
+#include "al/Library/LiveActor/ActorPoseUtil.h"
+
+#include "game/Scene/StageScene.h"
+#include "game/System/GameDataFunction.h"
 
 #include <cstdio>
 #include <cstring>
-#include <nn/oe.h>
 
 #include "helpers/getHelper.h"
 #include "helpers/InputHelper.h"
@@ -24,7 +25,7 @@
 # include "al/Library/Nerve/NerveKeeper.h"
 # include "al/Library/Nerve/NerveStateCtrl.h"
 
-# include <sead/heap/seadHeapMgr.h>
+# include "sead/heap/seadHeapMgr.h"
 
 # include "game/System/GameDataFile.h"
 

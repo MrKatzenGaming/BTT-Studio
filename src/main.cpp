@@ -1,17 +1,17 @@
-#include <hk/gfx/ImGuiBackendNvn.h>
-#include <hk/hook/Trampoline.h>
+#include "hk/gfx/ImGuiBackendNvn.h"
+#include "hk/hook/Trampoline.h"
 
-#include <al/Library/Memory/HeapUtil.h>
-#include <al/Library/System/GameSystemInfo.h>
+#include "nn/fs/fs_mount.h"
 
-#include <sead/filedevice/seadFileDeviceMgr.h>
-#include <sead/heap/seadExpHeap.h>
+#include "al/Library/Memory/HeapUtil.h"
+#include "al/Library/System/GameSystemInfo.h"
 
-#include <game/Sequence/HakoniwaSequence.h>
-#include <game/System/Application.h>
-#include <game/System/GameSystem.h>
+#include "sead/filedevice/seadFileDeviceMgr.h"
+#include "sead/heap/seadExpHeap.h"
 
-#include <nn/fs.h>
+#include "game/Sequence/HakoniwaSequence.h"
+#include "game/System/Application.h"
+#include "game/System/GameSystem.h"
 
 #include "customBoot/BootHooks.hpp"
 #include "helpers/InputHelper.h"

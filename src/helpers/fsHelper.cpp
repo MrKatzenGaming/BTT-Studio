@@ -1,8 +1,8 @@
 #include "helpers/fsHelper.h"
 
-#include <hk/diag/diag.h>
+#include "hk/diag/diag.h"
 
-#include <nn/fs.h>
+#include "nn/fs.h" // IWYU pragma: keep
 
 namespace FsHelper {
 nn::Result writeFileToPath(void* buf, size_t size, const char* path) {

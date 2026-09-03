@@ -3,10 +3,10 @@ set(LLDFLAGS --no-demangle --gc-sections)
 
 set(OPTIMIZE_OPTIONS_DEBUG -O2 -gdwarf-4)
 set(OPTIMIZE_OPTIONS_RELEASE -O3 -ffast-math -flto)
-set(WARN_OPTIONS -Werror=return-type -Wno-invalid-offsetof -Wno-main -Wno-macro-redefined -Wno-unqualified-std-cast-call -Wno-deprecated-declarations)
+set(WARN_OPTIONS -Werror=return-type -Wno-main -Wno-unqualified-std-cast-call -Wno-underlying-cv-qualifier-ignored -Wno-invalid-offsetof -Wno-macro-redefined -Wno-deprecated-declarations)
 
 set(INCLUDES include lib/OdysseyHeaders/agl)
-set(DEFINITIONS IMGUI_DISABLE_FILE_FUNCTIONS)
+set(DEFINITIONS MATCHING_HACK_NX_CLANG)
 set(EXCEPTION_FLAGS -fno-exceptions)
 
 set(ASM_OPTIONS "")
@@ -26,5 +26,6 @@ set(USE_SAIL TRUE)
 set(TRAMPOLINE_LEVEL 1)
 set(BAKE_SYMBOLS FALSE)
 
+set(USE_ADVANCED_RESULT 1)
+
 set(HAKKUN_ADDONS Nvn ImGui HeapSourceDynamic)
-set(HAKKUN_DEBUGRENDERER_VTXBUFFER_SIZE 0x4000)

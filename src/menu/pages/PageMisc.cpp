@@ -1,20 +1,19 @@
-#include <hk/sail/detail.h>
-#include <hk/util/Math.h>
+#include "hk/sail/detail.h"
 
-#include <al/Library/LiveActor/ActorFlagFunction.h>
-#include <al/Library/LiveActor/ActorMovementFunction.h>
-#include <al/Library/LiveActor/ActorPoseUtil.h>
-#include <al/Library/Memory/HeapUtil.h>
-#include <al/Library/Nerve/Nerve.h>
-#include <al/Library/Nerve/NerveKeeper.h>
-#include <al/Library/Nerve/NerveStateCtrl.h>
+#include "al/Library/LiveActor/ActorFlagFunction.h"
+#include "al/Library/LiveActor/ActorMovementFunction.h"
+#include "al/Library/LiveActor/ActorPoseUtil.h"
+#include "al/Library/Memory/HeapUtil.h"
+#include "al/Library/Nerve/Nerve.h"
+#include "al/Library/Nerve/NerveKeeper.h"
+#include "al/Library/Nerve/NerveStateCtrl.h"
 
-#include <custom/game/Scene/StageSceneStateStageMap.h>
-#include <game/MapObj/ChangeStageInfo.h>
-#include <game/Player/PlayerFunction.h>
-#include <game/Player/PlayerHackKeeper.h>
-#include <game/System/GameDataFile.h>
-#include <game/System/GameDataFunction.h>
+#include "custom/game/Scene/StageSceneStateStageMap.h"
+#include "game/MapObj/ChangeStageInfo.h"
+#include "game/Player/PlayerFunction.h"
+#include "game/Player/PlayerHackKeeper.h"
+#include "game/System/GameDataFile.h"
+#include "game/System/GameDataFunction.h"
 
 #include <cxxabi.h>
 #include <typeinfo>

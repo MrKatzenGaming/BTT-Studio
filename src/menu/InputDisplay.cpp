@@ -1,10 +1,9 @@
 #include "menu/InputDisplay.h"
 
-#include <al/Library/Controller/InputFunction.h>
-#include <custom/al/Library/Pad/NpadController.h>
+#include "al/Library/Controller/InputFunction.h"
+#include "al/Library/Controller/NpadController.h"
 
-#include <sead/controller/seadControllerMgr.h>
-#include <sead/math/seadVector.h>
+#include "sead/controller/seadControllerMgr.h"
 
 #include "imgui_internal.h"
 

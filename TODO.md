@@ -14,6 +14,7 @@
 - [ ] reload sceene different fade
 - [ ] refresh deep woods nut
 - [ ] refresh shards
+  - [x] kinda
 - [ ] timer for every splice
   - [x] Moon Tick
   - [x] Moon Grab

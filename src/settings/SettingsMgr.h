@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sead/heap/seadDisposer.h>
+#include "sead/heap/seadDisposer.h"
 
 #include "imgui.h"
 #include "menu/Timer.h"

@@ -32,18 +32,20 @@ IncludeBlocks: Regroup
 IncludeCategories:
   - Regex: ^("|<)hk/
     Priority: 1
-  - Regex: ^("|<)(al/|custom/al/)
+  - Regex: ^("|<)(nn/|custom/nn/)
     Priority: 2
-  - Regex: ^("|<)(agl/|custom/agl/)
+  - Regex: ^("|<)(al/|custom/al/)
     Priority: 3
-  - Regex: ^("|<)(sead/|custom/sead/)
+  - Regex: ^("|<)(agl/|custom/agl/)
     Priority: 4
-  - Regex: ^("|<)(game/|custom/game/)
+  - Regex: ^("|<)(sead/|custom/sead/)
     Priority: 5
-  - Regex: ^<
+  - Regex: ^("|<)(game/|custom/game/)
     Priority: 6
-  - Regex: ^"
+  - Regex: ^<
     Priority: 7
+  - Regex: ^"
+    Priority: 8
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false

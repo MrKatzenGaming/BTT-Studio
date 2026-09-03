@@ -1,10 +1,10 @@
 #include "menu/stage_warp.h"
 
-#include <al/Library/Base/StringUtil.h>
+#include "al/Library/Base/StringUtil.h"
 
-#include <game/MapObj/ChangeStageInfo.h>
-#include <game/Sequence/HakoniwaSequence.h>
-#include <game/System/GameDataHolder.h>
+#include "game/MapObj/ChangeStageInfo.h"
+#include "game/Sequence/HakoniwaSequence.h"
+#include "game/System/GameDataHolder.h"
 
 #include <cstddef>
 #include <cstdio>

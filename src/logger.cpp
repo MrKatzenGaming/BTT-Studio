@@ -1,30 +1,24 @@
 #include "logger.h"
 
-#include <hk/diag/diag.h>
-#include <hk/hook/Trampoline.h>
-#include <hk/types.h>
+#include "hk/diag/diag.h"
+#include "hk/hook/Trampoline.h"
 
-#include <sead/heap/seadDisposer.h>
-#include <sead/heap/seadHeap.h>
-#include <sead/heap/seadHeapMgr.h>
-#include <sead/math/seadMathCalcCommon.h>
-#include <sead/prim/seadEndian.h>
+#include "nn/nifm.h"
+#include "nn/socket.h"
 
-#include <game/MapObj/ChangeStageInfo.h>
-#include <game/Sequence/HakoniwaSequence.h>
-#include <game/System/GameDataHolder.h>
+#include "sead/heap/seadDisposer.h"
+#include "sead/heap/seadHeap.h"
+#include "sead/heap/seadHeapMgr.h"
+#include "sead/math/seadMathCalcCommon.h"
+
+#include "game/MapObj/ChangeStageInfo.h"
+#include "game/Sequence/HakoniwaSequence.h"
+#include "game/System/GameDataHolder.h"
 
 #include <cstdarg>
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
-#include <netdb.h>
 #include <netinet/in.h>
-#include <nn/fs.h>
-#include <nn/fs/fs_files.h>
-#include <nn/fs/fs_types.h>
-#include <nn/nifm.h>
-#include <nn/socket.h>
 
 #include "helpers/getHelper.h"
 

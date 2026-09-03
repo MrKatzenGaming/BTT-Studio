@@ -1,29 +1,28 @@
 #include "settings/SettingsHooks.h"
 
-#include <hk/hook/InstrUtil.h>
-#include <hk/hook/Trampoline.h>
-#include <hk/Result.h>
-#include <hk/ro/RoUtil.h>
-#include <hk/sail/detail.h>
+#include "hk/hook/InstrUtil.h"
+#include "hk/hook/Trampoline.h"
+#include "hk/ro/RoUtil.h"
+#include "hk/sail/detail.h"
 
-#include <al/Library/Bgm/BgmLineFunction.h>
-#include <al/Library/Camera/CameraUtil.h>
-#include <al/Library/LiveActor/ActorPoseUtil.h>
-#include <al/Library/LiveActor/LiveActor.h>
-#include <al/Library/Math/MathUtil.h>
-#include <al/Library/Nerve/NerveKeeper.h>
-#include <al/Library/Nerve/NerveUtil.h>
+#include "al/Library/Bgm/BgmLineFunction.h"
+#include "al/Library/Camera/CameraUtil.h"
+#include "al/Library/LiveActor/ActorPoseUtil.h"
+#include "al/Library/LiveActor/LiveActor.h"
+#include "al/Library/Math/MathUtil.h"
+#include "al/Library/Nerve/NerveKeeper.h"
+#include "al/Library/Nerve/NerveUtil.h"
 
-#include <custom/game/MapObj/DoorAreaChange.h>
-#include <custom/game/Scene/StageSceneStateStageMap.h>
-#include <game/Item/CoinStackGroup.h>
-#include <game/System/GameDataFile.h>
-#include <game/System/GameDataFunction.h>
-#include <game/System/GameDataHolder.h>
-#include <game/System/GameDataHolderAccessor.h>
-#include <game/System/GameDataHolderWriter.h>
-#include <game/System/GameDataUtil.h>
-#include <game/System/PlayerHitPointData.h>
+#include "custom/game/MapObj/DoorAreaChange.h"
+#include "custom/game/Scene/StageSceneStateStageMap.h"
+#include "game/Item/CoinStackGroup.h"
+#include "game/System/GameDataFile.h"
+#include "game/System/GameDataFunction.h"
+#include "game/System/GameDataHolder.h"
+#include "game/System/GameDataHolderAccessor.h"
+#include "game/System/GameDataHolderWriter.h"
+#include "game/System/GameDataUtil.h"
+#include "game/System/PlayerHitPointData.h"
 
 #include "helpers/InputHelper.h"
 #include "menu/Menu.h"

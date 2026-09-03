@@ -6,4 +6,4 @@
 	url = https://github.com/ocornut/imgui
 [submodule "sys"]
 	path = sys
-	url = https://github.com/fruityloops1/LibHakkun
+	url = https://codeberg.org/fruityloops1/LibHakkun

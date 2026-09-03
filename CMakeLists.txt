@@ -32,5 +32,3 @@ usesail(${PROJECT_NAME})
 if(DEBUG)
     target_compile_definitions(${PROJECT_NAME} PRIVATE BTTDEBUG)
 endif()
-
-target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_USER_CONFIG="${CMAKE_CURRENT_SOURCE_DIR}/include/imconfig.h")

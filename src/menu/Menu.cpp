@@ -32,7 +32,6 @@
 # include <cxxabi.h>
 # include <typeinfo>
 
-# include "logger.h"
 #endif
 
 namespace btt {
@@ -85,9 +84,6 @@ void Menu::draw() {
     ImGui::Separator();
     if (ImGui::CollapsingHeader("Debug")) {
         ImGui::Indent();
-        if (ImGui::Button("Reconnect logger")) {
-            Logger::instance()->connect("192.168.178.41", 8171);
-        }
         ImGui::Text("Menu Timer: %lu", menuTimer);
         ImGui::Text("NavId: %u", GImGui->NavId);
         ImGui::Text(

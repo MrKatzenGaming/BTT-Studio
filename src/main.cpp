@@ -38,10 +38,9 @@ HkTrampoline gameSystemInit = [](TrampolineStatic(), GameSystem* gameSystem) -> 
     sead::Heap* heap = btt::initializeHeap();
 
     Logger* logger = Logger::createInstance(heap);
-    logger->init(heap);
 
 #ifdef BTTDEBUG
-    logger->connect("192.168.178.41", 8171);
+    logger->init(heap);
 #endif
 
     btt::SettingsMgr::createInstance(heap);

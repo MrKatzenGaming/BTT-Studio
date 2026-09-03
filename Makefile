@@ -49,9 +49,11 @@ package:
 	@cp -R romfs/ $(CONTENTPATH)
 
 	@echo - Ziping files
-	@zip -rq package/$(PROJNAME)-Switch.zip package/atmosphere
+
+	@cd package; zip -rq $(PROJNAME)-Switch.zip atmosphere
 	@mv package/atmosphere package/$(PROJNAME)
-	@zip -rq package/$(PROJNAME)-SimpleModManager.zip package/$(PROJNAME)
+	@cd package; zip -rq $(PROJNAME)-SimpleModManager.zip $(PROJNAME)
+
 
 	@echo -e "\n\e[32m════════════════════════════════════"
 	@echo -e "\e[1m         ✓ Build complete!\e[0m"

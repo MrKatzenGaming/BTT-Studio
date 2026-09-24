@@ -1,0 +1,9 @@
+@smo:100,101,110,120
+_ZN17DokanMazeDirector4initERKN2al13ActorInitInfoE
+_ZN17DokanMazeDirector9initLevelERKN2al13ActorInitInfoEP9DokanMaze 
+_ZN17DokanMazeDirector7exeWaitEv
+
+@smo:130
+_ZN17DokanMazeDirector4initERKN2al13ActorInitInfoE = 0x22c220
+_ZN17DokanMazeDirector9initLevelERKN2al13ActorInitInfoEP9DokanMaze = 0x22c4f0
+_ZN17DokanMazeDirector7exeWaitEv = 0x0022c7b0

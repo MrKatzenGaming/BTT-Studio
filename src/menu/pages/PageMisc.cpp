@@ -103,6 +103,39 @@ void Menu::loadTeleport(TpState& state) {
     }
 }
 
+void Menu::drawTimerCat() {
+    if (ImGui::CollapsingHeader("Segment Timer")) {
+        ImGui::Indent();
+        ImGui::Checkbox("Enable", &set->getSettings()->mIsEnableSegmentTimer);
+        ImGui::SameLine();
+        if (ImGui::Button("Start")) {
+            btt::Timer::sInstance->start();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Stop")) {
+            btt::Timer::sInstance->stop();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Reset")) {
+            btt::Timer::sInstance->reset();
+        }
+        static int startType = (u8)set->getSettings()->mTimerStartType;
+        static int endType = (u8)set->getSettings()->mTimerEndType;
+
+        if (ImGui::Combo("Start Type", &startType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes)))
+            set->getSettings()->mTimerStartType = (TimerHookType)startType;
+        if (ImGui::Combo("End Type", &endType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes)))
+            set->getSettings()->mTimerEndType = (TimerHookType)endType;
+        static int posX = set->getSettings()->mTimerPos.x;
+        static int posY = set->getSettings()->mTimerPos.y;
+        ImGui::PushItemWidth(200);
+        if (ImGui::InputInt("Timer X", &posX, 5)) set->getSettings()->mTimerPos.x = posX;
+        if (ImGui::InputInt("Timer Y", &posY, 5)) set->getSettings()->mTimerPos.y = posY;
+        ImGui::PopItemWidth();
+        ImGui::Unindent();
+    }
+}
+
 void Menu::drawPageMisc() {
     if (ImGui::CollapsingHeader("Misc##page")) {
         ImGui::Indent();
@@ -122,36 +155,33 @@ void Menu::drawPageMisc() {
             }
             ImGui::Unindent();
         }
-        if (ImGui::CollapsingHeader("Segment Timer")) {
-            ImGui::Indent();
-            ImGui::Checkbox("Enable", &set->getSettings()->mIsEnableSegmentTimer);
-            ImGui::SameLine();
-            if (ImGui::Button("Start")) {
-                btt::Timer::sInstance->start();
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Stop")) {
-                btt::Timer::sInstance->stop();
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Reset")) {
-                btt::Timer::sInstance->reset();
-            }
-            static int startType = (u8)set->getSettings()->mTimerStartType;
-            static int endType = (u8)set->getSettings()->mTimerEndType;
+        drawTimerCat();
+        if (ImGui::CollapsingHeader("Pipe Randomizer Override")) {
+            static int pipe1 = set->getSettings()->mPipeRando1;
+            static int pipe2 = set->getSettings()->mPipeRando2;
+            static int pipe3 = set->getSettings()->mPipeRando3;
+            ImGui::Checkbox("Enabled", &set->getSettings()->mIsEnablePipeMazeOverride);
 
-            if (ImGui::Combo("Start Type", &startType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes)))
-                set->getSettings()->mTimerStartType = (TimerHookType)startType;
-            if (ImGui::Combo("End Type", &endType, TimerHookTypes, IM_ARRAYSIZE(TimerHookTypes)))
-                set->getSettings()->mTimerEndType = (TimerHookType)endType;
-            static int posX = set->getSettings()->mTimerPos.x;
-            static int posY = set->getSettings()->mTimerPos.y;
-            ImGui::PushItemWidth(200);
-            if (ImGui::InputInt("Timer X", &posX, 5)) set->getSettings()->mTimerPos.x = posX;
-            if (ImGui::InputInt("Timer Y", &posY, 5)) set->getSettings()->mTimerPos.y = posY;
-            ImGui::PopItemWidth();
-            ImGui::Unindent();
+            if (ImGui::InputInt("2 Pipes", &pipe1)) {
+                if (pipe1 < 0) pipe1 = 1;
+                if (pipe1 > 1) pipe1 = 0;
+                set->getSettings()->mPipeRando1 = pipe1;
+            }
+            if (ImGui::InputInt("3 Pipes", &pipe2)) {
+                if (pipe2 < 0) pipe2 = 2;
+                if (pipe2 > 2) pipe2 = 0;
+                set->getSettings()->mPipeRando2 = pipe2;
+            }
+            if (ImGui::InputInt("5 Pipes", &pipe3)) {
+                if (pipe3 < 0) pipe3 = 4;
+                if (pipe3 > 4) pipe3 = 0;
+                set->getSettings()->mPipeRando3 = pipe3;
+            }
         }
+        if (GImGui->NavId == ImGui::GetID("Pipe Randomizer Override")) {
+            ImGui::SetTooltip("For changes to take effect \nreload the scene");
+        }
+
         ImGui::PushItemWidth(200);
         static int pattern = set->getSettings()->mWigglerPattern;
         static int status = set->getSettings()->mWorldTravelingStatus;
@@ -283,6 +313,7 @@ void Menu::drawPageMisc() {
         if (ImGui::Combo("Open Menu Key", &key, MenuKeys, IM_ARRAYSIZE(MenuKeys)))
             set->getSettings()->mMenuKey = key;
         ImGui::PopItemWidth();
+
         ImGui::Unindent();
     }
 }

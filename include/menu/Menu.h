@@ -58,6 +58,7 @@ private:
     void drawPageInfo();
     void drawPageMisc();
     void drawTeleportCat();
+    void drawTimerCat();
 
     void saveTeleport(TpState& state);
     void loadTeleport(TpState& state);

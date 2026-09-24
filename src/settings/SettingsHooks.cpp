@@ -25,6 +25,7 @@
 #include "game/System/PlayerHitPointData.h"
 
 #include "helpers/InputHelper.h"
+#include "logger.h"
 #include "menu/Menu.h"
 #include "settings/DemoHooks.hpp"
 #include "src/settings/SettingsMgr.h"
@@ -153,14 +154,16 @@ int getPatternTarget(int a) {
     return mPatternEntries[SettingsMgr::instance()->getSettings()->mWigglerPattern - 1].target;
 }
 
-void installWigglerHooks() {
-    ptr addr = sail::lookupSymbolFromDb<>("WigglerPatternReverse");
-    ptr offset = addr - ro::getMainModule()->range().start();
-    hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)isPatternReverse);
+inline void installWigglerHooks() {
+    // ptr addr = sail::lookupSymbolFromDb<>("WigglerPatternReverse");
+    // ptr offset = addr - ro::getMainModule()->range().start();
+    // hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)isPatternReverse);
+    hk::hook::writeBranchLinkAtSym<"WigglerPatternReverse">(isPatternReverse);
 
-    addr = sail::lookupSymbolFromDb<>("WigglerPatternTarget");
-    offset = addr - ro::getMainModule()->range().start();
-    hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)getPatternTarget);
+    // addr = sail::lookupSymbolFromDb<>("WigglerPatternTarget");
+    // offset = addr - ro::getMainModule()->range().start();
+    // hk::hook::writeBranchLink(ro::getMainModule(), offset, (void*)getPatternTarget);
+    hk::hook::writeBranchLinkAtSym<"WigglerPatternTarget">(getPatternTarget);
 }
 
 HkTrampoline allCheckpointsHook = [](TrampolineStatic(), GameDataHolderAccessor acc,
@@ -294,11 +297,36 @@ bool shardRefreshHook(SaveObjInfo* info) {
     return SettingsMgr::getSettings()->mIsEnableShardRefresh ? false : info->isOn;
 }
 
+int pipeRandomness(int param) {
+    // not overridden, as no randomness
+    if (param == 0 || param == 1) return al::getRandom(param);
+    SettingsMgr* set = SettingsMgr::instance();
+    if (set->getSettings()->mIsEnablePipeMazeOverride) {
+        if (param == 2) return set->getSettings()->mPipeRando1;
+        if (param == 3) return set->getSettings()->mPipeRando2;
+        if (param == 5) return set->getSettings()->mPipeRando3;
+
+        Logger::instance()->log(
+            Logger::LogType::LogWarn, "Unhandled pipeRandomness with param %d! Defaulting to 0.\n", param
+        );
+        return 0;
+    }
+    return al::getRandom(param);
+}
+
+inline void installPipeRandoHooks() {
+    hk::hook::writeBranchLinkAtSym<"$PipeRando1">(pipeRandomness);
+    hk::hook::writeBranchLinkAtSym<"$PipeRando2">(pipeRandomness);
+    hk::hook::writeBranchLinkAtSym<"$PipeRando3">(pipeRandomness);
+    // hk::hook::writeBranchLinkAtSym<"$PipeRando4">(pipeRandomness);
+}
+
 void SettingsHooks::installSettingsHooks() {
     hk::hook::writeBranchLinkAtSym<"ShineChipRefresh">(shardRefreshHook);
 
     installDemoHooks();
     installWigglerHooks();
+    installPipeRandoHooks();
 
     ptr addr = sail::lookupSymbolFromDb<>("UpdateMapTarget");
     ptr offset = addr - ro::getMainModule()->range().start();

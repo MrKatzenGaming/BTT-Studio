@@ -68,6 +68,7 @@ public:
         SETTING(SegTimerSplit);
         SETTING(RefreshNpc);
         SETTING(DisableCoinStackSave);
+        SETTING(PipeMazeOverride);
         InputDisplayColor mInputDisplayButtonColor = InputDisplayColor::White;
         InputDisplayColor mInputDisplayButtonPressedColor = InputDisplayColor::Pink;
         InputDisplayColor mInputDisplayStickColor = InputDisplayColor::White;
@@ -94,6 +95,9 @@ public:
         u8 mMenuKey = 0;
         u8 mMoonRefreshText = 0;
         u8 mWigglerPattern = 0;
+        u8 mPipeRando1 = 0;
+        u8 mPipeRando2 = 0;
+        u8 mPipeRando3 = 0;
         ImVec2 mInfoPos = ImVec2(0, 0);
         ImVec2 mInputDisplayPosP2 = ImVec2(1600.f / 2, 900.f / 2);
         ImVec2 mTimerPos = ImVec2(1600.f / 2, 900.f / 2);

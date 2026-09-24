@@ -8,7 +8,7 @@
 namespace btt {
 
 #define SETTING(NAME) bool mIsEnable##NAME
-#define VERSION "1.2.4"
+#define VERSION "1.3.0"
 #ifdef BTTDEBUG
 # define SUBVER "-dev"
 #else

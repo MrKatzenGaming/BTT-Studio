@@ -31,34 +31,42 @@ using namespace btt;
 void Menu::drawTeleportCat() {
     if (ImGui::CollapsingHeader("Teleport")) {
         ImGui::Indent();
-        ImGui::PushItemWidth(200);
-        ImGui::InputInt("Teleport Index", &tpIndex);
-        if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
-        if (tpIndex >= hk::util::arraySize(tpStates)) tpIndex = 0;
-        ImGui::PopItemWidth();
+        {
+            ImGui::PushItemWidth(200);
+            {
+                ImGui::InputInt("Teleport Index", &tpIndex);
+                if (tpIndex < 0) tpIndex = hk::util::arraySize(tpStates) - 1;
+                if (tpIndex >= hk::util::arraySize(tpStates)) tpIndex = 0;
+            }
+            ImGui::PopItemWidth();
 
-        if (ImGui::Button("Save")) saveTeleport(tpStates[tpIndex]);
-        ImGui::SameLine();
-        if (ImGui::Button("Load")) loadTeleport(tpStates[tpIndex]);
-        ImGui::SameLine();
-        ImGui::PushID("TpHotkeys");
-        ImGui::Checkbox("Hotkeys", &set->getSettings()->mIsEnableTpHotkeys);
-        ImGui::PopID();
-        ImGui::SameLine();
-        ImGui::BeginDisabled();
-        ImGui::Checkbox("Saved", &tpStates[tpIndex].saved);
-        ImGui::Text("Stage: %s", tpStates[tpIndex].stageName);
-        ImGui::EndDisabled();
+            if (ImGui::Button("Save")) saveTeleport(tpStates[tpIndex]);
+            ImGui::SameLine();
+            if (ImGui::Button("Load")) loadTeleport(tpStates[tpIndex]);
+            ImGui::SameLine();
 
-        if (ImGui::Button("Save To File")) {
-            SaveFileHelper::instance()->saveTeleport(tpStates, hk::util::arraySize(tpStates));
-        }
+            ImGui::PushID("TpHotkeys");
+            ImGui::Checkbox("Hotkeys", &set->getSettings()->mIsEnableTpHotkeys);
+            ImGui::PopID();
+            ImGui::SameLine();
 
-        ImGui::SameLine();
-        if (ImGui::Button("Load From File")) {
-            SaveFileHelper::instance()->loadTeleport(
-                tpStates, hk::util::arraySize(tpStates), al::getStationedHeap()
-            );
+            ImGui::BeginDisabled();
+            {
+                ImGui::Checkbox("Saved", &tpStates[tpIndex].saved);
+                ImGui::Text("Stage: %s", tpStates[tpIndex].stageName);
+            }
+            ImGui::EndDisabled();
+
+            if (ImGui::Button("Save To File")) {
+                SaveFileHelper::instance()->saveTeleport(tpStates, hk::util::arraySize(tpStates));
+            }
+
+            ImGui::SameLine();
+            if (ImGui::Button("Load From File")) {
+                SaveFileHelper::instance()->loadTeleport(
+                    tpStates, hk::util::arraySize(tpStates), al::getStationedHeap()
+                );
+            }
         }
         ImGui::Unindent();
     }
@@ -90,7 +98,8 @@ void Menu::loadTeleport(TpState& state) {
         return;
     }
 
-    if (set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) {
+    if ((set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) ||
+        helpers::isBindState(stageScene)) {
         al::setTrans(playerHak, state.pos);
         al::updatePoseQuat(playerHak, state.quat);
         menuTimer = 0;

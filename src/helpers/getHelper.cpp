@@ -1,6 +1,7 @@
 #include "helpers/getHelper.h"
 
 #include "al/Library/Base/StringUtil.h"
+#include "al/Library/Nerve/IUseNerve.h"
 #include "al/Library/Nerve/Nerve.h"
 #include "al/Library/Nerve/NerveKeeper.h"
 #include "al/Library/Nerve/NerveStateCtrl.h"
@@ -230,33 +231,61 @@ bool tryReloadStage() {
     return true;
 }
 
+char* getStateName(al::IUseNerve* iUseNerve) {
+    if (!iUseNerve) return nullptr;
+    char* stateName = nullptr;
+    if (!iUseNerve->getNerveKeeper() || !iUseNerve->getNerveKeeper()->mStateCtrl) return nullptr;
+    al::NerveStateCtrl::State* state = iUseNerve->getNerveKeeper()->mStateCtrl->mCurrentState;
+    if (!state) return nullptr;
+    stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
+    return stateName;
+}
+
+char* getNerveName(al::IUseNerve* iUseNerve) {
+    if (!iUseNerve) return nullptr;
+    char* nrvName = nullptr;
+    if (!iUseNerve->getNerveKeeper()) return nullptr;
+    const al::Nerve* nerve = iUseNerve->getNerveKeeper()->mCurrentNerve;
+    if (!nerve) return nullptr;
+    nrvName = abi::__cxa_demangle(typeid(*nerve).name(), nullptr, nullptr, &status);
+    return nrvName + strlen("(anonymous namespace)::");
+}
+
 bool isGetShineState(StageScene* stageScene) {
     if (!stageScene) return false;
     PlayerActorHakoniwa* p = tryGetPlayerActorHakoniwa(stageScene);
     if (!p) return false;
 
-    char* stateNameScene = nullptr;
-    char* nrvNameP = nullptr;
+    char* stateNameScene = getStateName(stageScene);
+    char* nrvNameP = getNerveName(p);
 
-    if (!stageScene->getNerveKeeper()->mStateCtrl) return false;
-    if (!p->getNerveKeeper()) return false;
-
-    al::NerveStateCtrl::State* stateScene = stageScene->getNerveKeeper()->mStateCtrl->mCurrentState;
-    if (!stateScene) return false;
-    const al::Nerve* currentNerve = p->getNerveKeeper()->mCurrentNerve;
-    if (!currentNerve) return false;
-
-    // stateName = demangle(typeid(*state->state).name()) + strlen("StageSceneState");
-    stateNameScene = abi::__cxa_demangle(typeid(*stateScene->state).name(), nullptr, nullptr, &status) +
-                     strlen("StageSceneState");
-    nrvNameP = abi::__cxa_demangle(typeid(*currentNerve).name(), nullptr, nullptr, &status) +
-               strlen("(anonymous namespace)::PlayerActorHakoniwaNrv");
-
-    bool cmp = strcmp(stateNameScene, "GetShine") == 0 && strcmp(nrvNameP, "Demo") == 0;
-    free(stateNameScene);
+    bool cmp = false;
+    if (stateNameScene && nrvNameP) {
+        cmp = strcmp(stateNameScene + strlen("StageSceneState"), "GetShine") == 0 &&
+              strcmp(nrvNameP + strlen("PlayerActorHakoniwaNrv"), "Demo") == 0;
+    }
     free(nrvNameP);
-    return cmp;
+    free(stateNameScene);
 
-    return false;
+    return cmp;
+}
+
+bool isBindState(StageScene* stageScene) {
+    if (!stageScene) return false;
+    PlayerActorHakoniwa* p = tryGetPlayerActorHakoniwa(stageScene);
+    if (!p) return false;
+
+    bool cmp = false;
+    char* stateNameP = getStateName(p);
+    char* nrvNameP = getNerveName(p);
+
+    if (stateNameP && nrvNameP) {
+        cmp = strcmp(stateNameP + strlen("PlayerState"), "Bind") == 0 &&
+              strcmp(nrvNameP + strlen("PlayerActorHakoniwaNrv"), "Bind") == 0;
+    }
+    free(nrvNameP);
+    free(stateNameP);
+
+    return cmp;
 }
 } // namespace helpers

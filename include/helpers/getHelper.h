@@ -16,6 +16,9 @@ bool isInStageScene(al::Scene* scene);
 bool tryReloadStage();
 
 bool isGetShineState(StageScene* stageScene);
+bool isBindState(StageScene* stageScene);
+char* getStateName(al::IUseNerve* iUseNerve);
+char* getNerveName(al::IUseNerve* iUseNerve);
 
 // Safe getters
 al::Sequence* tryGetSequence();

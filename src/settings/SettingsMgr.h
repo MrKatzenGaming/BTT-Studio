@@ -7,8 +7,10 @@
 
 namespace btt {
 
-#define SETTING(NAME) bool mIsEnable##NAME
-#define VERSION "1.3.1"
+#define SETTING(NAME) bool mIsEnable##NAME = false
+#define KEY(NAME) SettingsHotkey m##NAME##Key = SettingsHotkey::Disabled
+
+#define VERSION "1.3.2"
 #ifdef BTTDEBUG
 # define SUBVER "-dev"
 #else
@@ -17,9 +19,6 @@ namespace btt {
 
 class SettingsMgr {
     SEAD_SINGLETON_DISPOSER(SettingsMgr)
-
-private:
-    sead::Heap* mHeap;
 
 public:
     SettingsMgr() = default;
@@ -74,20 +73,21 @@ public:
         InputDisplayColor mInputDisplayStickColor = InputDisplayColor::White;
         InputDisplayColor mInputDisplayRingColor = InputDisplayColor::Gray;
         InputDisplayColor mInputDisplayBackColor = InputDisplayColor::Black;
-        SettingsHotkey mKillSceneKey = SettingsHotkey::Disabled;
-        SettingsHotkey mHealMarioKey = SettingsHotkey::Disabled;
-        SettingsHotkey mPrevSceneKey = SettingsHotkey::Disabled;
-        SettingsHotkey mIncTpIndexKey = SettingsHotkey::Disabled;
-        SettingsHotkey mDecTpIndexKey = SettingsHotkey::Disabled;
-        SettingsHotkey mAddCoinsKey = SettingsHotkey::Disabled;
-        SettingsHotkey mDecCoinsKey = SettingsHotkey::Disabled;
-        SettingsHotkey mLifeUpKey = SettingsHotkey::Disabled;
-        SettingsHotkey mIncPatternKey = SettingsHotkey::Disabled;
-        SettingsHotkey mDecPatternKey = SettingsHotkey::Disabled;
-        SettingsHotkey mTimerStartKey = SettingsHotkey::Disabled;
-        SettingsHotkey mTimerEndKey = SettingsHotkey::Disabled;
-        SettingsHotkey mTimerResetKey = SettingsHotkey::Disabled;
-        SettingsHotkey mWarpLastCpKey = SettingsHotkey::Disabled;
+        KEY(KillScene);
+        KEY(HealMario);
+        KEY(FullHealMario);
+        KEY(PrevScene);
+        KEY(IncTpIndex);
+        KEY(DecTpIndex);
+        KEY(AddCoins);
+        KEY(DecCoins);
+        KEY(LifeUp);
+        KEY(IncPattern);
+        KEY(DecPattern);
+        KEY(TimerStart);
+        KEY(TimerEnd);
+        KEY(TimerReset);
+        KEY(WarpLastCp);
         TimerHookType mTimerStartType = TimerHookType::None;
         TimerHookType mTimerEndType = TimerHookType::None;
         u8 mWorldTravelingStatus = 0;

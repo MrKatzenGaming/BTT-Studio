@@ -219,6 +219,13 @@ void Menu::drawPageMisc() {
         if (ImGui::Button("Heal Mario")) {
             if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
         }
+        ImGui::SameLine();
+        if (ImGui::Button("Full Heal Mario")) {
+            if (playerHak) {
+                for (int i = 0; i < 6; i++)
+                    GameDataFunction::recoveryPlayer(playerHak);
+            }
+        }
         if (ImGui::Button("Add 1000 coins")) {
             if (stageScene) GameDataFunction::addCoin(GameDataHolderWriter(stageScene), 1000);
         }
@@ -232,9 +239,10 @@ void Menu::drawPageMisc() {
                     GameDataFunction::addCoin(GameDataHolderWriter(stageScene), -1000);
             }
         }
-        // if (ImGui::Button("Remove Cappy")) {
-        //     if (playerHak) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
-        // }
+        if (ImGui::Button("Remove Cappy")) {
+            if (playerHak) GameDataFunction::disableCapByPlacement((al::LiveActor*)playerHak->mHackCap);
+        }
+        ImGui::SameLine();
         if (ImGui::Button("Kill Scene")) {
             if (stageScene && playerHak) {
                 al::NerveKeeper* sceneNerveKeeper = stageScene->getNerveKeeper();
@@ -309,7 +317,7 @@ void Menu::drawPageMisc() {
         ImGui::SameLine();
         ImGui::Checkbox("Reload Scene at Pos", &mIsReloadPos);
         if (GImGui->NavId == ImGui::GetID("Reload Scene at Pos")) {
-            ImGui::SetTooltip("Doesn't save!!! \nWill break normal reload \n(To fix: re enter stage)");
+            ImGui::SetTooltip("Doesn't save!!!\nWill break normal reload\n(To fix: re enter stage)");
         }
         ImGui::PushItemWidth(200);
         static int txt = set->getSettings()->mMoonRefreshText;

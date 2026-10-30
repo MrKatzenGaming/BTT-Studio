@@ -49,12 +49,14 @@ void SaveFileHelper::loadSettings(sead::Heap* heap) {
     data.path = mSettingsPath;
     FsHelper::loadFileFromPath(data, heap);
     if (!data.buffer) {
-        Logger::instance()->log(Logger::LogType::LogErr, "Failed to load settings from %s", mSettingsPath);
+        Logger::instance()->log(
+            Logger::LogType::LogErr, "Failed to load settings from %s. Using Empty", mSettingsPath
+        );
         return;
     }
     if (data.bufSize != sizeof(btt::SettingsMgr::Settings)) {
         Logger::instance()->log(
-            Logger::LogType::LogErr, "Invalid settings size: %zu, expected: %zu", data.bufSize,
+            Logger::LogType::LogWarn, "Invalid settings size: %zu, expected: %zu. Using Empty", data.bufSize,
             sizeof(btt::SettingsMgr::Settings)
         );
         return;

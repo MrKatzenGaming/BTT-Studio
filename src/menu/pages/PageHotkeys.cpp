@@ -25,6 +25,7 @@ void Menu::drawPageHotkeys() {
     if (ImGui::CollapsingHeader("Hotkeys")) {
         static int killKey = (u8)set->getSettings()->mKillSceneKey;
         static int healKey = (u8)set->getSettings()->mHealMarioKey;
+        static int fullHealKey = (u8)set->getSettings()->mFullHealMarioKey;
         static int lifeupKey = (u8)set->getSettings()->mLifeUpKey;
         static int prevSceneKey = (u8)set->getSettings()->mPrevSceneKey;
         static int inctpKey = (u8)set->getSettings()->mIncTpIndexKey;
@@ -45,6 +46,8 @@ void Menu::drawPageHotkeys() {
             set->getSettings()->mKillSceneKey = (Hotkey)killKey;
         if (ImGui::Combo("Heal Mario##Key", &healKey, Keys, IM_ARRAYSIZE(Keys)))
             set->getSettings()->mHealMarioKey = (Hotkey)healKey;
+        if (ImGui::Combo("Full Heal Mario##Key", &fullHealKey, Keys, IM_ARRAYSIZE(Keys)))
+            set->getSettings()->mFullHealMarioKey = (Hotkey)fullHealKey;
 
         if (ImGui::Combo("Life Up Heart##Key", &lifeupKey, Keys, IM_ARRAYSIZE(Keys)))
             set->getSettings()->mLifeUpKey = (Hotkey)lifeupKey;
@@ -166,6 +169,11 @@ void Menu::handleHotkeys() {
     }
     if (isHotkey(set->getSettings()->mHealMarioKey)) {
         if (playerHak) GameDataFunction::recoveryPlayer(playerHak);
+    }
+    if (isHotkey(set->getSettings()->mFullHealMarioKey)) {
+        if (playerHak)
+            for (int i = 0; i < 6; i++)
+                GameDataFunction::recoveryPlayer(playerHak);
     }
     if (isHotkey(set->getSettings()->mPrevSceneKey)) {
         if (stageScene) GameDataHolderAccessor(stageScene)->returnPrevStage();

@@ -33,6 +33,8 @@
 using namespace hk;
 using namespace btt;
 
+SEAD_SINGLETON_DISPOSER_IMPL(SettingsMgr);
+
 class ShineInfo;
 class ShineChip;
 class GrowFlowerPot;

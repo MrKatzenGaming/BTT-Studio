@@ -1,7 +1,4 @@
-- Toad refresh
-- coin stack refresh
-- refresh kingdom enter (kinda)
-- new boot screen
-- separate moon refresh
-- disable tp puppet really only in moon cutscenes
-- kinda shard refresh
+- option descriptions
+- full heal hotkey
+- remove cappy button
+- menu input always uses mario controller now

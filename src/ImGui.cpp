@@ -9,6 +9,7 @@
 #include "helpers/InputHelper.h"
 #include "imgui.h"
 #include "imgui_hid_mappings.h"
+#include "Library/Controller/InputFunction.h"
 #include "menu/Menu.h"
 
 namespace btt::imgui {
@@ -77,6 +78,9 @@ void updateGamepad(ImGuiIO& io) {
 void updateInput() {
     ImGuiIO& io = ImGui::GetIO();
     io.MouseDrawCursor = InputHelper::isMouseConnected();
+
+    if (al::getPlayerControllerPort(0) != InputHelper::getPort())
+        InputHelper::setPort(al::getPlayerControllerPort(0));
 
     if (io.MouseDrawCursor) updateMouse(io);
 

@@ -10,12 +10,12 @@ void Menu::drawPageOptions() {
         if (ImGui::CollapsingHeader("Refresh##options")) {
             ImGui::Indent();
             ImGuiHelper::CheckboxDesc(
-                "Disable Saving Moons", "Moon Grabs are no longer Saved", // TODO: sounds weird idk
+                "Disable Saving Moons", "when your stage is reset/killed, Moons you got, will return to their original state", // TODO: sounds weird idk
                 &set->getSettings()->mIsEnableMoonRefresh
             );
             ImGuiHelper::CheckboxDesc(
                 "Refresh Gray Moons",
-                "Grabbed Moons will now be back in Default State", // TODO: sounds weird idk
+                " Moons you already got, will now be back in their original State", // TODO: sounds weird idk
                 &set->getSettings()->mIsEnableGrayMoonRefresh
             );
             ImGuiHelper::CheckboxDesc(
@@ -36,9 +36,8 @@ void Menu::drawPageOptions() {
                 "Refresh Seeds", "Seeds will always be unplanted after a scene reload",
                 &set->getSettings()->mIsEnableFlowerPotRefresh
             );
-            ImGuiHelper::CheckboxDesc(
+            ImGui::Checkbox(
                 "Refresh Toad Text",
-                "Before Moon Grab Toad Text now Refresh", // TODO: prolly no desc, idek how this works anymore
                 &set->getSettings()->mIsEnableRefreshNpc
             );
             ImGuiHelper::CheckboxDesc(

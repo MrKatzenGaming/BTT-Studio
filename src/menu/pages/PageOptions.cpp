@@ -10,7 +10,7 @@ void Menu::drawPageOptions() {
         if (ImGui::CollapsingHeader("Refresh##options")) {
             ImGui::Indent();
             ImGuiHelper::CheckboxDesc(
-                "Disable Saving Moons", "when your stage  is reset/killed, Moons you got, will return to their original state", // TODO: sounds weird idk
+                "Disable Saving Moons", "when your stage is reset/killed, Moons you got, will return to their original state", // TODO: sounds weird idk
                 &set->getSettings()->mIsEnableMoonRefresh
             );
             ImGuiHelper::CheckboxDesc(

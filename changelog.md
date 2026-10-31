@@ -1,4 +1,3 @@
 - option descriptions
 - full heal hotkey
 - remove cappy button
-- menu input always uses mario controller now

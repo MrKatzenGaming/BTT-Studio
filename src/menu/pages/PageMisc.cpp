@@ -1,5 +1,9 @@
 #include "hk/sail/detail.h"
 
+#include "al/Library/Camera/CameraDirector.h"
+#include "al/Library/Camera/CameraPoseUpdater.h"
+#include "al/Library/Camera/CameraSwitcher.h"
+#include "al/Library/Camera/CameraTicket.h"
 #include "al/Library/LiveActor/ActorFlagFunction.h"
 #include "al/Library/LiveActor/ActorMovementFunction.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
@@ -14,6 +18,7 @@
 #include "game/Player/PlayerHackKeeper.h"
 #include "game/System/GameDataFile.h"
 #include "game/System/GameDataFunction.h"
+#include "game/Util/DemoUtil.h"
 
 #include <cxxabi.h>
 #include <typeinfo>
@@ -27,6 +32,34 @@
 #include "menu/Timer.h"
 
 using namespace btt;
+
+namespace {
+
+constexpr s32 sExitCameraPriority = al::CameraTicket::Priority_Unknown;
+
+// The demo's camera is not released when the demo is ended from outside, so it keeps priority over the
+// follow camera.
+al::CameraTicket* getExitCameraTicket(al::LiveActor* player) {
+    al::CameraDirector* director = player->getCameraDirector();
+    if (!director || director->mCountCameraPoseUpdaters <= 0 || !director->mPoseUpdaters) return nullptr;
+    al::CameraPoseUpdater* updater = director->mPoseUpdaters[0];
+    if (!updater || !updater->mTicket) return nullptr;
+    al::CameraTicket* ticket = updater->mTicket;
+    return ticket->getPriority() == sExitCameraPriority && ticket->isActiveCamera() ? ticket : nullptr;
+}
+
+bool isSceneStartWalkDemo(al::NerveKeeper* keeper) {
+    if (!keeper) return false;
+    const al::Nerve* nerve = keeper->getCurrentNerve();
+    if (!nerve) return false;
+    int status;
+    char* name = abi::__cxa_demangle(typeid(*nerve).name(), nullptr, nullptr, &status);
+    bool result = name && strstr(name, "StageSceneNrvDemoSceneStartPlayerWalk");
+    free(name);
+    return result;
+}
+
+} // namespace
 
 void Menu::drawTeleportCat() {
     if (ImGui::CollapsingHeader("Teleport")) {
@@ -98,6 +131,9 @@ void Menu::loadTeleport(TpState& state) {
         return;
     }
 
+    bool wasInExitDemo = isSceneStartWalkDemo(stageScene->getNerveKeeper());
+    al::CameraTicket* exitCamera = getExitCameraTicket(playerHak);
+
     if ((set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) ||
         helpers::isBindState(stageScene)) {
         al::setTrans(playerHak, state.pos);
@@ -109,6 +145,12 @@ void Menu::loadTeleport(TpState& state) {
         al::updatePoseQuat(playerHak, state.quat);
         playerHak->endDemoPuppetable();
         menuTimer = 0;
+    }
+
+    if (wasInExitDemo) rs::requestEndDemoSceneStartPlayerWalk(playerHak);
+    if (exitCamera) {
+        al::CameraSwitcher* switcher = playerHak->getCameraDirector()->mPoseUpdaters[0]->mSwitcher;
+        if (switcher) switcher->mRequester.requestEnd(exitCamera, 0, false);
     }
 }
 

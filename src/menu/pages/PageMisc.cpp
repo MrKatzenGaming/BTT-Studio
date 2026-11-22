@@ -1,5 +1,11 @@
+#include "hk/ro/RoUtil.h"
 #include "hk/sail/detail.h"
 
+#include "al/Library/Camera/CameraDirector.h"
+#include "al/Library/Camera/CameraPoseUpdater.h"
+#include "al/Library/Camera/CameraSwitchRequestInfo.h"
+#include "al/Library/Camera/CameraSwitcher.h"
+#include "al/Library/Camera/CameraTicket.h"
 #include "al/Library/LiveActor/ActorFlagFunction.h"
 #include "al/Library/LiveActor/ActorMovementFunction.h"
 #include "al/Library/LiveActor/ActorPoseUtil.h"
@@ -27,6 +33,98 @@
 #include "menu/Timer.h"
 
 using namespace btt;
+
+namespace {
+
+using EndDemoFn = void (*)(const al::LiveActor*);
+
+// Teleporting while the scene is still in the "player walks out of the pipe/door" intro demo leaves
+// that demo running forever: its camera is never released and no new subarea can be entered.
+// rs::requestEndDemoSceneStartPlayerWalk ends it, but its 1.3.0 address is unknown, so it is found
+// by its instruction shape and the demo name it passes. Nothing is called unless exactly one match exists.
+EndDemoFn findEndSceneStartWalkDemo() {
+    static bool searched = false;
+    static EndDemoFn found = nullptr;
+    if (searched) return found;
+    searched = true;
+
+    const hk::ro::RoModule* module = hk::ro::getMainModule();
+    if (!module) return nullptr;
+    const hk::ro::RoModule::Range text = module->text();
+    const hk::ro::RoModule::Range rodata = module->rodata();
+    constexpr char demoName[] = "シーン開始プレイヤー歩きデモ";
+
+    const u32* code = reinterpret_cast<const u32*>(text.start());
+    const size count = text.size() / sizeof(u32);
+    int matches = 0;
+    for (size i = 0; i + 9 <= count; i++) {
+        if (code[i] != 0xa9bf7bfd) continue;                  // stp x29, x30, [sp, #-0x10]!
+        if (code[i + 1] != 0x910003fd) continue;              // mov x29, sp
+        if ((code[i + 2] >> 26) != 0b100101) continue;        // bl
+        if (code[i + 3] != 0xf9401000) continue;              // ldr x0, [x0, #0x20]
+        if ((code[i + 4] & 0x9f00001f) != 0x90000001) continue; // adrp x1, page
+        if ((code[i + 5] & 0xffc003ff) != 0x91000021) continue; // add x1, x1, #offset
+        if (code[i + 6] != 0x52800122) continue;              // mov w2, #9
+        if (code[i + 7] != 0xa8c17bfd) continue;              // ldp x29, x30, [sp], #0x10
+        if ((code[i + 8] >> 26) != 0b000101) continue;        // b
+
+        u64 pc = text.start() + (i + 4) * sizeof(u32);
+        u64 raw = ((code[i + 4] >> 5) & 0x7ffff) << 2 | ((code[i + 4] >> 29) & 3);
+        s64 pages = static_cast<s64>(raw << 43) >> 43;
+        u64 target = (pc & ~0xfffull) + (pages << 12) + ((code[i + 5] >> 10) & 0xfff);
+        if (target < rodata.start() || target + sizeof(demoName) > rodata.end()) continue;
+        if (memcmp(reinterpret_cast<const void*>(target), demoName, sizeof(demoName)) != 0) continue;
+
+        found = reinterpret_cast<EndDemoFn>(text.start() + i * sizeof(u32));
+        matches++;
+    }
+    if (matches != 1) found = nullptr;
+    return found;
+}
+
+constexpr s32 sExitCameraPriority = al::CameraTicket::Priority_Unknown;
+
+// The demo's camera is not released when the demo is ended from outside, so it keeps priority over the
+// follow camera.
+al::CameraTicket* getExitCameraTicket(al::LiveActor* player) {
+    al::CameraDirector* director = player->getCameraDirector();
+    if (!director || director->mCountCameraPoseUpdaters <= 0 || !director->mPoseUpdaters) return nullptr;
+    al::CameraPoseUpdater* updater = director->mPoseUpdaters[0];
+    if (!updater || !updater->mTicket) return nullptr;
+    al::CameraTicket* ticket = updater->mTicket;
+    return ticket->getPriority() == sExitCameraPriority && ticket->isActiveCamera() ? ticket : nullptr;
+}
+
+// Mirrors al::CameraSwitchRequester::requestEnd, which has no known address in 1.3.0.
+bool endExitCamera(al::LiveActor* player, al::CameraTicket* ticket) {
+    if (!ticket || getExitCameraTicket(player) != ticket) return false;
+
+    al::CameraSwitcher* switcher = player->getCameraDirector()->mPoseUpdaters[0]->mSwitcher;
+    if (!switcher || !switcher->mRequester.mStart || !switcher->mRequester.mEnd) return false;
+
+    al::CameraSwitchRequestInfo& endRequests = switcher->mRequester.mEnd[ticket->getPriority()];
+    if (!endRequests.mRequests || endRequests.mNumRequests != 0) return false;
+
+    ticket->setActiveCamera(false);
+    endRequests.mRequests[endRequests.mNumRequests++] = ticket;
+    endRequests._c = 0;
+    endRequests._10 = false;
+    endRequests.mHasNextCameraPose = false;
+    return true;
+}
+
+bool isSceneStartWalkDemo(al::NerveKeeper* keeper) {
+    if (!keeper) return false;
+    const al::Nerve* nerve = keeper->getCurrentNerve();
+    if (!nerve) return false;
+    int status;
+    char* name = abi::__cxa_demangle(typeid(*nerve).name(), nullptr, nullptr, &status);
+    bool result = name && strstr(name, "StageSceneNrvDemoSceneStartPlayerWalk");
+    free(name);
+    return result;
+}
+
+} // namespace
 
 void Menu::drawTeleportCat() {
     if (ImGui::CollapsingHeader("Teleport")) {
@@ -98,6 +196,9 @@ void Menu::loadTeleport(TpState& state) {
         return;
     }
 
+    bool wasInExitDemo = isSceneStartWalkDemo(stageScene->getNerveKeeper());
+    al::CameraTicket* exitCamera = getExitCameraTicket(playerHak);
+
     if ((set->getSettings()->mIsEnableDisableTpPuppet && helpers::isGetShineState(stageScene)) ||
         helpers::isBindState(stageScene)) {
         al::setTrans(playerHak, state.pos);
@@ -110,6 +211,11 @@ void Menu::loadTeleport(TpState& state) {
         playerHak->endDemoPuppetable();
         menuTimer = 0;
     }
+
+    if (wasInExitDemo) {
+        if (EndDemoFn endDemo = findEndSceneStartWalkDemo()) endDemo(playerHak);
+    }
+    endExitCamera(playerHak, exitCamera);
 }
 
 void Menu::drawTimerCat() {
